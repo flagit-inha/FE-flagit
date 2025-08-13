@@ -1,10 +1,12 @@
 import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
-import OpeningPage from './pages/startPage/OpeningPage'
-import LandingPage from './pages/startPage/LandingPage'
+import { BrowserRouter as Router } from 'react-router-dom'
+import AppRoutes from './route/AppRoutes'  // 경로 수정
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <OpeningPage/>
-  </StrictMode>
+    <Router>
+      <AppRoutes />
+    </Router>
+  </StrictMode>,
 )
