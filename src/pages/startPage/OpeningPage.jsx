@@ -1,12 +1,13 @@
 import React from 'react';
-import './Opening.css';
+import './OpeningPage.css';
 
-function Opening() {
+function OpeningPage() {
     return (
-        <div className="background">
-            <div className='phone'></div>
+        <div className='phone'>
+            <img className='flagitLogo'src="/img/flagitLogo.svg" alt="logo" /> 
+            <p className=''>“flag, it 함께 꽂는 우리 기록 “</p>
         </div>
+
     );
 }
-
-export default Opening;
+export default OpeningPage;

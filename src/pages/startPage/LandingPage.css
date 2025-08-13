@@ -1,0 +1,50 @@
+
+.phone{
+    background-color: #ffffff;
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    
+}
+
+.flagitLogo{
+    width: 300px;
+
+}
+
+.phone p {
+    margin-top: 10px; /* 로고와 글씨 사이의 여백 조정 */
+}
+
+.startButton{
+    margin-top: 10vw;
+    background-color: rgb(60, 190, 164);
+    color: #ffffff;
+    border: none;
+    padding: 15px 110px;
+    border-radius: 10px;
+}
+
+.startButton:hover{
+    background-color: rgb(53, 169, 145)
+}
+.loginLink {
+    color: #007BFF; 
+    cursor: pointer;
+    font-size: 14px;
+}
+
+.loginLink:hover {
+    text-decoration: underline;
+}
+
+.imi{
+    font-size: 14px;
+}
+
+.description{
+    margin-top: 40px;
+}
