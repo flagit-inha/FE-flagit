@@ -1,20 +1,22 @@
-
-.phone{
+.phone {
     background-color: #ffffff;
     width: 100%;
-    height: 100vh;
+    min-height: 100vh;
     display: flex;
+    flex-direction: column;
     align-items: center;
     justify-content: center;
-    flex-direction: column;
-    
+    padding: 1rem;
+    box-sizing: border-box;
 }
 
-.flagitLogo{
-    width: 300px;
-
+.flagitLogo {
+    width: clamp(18rem, 30vw, 20rem); /* 최소 15rem, 화면폭 기준 30%, 최대 20rem */
+    height: auto;
 }
 
 .phone p {
-    margin-top: 10px; /* 로고와 글씨 사이의 여백 조정 */
+    margin-top: 0.625rem;
+    text-align: center;
+    font-size: clamp(0.975rem, 1.5vw, 1rem); /* 최소 14px, 화면폭 기준 유동, 최대 16px */
 }

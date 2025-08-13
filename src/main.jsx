@@ -5,6 +5,6 @@ import LandingPage from './pages/startPage/LandingPage'
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <LandingPage/>
+    <OpeningPage/>
   </StrictMode>,
 )
