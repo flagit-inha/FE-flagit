@@ -1,11 +1,24 @@
 import React from 'react';
+import './LandingPage.css';
 
 function LandingPage() {
-  return (
-    <div>
-      <h1>시작페이지 입니다</h1>
-    </div>
-  );
-}
+    return (
+        <div className='phone'>
+            <img className='flagitLogo'src="/img/flagitLogo.svg" alt="logo" /> 
+            <p>“flag, it 함께 꽂는 우리 기록 “</p>
 
+            <button className='startButton'>
+                시작하기
+            </button>
+            <div className='description'> 
+                <h className='imi'>이미 계정이 있나요? </h>
+                <a href="/login" className="loginLink">로그인하기</a> 
+            </div>
+          
+        </div>
+
+
+
+    );
+}
 export default LandingPage;

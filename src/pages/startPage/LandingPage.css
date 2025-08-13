@@ -1,0 +1,60 @@
+.phone {
+    background-color: #ffffff;
+    width: 100%;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    box-sizing: border-box;
+}
+
+.flagitLogo {
+    width: clamp(18rem, 30vw, 20rem); /* 최소 15rem, 화면폭 기준 30%, 최대 20rem */
+    height: auto;
+}
+
+.phone p {
+    margin-top: 0.625rem;
+    text-align: center;
+    font-size: clamp(0.975rem, 1.5vw, 1rem); /* 최소 14px, 화면폭 기준 유동, 최대 16px */
+}
+
+.startButton {
+    margin-top: 12rem;
+    background-color: rgb(60, 190, 164);
+    color: #ffffff;
+    border: none;
+    padding: clamp(0.8rem, 1vw, 1rem) clamp(7rem, 8vw, 4rem); /* 세로/가로 padding */
+    border-radius: 0.625rem;
+    font-size: clamp(0.975rem, 2vw, 1rem);
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.startButton:hover {
+    background-color: rgb(53, 169, 145);
+}
+
+.loginLink {
+    color: #007BFF;
+    cursor: pointer;
+    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+    margin-top: 1rem;
+}
+
+.loginLink:hover {
+    text-decoration: underline;
+}
+
+.imi {
+    font-size: clamp(0.75rem, 1.5vw, 0.875rem);
+}
+
+.description {
+    margin-top: 2rem;
+    text-align: center;
+    padding: 0 0.625rem;
+    font-size: clamp(0.875rem, 1.5vw, 1rem);
+}
