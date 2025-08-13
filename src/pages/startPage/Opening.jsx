@@ -7,7 +7,6 @@ function Opening() {
             <div className='phone'></div>
         </div>
     );
-
 }
 
 export default Opening;
