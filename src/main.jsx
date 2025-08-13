@@ -2,7 +2,7 @@ import { StrictMode } from 'react'
 import { createRoot } from 'react-dom/client'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Opening from './pages/startPage/OpeningPage'
-import LoginPage from './pages/signupLogin/LoginPage'
+import LoginPage from './pages/signupLoginPage/LoginPage'
 import DetailedLocationPage from './pages/homePage/DetailedLocationPage'
 import LevelListPage from './pages/myPage/LevelListPage'
 
