@@ -2,7 +2,9 @@ import React from 'react';
 
 function LandingPage() {
   return (
-    <div>시작페이지 입니다</div>
+    <div>
+      <h1>시작페이지 입니다</h1>
+    </div>
   );
 }
 
