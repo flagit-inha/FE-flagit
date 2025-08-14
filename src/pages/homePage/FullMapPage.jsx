@@ -8,31 +8,36 @@ function FullMapPage() {
         <div className="fullmap-header">
           <h1>홍길동님의 기록</h1>
         </div>
-        {/* 구름 이미지 삽입 */}
-        <img src="/img/cloud.svg" alt="구름" className="cloud cloud-top" />
-        <img src="/img/cloud.svg" alt="구름" className="cloud cloud-middle" />
-        <img src="/img/cloud.svg" alt="구름" className="cloud cloud-bottom" />
 
         <div className="map-area">
-          {/* 지도 SVG 삽입 */}
-          <object 
-            type="image/svg+xml" 
-            data="/img/main_map.svg" 
-            className="main-map-svg"
-            aria-label="메인 지도"
-          >
-            대체 텍스트: 지도를 불러오는 중입니다.
-          </object>
-        </div>
-        <div className="map-footer">
-          <div className="footer-text">
-            내 누적 기록: 13개
+          <div className="geo-wrapper">
+            <div className="geo-canvas">
+              {/* 메인 지도 (object 대신 img로 안정화) */}
+              <img
+                src="/img/main_map.svg"
+                alt="대한민국 지도"
+                className="geo-main"
+                draggable="false"
+              />
+
+              {/* 독도 / 제주 */}
+              <img src="/img/dokdo.svg" alt="독도" className="geo-dokdo" draggable="false" />
+              <img src="/img/jeju.svg" alt="제주도" className="geo-jeju" draggable="false" />
+
+              {/* 구름 */}
+              <img src="/img/cloud.svg" alt="" className="cloud cloud-top" />
+              <img src="/img/cloud.svg" alt="" className="cloud cloud-middle" />
+              <img src="/img/cloud.svg" alt="" className="cloud cloud-bottom" />
+            </div>
           </div>
-          <button className="add-button">+</button>
+
+          <div className="map-footer">
+            <div className="footer-text">내 누적 기록: 13개</div>
+            <button className="add-button" aria-label="기록 추가">+</button>
+          </div>
         </div>
       </div>
 
-      {/* 하단 네비게이션 바 */}
       <div className="bottom-nav">
         <div className="nav-item">
           <img src="/img/route-icon.svg" alt="경로" />
