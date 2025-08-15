@@ -1,10 +1,17 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom'; // 추가
 import './FullMapPage.css';
 
 function FullMapPage({ userName = '홍길동' }) {
   const line1 = `${userName}님의`;
   const line2 = '기록';
   const ariaTitle = `${line1} ${line2}`;
+  const navigate = useNavigate();                 // 추가
+
+  const goWrite = () => {
+    navigate('/record-write'); // 원하는 경로로 수정 가능
+  };
+
   return (
     <div className="fullmap-container">
       <div className="top-bar">
@@ -35,8 +42,12 @@ function FullMapPage({ userName = '홍길동' }) {
           <img src="/img/running2.svg" alt="" className="footer-flag-icon" draggable="false" />
           <div className="footer-flag-text">내 누적 깃발</div>
         </div>
-        {/* 기존 '+' 텍스트 제거: 이미지 아이콘만 */}
-        <button className="add-button" aria-label="기록 추가">
+        <button
+          type="button"
+          className="add-button"
+          aria-label="기록 추가"
+          onClick={goWrite}                 // 클릭 시 이동
+        >
           <img src="/img/plus.svg" alt="" aria-hidden="true" className="add-button-icon" draggable="false" />
         </button>
       </div>
