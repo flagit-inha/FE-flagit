@@ -1,0 +1,80 @@
+.auth-screen {
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+  }
+  
+  .auth-card {
+    width: 360px;
+    max-width: 92%;
+    background: #fff;
+    padding: 28px 20px 20px;
+    border-radius: 28px;
+    box-shadow: 0 10px 30px rgba(0,0,0,.08);
+    position: relative;
+  }
+  
+  .back-btn {
+    position: absolute;
+    top: 16px;
+    left: 14px;
+    border: none;
+    background: transparent;
+    font-size: 20px;
+    color: #6b7280;
+    cursor: pointer;
+  }
+  
+  .logo { height: 32px; margin-bottom: 24px; margin-left: 4px; }
+  .title { font-size: 24px; font-weight: 700; margin: 6px 0 16px; }
+  
+  .form { display: grid; gap: 18px; }
+  .field { display: grid; gap: 8px; }
+  
+  .label { font-size: 12px; color: #6b7280; }
+  .input {
+    border: none;
+    border-bottom: 1px solid #d1d5db;
+    padding: 10px 0;
+    outline: none;
+    background: transparent;
+  }
+  .input:focus { border-bottom-color: #111827; }
+  
+  .row { display: flex; gap: 8px; align-items: center; }
+  
+  .select {
+    flex: 1;
+    height: 36px;
+    border: 1px solid #e5e7eb;
+    border-radius: 8px;
+    padding: 0 10px;
+    background: #fff;
+  }
+  
+  .chip {
+    height: 32px;
+    padding: 0 10px;
+    border: none;
+    border-radius: 8px;
+    background: #e5e7eb;
+    color: #374151;
+    cursor: pointer;
+    white-space: nowrap;
+  }
+  
+  .hint { margin-top: 6px; font-size: 12px; color: #9ca3af; }
+  
+  .cta {
+    width: 100%;
+    padding: 12px 0;
+    border: none;
+    border-radius: 10px;
+    background: #2eccb6;
+    color: #fff;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  
