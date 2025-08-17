@@ -1,8 +1,23 @@
 import React from 'react';
-
+import './MyCrewPage.css'; 
 function MyCrewPage() {
   return (
-    <div>마이크루 페이지
+    <div>
+      <img src="/img/crep.png" alt="mycrew" className="mycrew-icon" />
+      <div className='crewProfile'>
+        <img src="/img/profile.png" alt="profile" className="profile-image" /> 
+        
+      </div>
+  
+
+
+
+
+
+
+
+
+
 
       <div className="bottom-nav">
         <div className="nav-item active">
