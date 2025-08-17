@@ -48,7 +48,7 @@ function AppRoutes() {
       <Route path="/failure" element={<FailurePage />} />
       <Route path="/qr" element={<QRPage />} />
       <Route path="/fullmap" element={<FullMapPage />} />
-      <Route path="/detailed-location" element={<DetailedLocationPage />} />
+      <Route path="/location/:id" element={<DetailedLocationPage />} />
       <Route path="/record-write" element={<RecordWritePage />} />
       <Route path="/mycrew" element={<MyCrewPage />} />
       <Route path="/memberlist" element={<MemberListPage />} />
