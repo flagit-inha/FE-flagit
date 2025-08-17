@@ -1,6 +1,7 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './RecordWritePage.css';
+import { createRecord } from '../../services/recordsService';
 
 function RecordWritePage() {
   const navigate = useNavigate();
@@ -20,8 +21,10 @@ function RecordWritePage() {
   const [hashtags, setHashtags] = useState('');
   const [files, setFiles] = useState([]);
 
-  const [mediaMode, setMediaMode] = useState('photo'); // 'photo' | 'note'
+  const [mediaMode, setMediaMode] = useState('photo');
   const [recordText, setRecordText] = useState('');
+
+  const [submitting, setSubmitting] = useState(false);
 
   const activities = [
     { key:'running', label:'러닝' },
@@ -126,17 +129,30 @@ function RecordWritePage() {
     setHashtags(v);
   };
 
-  const submit = ()=>{
-    console.log({
-      place, activity, date, timeStart, timeEnd,
-      distance, duration: computedDuration || '00:00:00',
-      crew,
-      hashtags: hashtags.trim(),
-      files,
-      mediaMode,
-      recordText
-    });
-    navigate(-1);
+  const submit = async ()=>{
+    if(submitting) return;
+    setSubmitting(true);
+    try {
+      const record = await createRecord({
+        place,
+        activity,
+        date,
+        timeStart,
+        timeEnd,
+        distance: distance || '0',
+        duration: computedDuration || '00:00:00',
+        crew,
+        hashtags: hashtags.trim(),
+        mediaMode,
+        images: files,   // File -> 새로고침 후 미복원 (임시)
+        note: recordText
+      });
+      navigate(`/location/${record.id}`);
+    } catch(e){
+      alert('저장 실패: ' + e.message);
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   return (
@@ -144,7 +160,9 @@ function RecordWritePage() {
       <header className="rw-header">
         <button type="button" className="rw-back-btn" aria-label="뒤로가기" onClick={()=>navigate(-1)}>〈</button>
         <h1 className="rw-page-title">기록 작성</h1>
-        <button type="button" className="rw-save-btn" onClick={submit}>저장하기</button>
+        <button type="button" className="rw-save-btn" onClick={submit} disabled={submitting}>
+          {submitting ? '저장 중...' : '저장하기'}
+        </button>
       </header>
 
       <div className="rw-scroll">
@@ -333,7 +351,6 @@ function RecordWritePage() {
           </div>
         </div>
 
-        {/* 축소된 하단 여백 */}
         <div className="rw-bottom-gap" />
       </div>
 
@@ -355,48 +372,48 @@ function RecordWritePage() {
       {dateTimeOpen && (
         <>
           <div className="rw-datetime-backdrop" />
-          <div
-            ref={dtPanelRef}
-            className="rw-datetime-panel rw-datetime-panel-fixed"
-            style={{top:panelRect.top, left:panelRect.left, width:panelRect.width}}
-          >
-            <label className="rw-dtp-row">
-              <span className="rw-dtp-label">날짜</span>
-              <input
-                type="date"
-                value={date}
-                onChange={e=>setDate(e.target.value)}
-              />
-            </label>
-            <div className="rw-dtp-row rw-dtp-row-col">
-              <span className="rw-dtp-label">시간</span>
-              <div className="rw-time-edit-col">
-                <label className="rw-time-line">
-                  <span className="rw-time-sub">시작</span>
-                  <input
-                    type="time"
-                    value={timeStart}
-                    onChange={e=>setTimeStart(e.target.value)}
-                  />
-                </label>
-                <label className="rw-time-line">
-                  <span className="rw-time-sub">종료</span>
-                  <input
-                    type="time"
-                    value={timeEnd}
-                    onChange={e=>setTimeEnd(e.target.value)}
-                  />
-                </label>
+            <div
+              ref={dtPanelRef}
+              className="rw-datetime-panel rw-datetime-panel-fixed"
+              style={{top:panelRect.top, left:panelRect.left, width:panelRect.width}}
+            >
+              <label className="rw-dtp-row">
+                <span className="rw-dtp-label">날짜</span>
+                <input
+                  type="date"
+                  value={date}
+                  onChange={e=>setDate(e.target.value)}
+                />
+              </label>
+              <div className="rw-dtp-row rw-dtp-row-col">
+                <span className="rw-dtp-label">시간</span>
+                <div className="rw-time-edit-col">
+                  <label className="rw-time-line">
+                    <span className="rw-time-sub">시작</span>
+                    <input
+                      type="time"
+                      value={timeStart}
+                      onChange={e=>setTimeStart(e.target.value)}
+                    />
+                  </label>
+                  <label className="rw-time-line">
+                    <span className="rw-time-sub">종료</span>
+                    <input
+                      type="time"
+                      value={timeEnd}
+                      onChange={e=>setTimeEnd(e.target.value)}
+                    />
+                  </label>
+                </div>
+              </div>
+              <div className="rw-dtp-actions">
+                <button
+                  type="button"
+                  className="rw-btn-small"
+                  onClick={()=>setDateTimeOpen(false)}
+                >확인</button>
               </div>
             </div>
-            <div className="rw-dtp-actions">
-              <button
-                type="button"
-                className="rw-btn-small"
-                onClick={()=>setDateTimeOpen(false)}
-              >확인</button>
-            </div>
-          </div>
         </>
       )}
     </div>

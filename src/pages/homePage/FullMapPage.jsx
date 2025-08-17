@@ -1,15 +1,15 @@
 import React from 'react';
-import { useNavigate } from 'react-router-dom'; // 추가
+import { useNavigate } from 'react-router-dom';
 import './FullMapPage.css';
 
 function FullMapPage({ userName = '홍길동' }) {
   const line1 = `${userName}님의`;
   const line2 = '기록';
   const ariaTitle = `${line1} ${line2}`;
-  const navigate = useNavigate();                 // 추가
+  const navigate = useNavigate();
 
   const goWrite = () => {
-    navigate('/record-write'); // 원하는 경로로 수정 가능
+    navigate('/record-write');
   };
 
   return (
@@ -46,14 +46,13 @@ function FullMapPage({ userName = '홍길동' }) {
           type="button"
           className="add-button"
           aria-label="기록 추가"
-          onClick={goWrite}                 // 클릭 시 이동
+          onClick={goWrite}
         >
           <img src="/img/plus.svg" alt="" aria-hidden="true" className="add-button-icon" draggable="false" />
         </button>
       </div>
 
       <div className="bottom-nav">
-        {/* 로고 아직 없으니 center-logo-slot 제거 */}
         <div className="nav-item active">
           <img src="/img/route.svg" alt="route" />
           <span>route</span>
