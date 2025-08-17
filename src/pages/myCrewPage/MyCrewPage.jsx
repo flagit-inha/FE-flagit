@@ -1,6 +1,16 @@
 import React from 'react';
 import './MyCrewPage.css'; 
+import { useNavigate } from 'react-router-dom';
+
+
 function MyCrewPage() {
+  const navigate = useNavigate();
+  const handleFullMapClick = () => {
+    navigate('/fullmap'); // 전체지도 페이지로 이동
+  }
+  const handleMemberClick = () => {
+    navigate('/memberlist'); // 크루 회원 페이지로 이동
+  };
   return (
     <div>
       {/* 크루이미지 */}
@@ -9,7 +19,7 @@ function MyCrewPage() {
 
       {/* 크루프로필  */}
       <div className='crewProfile'>
-        <img src="/img/profile.png" alt="profile" className="profile-image" /> 
+        <img src="/img/Ellipse2.svg" className="profile-image" /> 
       </div>
 
       {/* 크루이름 */}
@@ -25,7 +35,7 @@ function MyCrewPage() {
 
       <div className='notic-member'>
         <button className='noticeButton'>공지</button>
-        <button className='memberButton'>회원</button>
+        <button className='memberButton' onClick={handleMemberClick}>회원</button>
         <div></div>
         <button className='list'>공지사항</button>
       </div>
@@ -36,7 +46,7 @@ function MyCrewPage() {
 
       {/* 하단네비게이션 바 */}
       <div className="bottom-nav">
-        <div className="nav-item active">
+        <div className="nav-item active" onClick={handleFullMapClick}>
           <img src="/img/route.svg" alt="route" />
           <span>route</span>
         </div>
@@ -44,8 +54,9 @@ function MyCrewPage() {
           <img src="/img/home.svg" alt="home" />
           <span>home</span>
         </div>
-        <div className="nav-item">
+        <div className="nav-item" onClick={() => window.location.href = '/mycrew'}>
           <img src="/img/mycrew.svg" alt="mycrew" />
+          
           <span>mycrew</span>
         </div>
         <div className="nav-item">

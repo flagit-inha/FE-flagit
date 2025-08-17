@@ -1,0 +1,92 @@
+.mycrew-icon {
+    width: 100%;
+    height: 25vh;
+    position: relative;
+}
+
+.crewProfile {
+    transform: translate(160%, -50%);
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+  
+
+
+}
+.profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.crewName{
+    position: absolute;
+    top: 34%;
+    left: 46%;
+    margin-top: 0px;
+    font-size: clamp(1rem, 1vw, 1.2rem);
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.memberCountText{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(0.8rem, 0.8vw, 1rem);
+    color: rgba(0, 0, 0, 0.6);
+}
+
+
+
+.notic-member{
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    width: 430px;
+    height: 50px;
+    padding: 0 40px;
+    box-sizing: border-box;
+    margin-top: 40px;
+}
+
+.noticeButton1{
+    flex: 1;
+    color: #000000;
+    background-color: #ffffff;
+    border: 1px solid;
+    border-color: #b5b5b5;
+    border-radius: 15px;
+    height: 34px;
+    width: 49px;
+    margin-right: 10px;
+}
+.noticeButton1:hover {
+    background-color: #f0f0f0;
+}
+
+.memberButton1{
+    flex: 1;
+    color: #ffffff;
+    background-color: #23AFB4;
+    border: 1px solid;
+    border-color: #b5b5b5;
+    border-radius: 15px;
+    height: 34px;
+    width: 49px;
+    margin-right: 50%;
+}
+.memberButton1:hover {
+    background-color: #1e9f9f;
+}
+
+.list{
+    flex:1;
+    background-color: #ededed;
+    border-radius: 5px;
+    height: 23px;
+    width: 63px;
+    border: none;
+}
