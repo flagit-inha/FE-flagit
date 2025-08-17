@@ -1,53 +1,64 @@
-/* DetailedLocationPage 전용 (dlp-) */
-.dlp-header {
+/* 헤더 (RecordWritePage 스타일 재사용 + 고정) */
+.dlp-fixed-header {
   position:sticky;
   top:0;
+  z-index:40;
+  background:#fff;
+  border-top-left-radius:36px;
+  border-top-right-radius:36px;
   height:60px;
   display:flex;
   align-items:center;
-  padding:0 20px;
-  z-index:20;
-  background:transparent;
+  padding:0;
+  box-sizing:border-box;
+  border-bottom:1px solid #ececec;
 }
-.dlp-back {
-  background:none;
-  border:none;
-  font-size:24px;
-  font-weight:600;
-  color:#358bef;
-  cursor:pointer;
-}
-.dlp-scroll {
-  padding:0 42px 40px;
+.dlp-head-inner {
+  width:100%;
+  padding:0 16px;
+  display:flex;
+  align-items:center;
+  gap:12px;
   box-sizing:border-box;
 }
-.dlp-top { margin-top:4px; }
-.dlp-place {
-  font-size:34px;
-  line-height:1.15;
-  letter-spacing:-1.2px;
-  margin:0 0 14px;
-  font-weight:700;
+.dlp-head-center {
+  flex:1;
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  min-width:0;
 }
+.dlp-place-title {
+  margin:0;
+  font-size:20px;
+  font-weight:700;
+  letter-spacing:-0.5px;
+  line-height:1.2;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
+.dlp-head-spacer { width:56px; flex-shrink:0; }
+
 .dlp-meta-line {
   display:flex;
   align-items:center;
   gap:8px;
-  font-size:15px;
+  font-size:12px;
   font-weight:600;
-  color:#444;
+  color:#555;
   letter-spacing:-0.3px;
 }
 .dlp-dot { color:#9aa5a6; }
-.dlp-hero {
-  margin-top:34px;
-  display:flex;
-  flex-direction:column;
-  gap:14px;
+
+/* rw-scroll 내부 추가 여백 조정 (필요 시) */
+.dlp-scroll {
+  /* RecordWritePage .rw-scroll 과 동일 구조 사용 */
 }
-.dlp-hero-img,
-.dlp-hero-empty,
-.dlp-hero-note-fallback {
+
+/* HERO 블록 */
+.dlp-hero-block { margin-top:20px; display:flex; flex-direction:column; gap:14px; }
+.dlp-hero-box {
   width:100%;
   aspect-ratio:16/9;
   border-radius:20px;
@@ -55,24 +66,19 @@
   display:flex;
   align-items:center;
   justify-content:center;
-  font-size:15px;
-  font-weight:600;
-  color:#4a5b5d;
-  box-shadow:0 6px 22px -8px rgba(0,0,0,.25);
   position:relative;
-  overflow:hidden;
+  box-shadow:0 6px 22px -8px rgba(0,0,0,.25);
+  padding:10px;
+  text-align:center;
 }
-.dlp-hero-fallback {
-  position:absolute;
-  inset:0;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-  background:linear-gradient(135deg,#d1dde0,#c2d3d7);
+.dlp-hero-msg {
+  font-size:16px;
   font-weight:600;
-  color:#234a55;
-  letter-spacing:0.5px;
+  color:#1d2830;
+  letter-spacing:-0.3px;
 }
+.dlp-hero-msg.empty { color:#666; }
+.dlp-hero-msg.note { color:#234a55; }
 .dlp-stats-row {
   display:flex;
   justify-content:space-between;
@@ -83,12 +89,9 @@
   padding:0 6px;
 }
 .dlp-stat { flex:1; text-align:center; }
-.dlp-crew {
-  margin-top:50px;
-  display:flex;
-  flex-direction:column;
-  gap:18px;
-}
+
+/* 크루 */
+.dlp-crew-block { margin-top:42px; display:flex; flex-direction:column; gap:18px; }
 .dlp-sec-title {
   margin:0;
   font-size:20px;
@@ -116,17 +119,18 @@
 }
 .dlp-avatar-empty { opacity:.75; }
 .dlp-avatar-text { pointer-events:none; }
+
+/* 구분선 */
+.dlp-separator-block { margin-top:54px; }
 .dlp-separator {
-  margin:64px 0 42px;
+  margin:0;
   border:none;
   height:1px;
   background:#d9dfe0;
 }
-.dlp-note {
-  display:flex;
-  flex-direction:column;
-  gap:18px;
-}
+
+/* 노트 */
+.dlp-note-block { margin-top:42px; display:flex; flex-direction:column; gap:18px; }
 .dlp-note-box {
   background:#e7e7e7;
   padding:26px 34px 28px;
@@ -143,8 +147,11 @@
 }
 .dlp-note-line { margin:0; }
 .dlp-note-empty { color:#666; }
+
 @media (max-width:430px){
-  .dlp-scroll { padding:0 30px 40px; }
-  .dlp-place { font-size:30px; }
+  .dlp-head-inner { padding:0 14px; }
+  .dlp-place-title { font-size:18px; }
   .dlp-avatar { width:74px; height:74px; }
+  .dlp-fixed-header { height:56px; }
+  .dlp-head-spacer { width:48px; }
 }
