@@ -1,7 +1,8 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { getRecord } from '../../services/recordsService';
-import './RecordWritePage.css';
+import './RecordWritePage.css';          // 공용 스타일 (rw-*)
+import './DetailedLocationPage.css';      // 상세 전용 스타일 (dlp-*)
 
 function DetailedLocationPage() {
   const { id } = useParams();
@@ -38,9 +39,6 @@ function DetailedLocationPage() {
   const {
     place,
     activity,
-    date,
-    timeStart,
-    timeEnd,
     distance,
     duration,
     hashtags,
@@ -50,7 +48,6 @@ function DetailedLocationPage() {
     crew = []
   } = record;
 
-  // 해시태그/노트 블록 텍스트
   const noteBlock = [
     note?.trim() || '',
     (hashtags||'').trim()
@@ -68,7 +65,6 @@ function DetailedLocationPage() {
       </header>
 
       <div className="dlp-scroll">
-        {/* 상단 타이틀 */}
         <section className="dlp-top">
           <h1 className="dlp-place">{place || '장소 미지정'}</h1>
           <div className="dlp-meta-line">
@@ -78,15 +74,10 @@ function DetailedLocationPage() {
           </div>
         </section>
 
-        {/* 대표 이미지 */}
         <section className="dlp-hero">
           {mediaMode === 'photo' && imagesMeta?.length
             ? <div className="dlp-hero-img">
-                {/* 새로고침 이전에는 원본 File 객체가 있었지만 지금은 메타만 → 실제 이미지를 저장한 URL 필요
-                   임시로 회색 배경 + 개수 표기 */}
-                <div className="dlp-hero-fallback">
-                  사진 {imagesMeta.length}개
-                </div>
+                <div className="dlp-hero-fallback">사진 {imagesMeta.length}개</div>
               </div>
             : mediaMode === 'note'
               ? <div className="dlp-hero-note-fallback">기록 모드</div>
@@ -99,35 +90,27 @@ function DetailedLocationPage() {
           </div>
         </section>
 
-        {/* 크루원 */}
         <section className="dlp-crew">
           <h2 className="dlp-sec-title">나와 함께한 사람들</h2>
-          <div className="dlp-crew-avatars">
-            {crew.length
-              ? crew.map((c,i)=>(
-                  <div key={i} className="dlp-avatar" title={String(c)}>
-                    <span className="dlp-avatar-text">
-                      {String(c).slice(0,2)}
-                    </span>
-                  </div>
-                ))
-              : [0,1,2].map(i=>(
-                  <div key={i} className="dlp-avatar dlp-avatar-empty" />
-                ))
-            }
-          </div>
+            <div className="dlp-crew-avatars">
+              {crew.length
+                ? crew.map((c,i)=>(
+                    <div key={i} className="dlp-avatar" title={String(c)}>
+                      <span className="dlp-avatar-text">{String(c).slice(0,2)}</span>
+                    </div>
+                  ))
+                : [0,1,2].map(i=> <div key={i} className="dlp-avatar dlp-avatar-empty" />)
+              }
+            </div>
         </section>
 
         <hr className="dlp-separator" />
 
-        {/* 기록/해시태그 */}
         <section className="dlp-note">
           <h2 className="dlp-sec-title">기록... 해시태그</h2>
           <div className="dlp-note-box">
             {noteBlock
-              ? noteBlock.split('\n').map((line,i)=>(
-                  <p key={i} className="dlp-note-line">{line}</p>
-                ))
+              ? noteBlock.split('\n').map((line,i)=><p key={i} className="dlp-note-line">{line}</p>)
               : <p className="dlp-note-line dlp-note-empty">내용이 없습니다.</p>
             }
           </div>
