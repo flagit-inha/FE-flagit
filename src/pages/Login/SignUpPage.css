@@ -1,80 +1,82 @@
-/* 화면 중앙 정렬 */
-.auth-screen {
+/* SignUp 전용 스타일 */
+.signup-screen {
   min-height: 100svh;
   display: flex;
   align-items: center;
   justify-content: center;
   background: #ffffff;
-  padding: 1.5rem;
+  padding: 3.5rem;
 }
 
-/* 카드 */
-.auth-card {
+.signup-card {
   width: min(92vw, 26rem);
   min-height: 80svh;
   background: #fff;
   display: flex;
   flex-direction: column;
   text-align: left;
-  padding: 1.5rem 1.5rem 2rem;   
 }
 
-
-.logo {
-  display: block;            
-  width: clamp(7rem, 10vw, 8rem); ;                                  
-  margin: 2rem 0 1.5rem -0.75rem;        
+.signup-logo {
+  display: block;
+  width: 8rem;
+  height: auto;
+  margin: 0 0 1.5rem -1rem;
 }
 
-/* 타이틀 */
-.title {
+.signup-title {
   font-size: 2rem;
-  margin: 1rem 0 2rem;
+  margin: 0 0 3rem;
   line-height: 1.2;
 }
 
-/* 폼 */
-.form {
+.signup-form {
   display: flex;
   flex-direction: column;
-  gap: 0.75rem;
+  gap: 1rem;
   flex: 1;
 }
 
-.field { display: grid; gap: 0.5rem; }
+.signup-field {
+  display: grid;
+  gap: 0.5rem;
+}
 
-.label { font-size: 0.8rem; color: #6b7280; }
+.signup-label {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
 
-
-.input {
+.signup-input {
   border: none;
   border-bottom: 2px solid #d1d5db;
-  padding: 0.5rem 0;
+  padding: 0.75rem 0;
   outline: none;
   background: transparent;
   font-size: 1rem;
 }
-.input:focus { border-bottom-color: #3b82f6; }
+.signup-input:focus {
+  border-bottom-color: #3b82f6;
+}
 
-.checkbox-row {
-  display: inline-flex;
-  align-items: center;
-  color: #9ca3af;
+.signup-error {
+  color: #ef4444;
   font-size: 0.8rem;
 }
 
-.error { color: #ef4444; font-size: 0.8rem; }
-
-.cta {
+.signup-cta {
   margin-top: auto;
   width: 100%;
   padding: 0.75rem 0;
   border: none;
-  border-radius: 0.5rem;
+  border-radius: 0.75rem;
   background: #3CBEA5;
   color: #fff;
   font-weight: 500;
   font-size: 1rem;
   cursor: pointer;
 }
-.cta:disabled { opacity: 0.6; cursor: not-allowed; }
+.signup-cta:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
