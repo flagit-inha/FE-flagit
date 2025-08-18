@@ -25,11 +25,14 @@ function DetailedLocationPage() {
 
   const dateDot = useMemo(()=> record?.date ? record.date.replace(/-/g,'.') : '', [record]);
 
-  if(loading) return <div className="rw-container" style={{padding:32}}>불러오는 중...</div>;
+  if(loading) return <div className="rw-container"><div style={{padding:32}}>불러오는 중...</div></div>;
   if(!record) return (
-    <div className="rw-container" style={{padding:32}}>
-      <h2 style={{margin:'0 0 12px'}}>기록 없음</h2>
-      <button onClick={()=>navigate(-1)}>뒤로</button>
+    <div className="rw-container">
+      <header className="rw-header">
+        <button type="button" className="rw-back-btn" onClick={()=>navigate(-1)}>〈</button>
+        <h1 className="rw-page-title dlp-page-title">상세</h1>
+      </header>
+      <div className="rw-scroll" style={{padding:32}}>기록 없음</div>
     </div>
   );
 
@@ -43,61 +46,69 @@ function DetailedLocationPage() {
     note,
     imagesMeta,
     imagesData,
-    crew = []
+    imageUrls,
+    previewUrl,
+    crew = [],
+    flagOrder
   } = record;
 
-  const imageCount = (imagesData?.length ?? imagesMeta?.length ?? 0);
-  const hasImages = imageCount > 0;
-  const showNoteModeBadge = !hasImages && mediaMode === 'note';
+  const heroSrc = imageUrls?.[0] || imagesData?.[0] || previewUrl || null;
+  const imageCount = (imageUrls?.length ?? imagesData?.length ?? imagesMeta?.length ?? 0);
+  const hasImages = !!heroSrc;
+  const noteBlock = [note?.trim() || '', (hashtags||'').trim()].filter(Boolean).join('\n');
 
-  const noteBlock = [ note?.trim() || '', (hashtags||'').trim() ]
-    .filter(Boolean)
-    .join('\n');
+  const ordinal = n=>{
+    if(!n || n < 1) return '1st flag';
+    const s = ['th','st','nd','rd'];
+    const v = n % 100;
+    const tail = (v - 20) % 10;
+    const idx = (v===11||v===12||v===13)?0:(tail>=1&&tail<=3?tail:0);
+    return `${n}${s[idx]} flag`;
+  };
 
   return (
-    <div className="rw-container dlp">
-      <header className="rw-header dlp-fixed-header">
-        <div className="dlp-head-inner">
-          <button
-            type="button"
-            className="rw-back-btn"
-            aria-label="뒤로가기"
-            onClick={()=>navigate(-1)}
-          >〈</button>
-          <div className="dlp-head-center">
-            <h1 className="rw-page-title dlp-place-title">{place || '장소 미지정'}</h1>
-            <div className="dlp-meta-line">
-              <span className="dlp-activity">{activity || '-'}</span>
-              <span className="dlp-dot">|</span>
-              <span className="dlp-date">{dateDot}</span>
-            </div>
+    <div className="rw-container">
+      {/* 헤더: 장소 + (바로 아래) 운동종류 | 날짜 */}
+      <header className="rw-header dlp-header">
+        <button
+          type="button"
+          className="rw-back-btn"
+          aria-label="뒤로가기"
+          onClick={()=>navigate(-1)}
+        >〈</button>
+        <div className="dlp-header-text">
+          <h1 className="rw-page-title dlp-page-title">{place || '장소 미지정'}</h1>
+          <div className="dlp-meta-line dlp-meta-in-header">
+            <span className="dlp-activity">{activity || '-'}</span>
+            <span className="dlp-dot">|</span>
+            <span className="dlp-date">{dateDot}</span>
           </div>
-          <div className="dlp-head-spacer" />
         </div>
       </header>
 
-      <div className="rw-scroll dlp-scroll">
-        {/* HERO */}
+      <div className="rw-scroll">
+        {/* (이전) 활동/날짜 블록 제거됨 */}
+        {/* 사진 */}
         <div className="rw-block dlp-hero-block">
-          <div className="dlp-hero-box">
+          <div className="dlp-hero-wrapper">
             {hasImages ? (
-              <span className="dlp-hero-msg">
-                이미지가 업로드되었습니다{imageCount>1 ? ` (총 ${imageCount}장)` : ''}.
-              </span>
-            ) : showNoteModeBadge ? (
-              <span className="dlp-hero-msg note">기록 모드</span>
+              <>
+                <img src={heroSrc} alt="" className="dlp-hero-img" />
+                {imageCount > 1 && <div className="dlp-img-count">+{imageCount - 1}</div>}
+              </>
             ) : (
-              <span className="dlp-hero-msg empty">이미지가 없습니다.</span>
+              <div className="dlp-hero-fallback">{mediaMode==='note' ? '기록 모드 (이미지 없음)' : '이미지가 없습니다.'}</div>
             )}
           </div>
           <div className="dlp-stats-row">
             <div className="dlp-stat">{parseFloat(distance||0).toFixed(2)}km</div>
             <div className="dlp-stat">{duration || '00:00:00'}</div>
-            <div className="dlp-stat">1st flag</div>
+            <div className="dlp-stat">{ordinal(flagOrder || 1)}</div>
           </div>
         </div>
+        {/* ...existing code... */}
 
-        {/* 크루 */}
+        {/* 함께한 사람들 */}
         <div className="rw-block dlp-crew-block">
           <h2 className="dlp-sec-title">나와 함께한 사람들</h2>
           <div className="dlp-crew-avatars">
@@ -107,8 +118,7 @@ function DetailedLocationPage() {
                     <span className="dlp-avatar-text">{String(c).slice(0,2)}</span>
                   </div>
                 ))
-              : [0,1,2].map(i=> <div key={i} className="dlp-avatar dlp-avatar-empty" />)
-            }
+              : [0,1,2].map(i=> <div key={i} className="dlp-avatar dlp-avatar-empty" />)}
           </div>
         </div>
 
@@ -117,22 +127,21 @@ function DetailedLocationPage() {
           <hr className="dlp-separator" />
         </div>
 
-        {/* 노트 / 해시태그 */}
+        {/* 기록 / 해시태그 */}
         <div className="rw-block dlp-note-block">
           <h2 className="dlp-sec-title">기록... 해시태그</h2>
-          <div className="dlp-note-box">
-            {noteBlock
-              ? noteBlock.split('\n').map((line,i)=>
-                  <p key={i} className="dlp-note-line">{line}</p>
-                )
-              : <p className="dlp-note-line dlp-note-empty">내용이 없습니다.</p>
-            }
-          </div>
+            <div className="dlp-note-box">
+              {noteBlock
+                ? noteBlock.split('\n').map((line,i)=><p key={i} className="dlp-note-line">{line}</p>)
+                : <p className="dlp-note-line dlp-note-empty">내용이 없습니다.</p>
+              }
+            </div>
         </div>
 
-        <div style={{height:100}} />
+        <div style={{height:40}} />
       </div>
 
+      {/* 하단바 (RecordWritePage 동일) */}
       <nav className="bottom-nav">
         <div className="nav-item"><img src="/img/route.svg" alt="route"/><span>route</span></div>
         <div className="nav-item active"><img src="/img/home.svg" alt="home"/><span>home</span></div>

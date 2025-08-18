@@ -1,85 +1,117 @@
-/* 헤더 (RecordWritePage 스타일 재사용 + 고정) */
-.dlp-fixed-header {
+
+/* 헤더: 장소 제목 + 운동종류|날짜를 포함 (저장 버튼 없음) */
+.rw-header.dlp-header {
   position:sticky;
   top:0;
-  z-index:40;
-  background:#fff;
-  border-top-left-radius:36px;
-  border-top-right-radius:36px;
-  height:60px;
-  display:flex;
-  align-items:center;
-  padding:0;
-  box-sizing:border-box;
-  border-bottom:1px solid #ececec;
-}
-.dlp-head-inner {
-  width:100%;
-  padding:0 16px;
-  display:flex;
-  align-items:center;
-  gap:12px;
+  z-index:30;
+  background:var(--rw-bg);
+  /* 원래 header 의 높이는 124px (변수). 가변 높이로 전환 */
+  height:auto;
+  padding:0 var(--rw-pad) 20px;
   box-sizing:border-box;
 }
-.dlp-head-center {
-  flex:1;
+
+/* 기존 RecordWritePage 는 제목/버튼 absolute.
+   여기서는 back 버튼만 absolute 유지, 제목/메타는 문서 흐름 */
+.rw-header.dlp-header .rw-back-btn {
+  /* RecordWritePage.css 에 정의된 position:absolute; top:var(--rw-header-btn-top); left:var(--rw-pad); 그대로 활용 */
+}
+
+/* 제목/메타 래퍼 */
+.dlp-header-text {
   display:flex;
   flex-direction:column;
-  gap:4px;
-  min-width:0;
+  align-items:flex-start;
+  /* back 버튼 top 위치(40px)와 제목 목표 위치(88px) 차이 = 48px */
+  margin-top:calc(var(--rw-title-offset) - var(--rw-header-btn-top) + 40px);
+  padding-left:8px; /* 기존 제목 left:calc(var(--rw-pad)+8px) 보정 */
+  box-sizing:border-box;
+  max-width:100%;
 }
-.dlp-place-title {
-  margin:0;
-  font-size:20px;
-  font-weight:700;
-  letter-spacing:-0.5px;
-  line-height:1.2;
+
+/* 제목을 static 으로 (RecordWritePage 의 absolute 제거) */
+.rw-header.dlp-header .rw-page-title {
+  position:static;
+  top:auto; left:auto;
+  margin:0 0 6px;
+  max-width:calc(100% - 8px);
   white-space:nowrap;
   overflow:hidden;
   text-overflow:ellipsis;
 }
-.dlp-head-spacer { width:56px; flex-shrink:0; }
 
-.dlp-meta-line {
+/* 헤더 안 메타 정보 (운동종류 | 날짜) */
+.dlp-meta-line,
+.dlp-meta-in-header {
   display:flex;
   align-items:center;
   gap:8px;
-  font-size:12px;
+  font-size:14px;
   font-weight:600;
-  color:#555;
+  color:#444;
   letter-spacing:-0.3px;
+  line-height:1.3;
+  margin:0;
 }
-.dlp-dot { color:#9aa5a6; }
+.dlp-meta-in-header .dlp-dot { color:#9aa5a6; }
 
-/* rw-scroll 내부 추가 여백 조정 (필요 시) */
-.dlp-scroll {
-  /* RecordWritePage .rw-scroll 과 동일 구조 사용 */
+/* (스크롤 영역 내 기존 메타 블록은 사용하지 않음) */
+.dlp-meta-block { display:none; }
+
+/* HERO 영역 */
+.dlp-hero-block {
+  margin-top:32px;
+  display:flex;
+  flex-direction:column;
+  gap:14px;
 }
-
-/* HERO 블록 */
-.dlp-hero-block { margin-top:20px; display:flex; flex-direction:column; gap:14px; }
-.dlp-hero-box {
-  width:100%;
+.dlp-hero-wrapper {
+  width:calc(100% - 32px);
+  margin:0 16px;
   aspect-ratio:16/9;
   border-radius:20px;
+  overflow:hidden;
   background:#e2e6e8;
+  position:relative;
   display:flex;
   align-items:center;
   justify-content:center;
-  position:relative;
   box-shadow:0 6px 22px -8px rgba(0,0,0,.25);
-  padding:10px;
-  text-align:center;
 }
-.dlp-hero-msg {
-  font-size:16px;
+.dlp-hero-img {
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.dlp-img-count {
+  position:absolute;
+  bottom:8px;
+  right:10px;
+  background:rgba(0,0,0,.45);
+  color:#fff;
+  font-size:12px;
+  font-weight:600;
+  padding:4px 10px 5px;
+  border-radius:24px;
+  backdrop-filter:blur(2px);
+}
+.dlp-hero-fallback {
+  width:100%; height:100%;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  font-size:15px;
   font-weight:600;
   color:#1d2830;
   letter-spacing:-0.3px;
+  padding:12px;
+  text-align:center;
 }
-.dlp-hero-msg.empty { color:#666; }
-.dlp-hero-msg.note { color:#234a55; }
+
 .dlp-stats-row {
+  width:calc(100% - 32px);
+  margin:0 16px;
   display:flex;
   justify-content:space-between;
   gap:10px;
@@ -87,18 +119,28 @@
   font-weight:600;
   color:#141414;
   padding:0 6px;
+  box-sizing:border-box;
 }
 .dlp-stat { flex:1; text-align:center; }
 
-/* 크루 */
-.dlp-crew-block { margin-top:42px; display:flex; flex-direction:column; gap:18px; }
+/* 함께한 사람들 */
+.dlp-crew-block {
+  margin-top:48px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
 .dlp-sec-title {
-  margin:0;
+  width:calc(100% - 32px);
+  margin:0 16px;
   font-size:20px;
   font-weight:700;
-  letter-spacing:-0.5px;
+  letter-spacing:0; /* 한글 가독성 */
+  font-family:'Inter','Pretendard','Noto Sans KR','Malgun Gothic',system-ui,sans-serif;
 }
 .dlp-crew-avatars {
+  width:calc(100% - 32px);
+  margin:0 16px;
   display:flex;
   gap:32px;
   flex-wrap:wrap;
@@ -115,24 +157,31 @@
   font-weight:600;
   color:#324546;
   box-shadow:0 2px 6px -2px rgba(0,0,0,.25) inset;
-  position:relative;
 }
 .dlp-avatar-empty { opacity:.75; }
 .dlp-avatar-text { pointer-events:none; }
 
 /* 구분선 */
-.dlp-separator-block { margin-top:54px; }
+.dlp-separator-block { margin-top:60px; }
 .dlp-separator {
-  margin:0;
+  width:calc(100% - 32px);
+  margin:0 16px;
   border:none;
   height:1px;
   background:#d9dfe0;
 }
 
-/* 노트 */
-.dlp-note-block { margin-top:42px; display:flex; flex-direction:column; gap:18px; }
+/* 기록 / 해시태그 */
+.dlp-note-block {
+  margin-top:42px;
+  display:flex;
+  flex-direction:column;
+  gap:18px;
+}
 .dlp-note-box {
-  background:#e7e7e7;
+  width:calc(100% - 32px);
+  margin:0 16px;
+  background:#e2e6e7;
   padding:26px 34px 28px;
   border-radius:20px;
   display:flex;
@@ -142,16 +191,26 @@
   font-weight:500;
   line-height:1.55;
   color:#222;
+  letter-spacing:0;
   white-space:pre-wrap;
-  letter-spacing:-0.3px;
+  box-sizing:border-box;
+  -webkit-font-smoothing:antialiased;
+  text-rendering:optimizeLegibility;
 }
 .dlp-note-line { margin:0; }
 .dlp-note-empty { color:#666; }
 
+/* 반응형 */
 @media (max-width:430px){
-  .dlp-head-inner { padding:0 14px; }
-  .dlp-place-title { font-size:18px; }
+  .dlp-sec-title { font-size:19px; }
+  .dlp-note-box { padding:22px 26px 24px; }
   .dlp-avatar { width:74px; height:74px; }
-  .dlp-fixed-header { height:56px; }
-  .dlp-head-spacer { width:48px; }
+}
+
+/* 아주 작은 화면에서 제목이 2줄 가능하도록 */
+@media (max-width:360px){
+  .rw-header.dlp-header .rw-page-title {
+    white-space:normal;
+    line-height:1.2;
+  }
 }
