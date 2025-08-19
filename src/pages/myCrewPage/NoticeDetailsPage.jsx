@@ -116,7 +116,7 @@ function NoticeDetailsPage() {
           
           <span>mycrew</span>
         </div>
-        <div className="nav-item">
+        <div className="nav-item" onClick={() => navigate('/mypage')}>
           <img src="/img/my.svg" alt="my" />
           <span>my</span>
         </div>

@@ -15,7 +15,7 @@ function FullMapPage({ userName = '홍길동' }) {
   return (
     <div className="fullmap-container">
       <div className="top-bar">
-        <img src="/img/flagit2.svg" alt="Flagit 로고" className="app-logo" draggable="false" />
+        <img src="/img/flagit_logo2.svg" alt="Flagit 로고" className="app-logo" draggable="false" />
         <h1 className="top-title" aria-label={ariaTitle}>
           <span className="title-line1">{line1}</span>
           <span className="title-line2">{line2}</span>
@@ -57,15 +57,15 @@ function FullMapPage({ userName = '홍길동' }) {
           <img src="/img/route.svg" alt="route" />
           <span>route</span>
         </div>
-        <div className="nav-item">
+        <div className="nav-item" onClick={() => navigate('/fullmap')}>
           <img src="/img/home.svg" alt="home" />
           <span>home</span>
         </div>
-        <div className="nav-item">
+        <div className="nav-item" onClick={() => navigate('/mycrew')}>
           <img src="/img/mycrew.svg" alt="mycrew" />
           <span>mycrew</span>
         </div>
-        <div className="nav-item">
+        <div className="nav-item" onClick={() => navigate('/mypage')}>
           <img src="/img/my.svg" alt="my" />
           <span>my</span>
         </div>

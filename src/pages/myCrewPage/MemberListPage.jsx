@@ -133,7 +133,7 @@ function MemberListPage() {
           
           <span>mycrew</span>
         </div>
-        <div className="nav-item">
+        <div className="nav-item" onClick={() => window.location.href = '/mypage'}>
           <img src="/img/my.svg" alt="my" />
           <span>my</span>
         </div>
