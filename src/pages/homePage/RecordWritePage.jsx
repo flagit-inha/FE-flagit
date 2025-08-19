@@ -369,7 +369,7 @@ function RecordWritePage() {
         <div className="rw-bottom-gap" />
       </div>
 
-      <BottomNav active="home" />
+      <BottomNav />
 
       {dateTimeOpen && (
         <>

@@ -195,7 +195,7 @@ function DetailedLocationPage() {
         <div style={{height:40}} />
       </div>
 
-      <BottomNav active="home" />
+      <BottomNav />
     </div>
   );
 }
