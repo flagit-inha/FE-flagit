@@ -1,0 +1,76 @@
+/* 전체 레이아웃 */
+.routeview-screen {
+    min-height: 100svh;
+    display: flex;
+    align-items: stretch;
+    justify-content: stretch;
+    background: hsl(0, 0%, 100%);
+  }
+  
+  .routeview-card {
+    width: min(100vw, 30rem);
+    height: 100svh; /* 화면 전체 채우기 */
+    background: #fff;
+    position: relative;
+    overflow: hidden;
+  }
+  
+  /* 뒤로가기 */
+  .routeview-back {
+    position: absolute;
+    z-index: 10;
+    top: 1rem;
+    left: 1rem;
+    background: transparent;
+    border: 0;
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: #3b82f6;
+    cursor: pointer;
+  }
+  
+  /* 지도 영역 */
+  .routeview-map {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    background: #f3f4f6;
+  }
+  
+  /* 지도 프리뷰 꽉 채우기 */
+  .map-preview {
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* 여백 없이 꽉 채움 */
+    display: block;
+  }
+  
+  /* 지도 SDK 붙일 div (기본 숨김) */
+  .map-canvas {
+    position: absolute;
+    inset: 0;
+    display: none;
+  }
+  
+  /* 플로팅 버튼 */
+  .fab-shop {
+    position: absolute;
+    right: 2rem;
+    bottom: 2.5rem;
+    border:none;
+    padding: 0;
+    background: transparent;
+    cursor: pointer;
+  }
+  
+  /* 아이콘 이미지를 동그랗게 */
+  .fab-shop img {
+    width: 4rem;
+    height: 4rem;
+    border-radius: 50%;
+    object-fit: cover;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
+    display: block;
+  }
+  
