@@ -37,7 +37,8 @@ function NoticeDetailsPage() {
       {/* top바 */}
       <div className='to2p-bar'>
         <img 
-          src="/img/back.svg" 
+          src="/img/bback.svg" 
+
           onClick={handleBackClick} 
           alt="뒤로가기" 
           className="myc1rew-icon" 
