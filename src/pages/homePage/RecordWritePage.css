@@ -10,7 +10,7 @@
   --rw-save:#23AFB4;
   --rw-teal:#0da8a8;
   --rw-accent-grad:linear-gradient(145deg,#19cac8,#09a3d1);
-  --rw-header-height:124px;
+  --rw-header-height:180px;
   --rw-header-btn-top:40px;
   --rw-title-offset:88px;
   --rw-title-font-size:28px;
@@ -28,6 +28,9 @@
   font-weight:600; color:var(--rw-dark);
   position:relative; display:flex; flex-direction:column;
   border-radius:40px;
+  height: 100dvh;
+  display: flex;
+  flex-direction: column;
 }
 
 .rw-header {
@@ -54,7 +57,13 @@
   letter-spacing:-0.6px;
 }
 
-.rw-scroll { padding:8px var(--rw-pad) 70px; }
+.rw-scroll { 
+  padding:8px var(--rw-pad) 70px;
+  flex: 1 1 auto;
+  min-height: 0;
+  overflow-y: auto;
+  padding: 8px var(--rw-pad) 90px; /* 하단 네비바 높이만큼 */
+}
 .rw-block { display:flex; flex-wrap:wrap; gap:12px; margin-top:24px; width:100%; }
 
 .rw-search-bar {

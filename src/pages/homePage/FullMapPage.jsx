@@ -43,9 +43,9 @@ function FullMapPage({ userName='홍길동' }) {
       try {
         setLoading(true);
         const list = await listRecords();
-        if(alive) setRecords(list);
+        if (alive) setRecords(Array.isArray(list) ? list : []);
       } finally {
-        if(alive) setLoading(false);
+        if (alive) setLoading(false);
       }
     })();
     return ()=>{ alive = false; };
@@ -62,7 +62,7 @@ function FullMapPage({ userName='홍길동' }) {
           id: r.id,
           place: placeName,
           activity: r.activity || 'running',
-          date: r.date || '',
+            date: r.date || '',
           ...p
         };
       })
@@ -75,6 +75,7 @@ function FullMapPage({ userName='홍길동' }) {
 
   const line1 = `${userName}님의`;
   const line2 = '기록';
+  const ariaTitle = `${line1} ${line2}`;
 
   return (
     <div className="fullmap-container">
@@ -104,11 +105,12 @@ function FullMapPage({ userName='홍길동' }) {
                   const dateText = f.date ? f.date.replace(/-/g,'.') : '';
                   return (
                     <div key={f.id} className="map-flag" style={{left:`${f.left}%`, top:`${f.top}%`}}>
-                      <img src={icon} alt="" className="flag-icon" />
+                      <img src={icon} alt="" className="flag-icon" draggable="false" />
                       <div className="flag-card">
                         <div className="flag-place" title={f.place}>{f.place}</div>
                         <div className="flag-meta">
-                          {actLabel}{dateText && <span className="flag-date">{dateText}</span>}
+                          <span>{actLabel}</span>
+                          {dateText && <span className="flag-date">{dateText}</span>}
                         </div>
                         <button
                           type="button"
