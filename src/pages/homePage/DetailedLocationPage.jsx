@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { getRecord, deleteRecord } from '../../services/recordsService';
+import BottomNav from '../../components/BottomNav';
 import './RecordWritePage.css';
 import './DetailedLocationPage.css';
 
@@ -14,24 +15,21 @@ function DetailedLocationPage() {
   const [loading, setLoading] = useState(true);
   const [deleting, setDeleting] = useState(false); // ← 추가
 
-  useEffect(()=>{
-    let alive = true;
-    (async()=>{
+  useEffect(() => {
+    if(!id) return;
+    let cancelled = false;
+    (async () => {
       try {
-        setLoading(true);
-        const r = await getRecord(id);
-        if(alive){
-          if(r && !r.imagesData && stateImagesData.length){
-            r.imagesData = stateImagesData;
-          }
-          setRecord(r);
-        }
+        const data = await getRecord(id);
+        if(!cancelled) setRecord(data);
+      } catch(e){
+        console.error('record load fail', e);
       } finally {
-        if(alive) setLoading(false);
+        if(!cancelled) setLoading(false);
       }
     })();
-    return ()=>{ alive = false; };
-  },[id, stateImagesData]);
+    return ()=> { cancelled = true; };
+  }, [id]); // ← record 넣지 말기
 
   const dateDot = useMemo(()=> record?.date ? record.date.replace(/-/g,'.') : '', [record]);
 
@@ -197,12 +195,7 @@ function DetailedLocationPage() {
         <div style={{height:40}} />
       </div>
 
-      <nav className="bottom-nav">
-        <div className="nav-item"><img src="/img/route.svg" alt="route"/><span>route</span></div>
-        <div className="nav-item active"><img src="/img/home.svg" alt="home"/><span>home</span></div>
-        <div className="nav-item"><img src="/img/mycrew.svg" alt="mycrew"/><span>mycrew</span></div>
-        <div className="nav-item"><img src="/img/my.svg" alt="my"/><span>my</span></div>
-      </nav>
+      <BottomNav active="home" />
     </div>
   );
 }

@@ -2,6 +2,7 @@ import React, { useState, useRef, useEffect, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './RecordWritePage.css';
 import { createRecord } from '../../services/recordsService';
+import BottomNav from '../../components/BottomNav';
 
 function RecordWritePage() {
   const navigate = useNavigate();
@@ -368,20 +369,7 @@ function RecordWritePage() {
         <div className="rw-bottom-gap" />
       </div>
 
-      <nav className="bottom-nav">
-        <div className="nav-item">
-          <img src="/img/route.svg" alt="route"/><span>route</span>
-        </div>
-        <div className="nav-item">
-          <img src="/img/home.svg" alt="home"/><span>home</span>
-        </div>
-        <div className="nav-item">
-          <img src="/img/mycrew.svg" alt="mycrew"/><span>mycrew</span>
-        </div>
-        <div className="nav-item">
-          <img src="/img/my.svg" alt="my"/><span>my</span>
-        </div>
-      </nav>
+      <BottomNav active="home" />
 
       {dateTimeOpen && (
         <>

@@ -2,6 +2,7 @@ import React, { useEffect, useState, useMemo } from 'react';
 import { useNavigate } from 'react-router-dom';
 import './FullMapPage.css';
 import { listRecords } from '../../services/recordsService';
+import BottomNav from '../../components/BottomNav';
 
 const GEO_BOUNDS = {
   latMin: 33.0,
@@ -138,20 +139,7 @@ function FullMapPage({ userName='홍길동' }) {
         </button>
       </div>
 
-      <div className="bottom-nav">
-        <div className="nav-item active">
-          <img src="/img/route.svg" alt="route"/><span>route</span>
-        </div>
-        <div className="nav-item">
-          <img src="/img/home.svg" alt="home"/><span>home</span>
-        </div>
-        <div className="nav-item">
-          <img src="/img/mycrew.svg" alt="mycrew"/><span>mycrew</span>
-        </div>
-        <div className="nav-item">
-          <img src="/img/my.svg" alt="my"/><span>my</span>
-        </div>
-      </div>
+      <BottomNav active="home" />
     </div>
   );
 }
