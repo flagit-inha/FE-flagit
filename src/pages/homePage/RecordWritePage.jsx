@@ -133,9 +133,9 @@ function RecordWritePage() {
   const resolveCoords = (raw='')=>{
     const name = raw.trim();
     if(!name) return { lat:33.4996, lng:126.5312, canonical:'제주도' };
-    if(name.includes('올림픽공원')) return { lat:37.5163, lng:127.1215, canonical:'올림픽공원' };
-    if(name.includes('태백산')) return { lat:37.1009, lng:128.9153, canonical:'태백산' };
-    if(name.includes('땅끝마을')) return { lat:34.2980, lng:126.5233, canonical:'땅끝마을' };
+    if(name.includes('올림픽공원')) return { lat:36.4163, lng:127.2215, canonical:'올림픽공원' };
+    if(name.includes('태백산')) return { lat:36.1009, lng:128.5153, canonical:'태백산' };
+    if(name.includes('땅끝마을')) return { lat:34.0980, lng:127.5233, canonical:'땅끝마을' };
     return { lat:33.4996, lng:126.5312, canonical:'제주도' };
   };
 

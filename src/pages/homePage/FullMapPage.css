@@ -26,6 +26,8 @@
   --nav-label-fs: 11px;
   --bottom-nav-bg:#e9e9e9;
   --bottom-nav-icon-size:26px;
+
+  --flag-card-width: 100px; /* 추가: 카드/플래그 공통 기준 폭 */
 }
 
 /* ===== Base ===== */
@@ -118,7 +120,8 @@ html, body {
 .map-flags { position:absolute; inset:0; pointer-events:none; z-index:8; }
 .map-flag {
   position:absolute;
-  transform:translate(-50%, -100%);
+  width: var(--flag-card-width);            /* 카드와 동일 폭으로 고정 */
+  transform: translate(-50%, -100%);        /* 좌표 = 폭/2 기준 정중앙 */
   background:transparent;
   border:none;
   padding:0;
@@ -136,7 +139,7 @@ html, body {
   -webkit-user-drag:none;
 }
 .flag-card {
-  width:100px;
+  width: var(--flag-card-width);            /* 동일 변수 사용 */
   padding:8px 8px 9px;
   background:#fff;
   border-radius:14px;
@@ -257,7 +260,10 @@ html, body {
 
 /* ===== Responsive ===== */
 @media (max-width:360px){
-  .flag-card { width:74px; padding:7px 7px 8px; }
+  :root {
+    --flag-card-width: 74px;                /* 작은 화면 폭 조정 */
+  }
+  .flag-card { padding:7px 7px 8px; }
   .flag-place { font-size:11px; }
   .flag-view-btn { font-size:9px; padding:3px 7px 4px; }
   .add-button { width:56px; height:56px; }

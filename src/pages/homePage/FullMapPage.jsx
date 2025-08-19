@@ -130,7 +130,7 @@ function FullMapPage({ userName='홍길동' }) {
         <div className="footer-flag">
           <img src="/img/running2.svg" alt="" className="footer-flag-icon" draggable="false" />
           <div className="footer-flag-text">
-            {loading ? '로딩 중' : `내 누적 깃발 ${coordCount}`}
+            {loading ? '로딩 중' : `내 누적 깃발 ${coordCount}개`}
           </div>
         </div>
         <button type="button" className="add-button" aria-label="기록 추가" onClick={goWrite}>
