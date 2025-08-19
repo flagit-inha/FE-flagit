@@ -69,7 +69,7 @@ function MemberListPage() {
 
       {/* 크루프로필  */}
       <div className='crewProfile'>
-        <img src="/img/Ellipse2.svg" className="profile-image" /> 
+        <img src="/img/Ellipse2.svg" className="profqile-image" /> 
       </div>
 
       {/* 크루이름 */}
