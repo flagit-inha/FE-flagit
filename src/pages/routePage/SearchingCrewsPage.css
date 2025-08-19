@@ -1,0 +1,67 @@
+/* 화면 중앙 정렬 */
+.search-screen{
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    padding: 2rem;
+  }
+  
+  /* 카드 영역 (다른 페이지와 톤 맞춤) */
+  .search-card{
+    width: min(92vw, 26rem);
+    min-height: 70svh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    text-align: center;
+  }
+  
+  /* 뒤로가기 */
+  .search-back{
+    position: absolute;
+    top: -5rem;
+    left: 1rem;
+    background: transparent;
+    border: 0;
+    font-size: 2rem;
+    font-weight: 600;
+    color:#3b82f6;
+    line-height: 1;
+    cursor: pointer;
+  }
+  
+  /* 돋보기 아이콘 */
+  .search-icon{
+    width: 7rem;          /* 필요하면 6~8rem 사이 조절 */
+    height: auto;
+    display: block;
+    margin: 0 auto 2rem; /* 중앙 정렬 */
+    animation: searchPulse 1.6s ease-in-out infinite;
+    /* 살짝 더 또렷하게 보이도록 */
+    filter: drop-shadow(0 2px 8px rgba(0,0,0,.08));
+  }
+  
+  /* 상태 텍스트 */
+  .search-text{
+    margin-top: 1rem;
+    font-size: 1rem;
+    color: #6b7280;
+    font-weight: 500;
+  }
+  
+  /* 돋보기 커졌다-작아지는 모션 */
+  @keyframes searchPulse{
+    0%   { transform: scale(0.92); opacity: .9; }
+    50%  { transform: scale(1.10); opacity: 1;  }
+    100% { transform: scale(0.92); opacity: .9; }
+  }
+  
+  /* 사용자 접근성: 모션 줄이기 */
+  @media (prefers-reduced-motion: reduce){
+    .search-icon{ animation: none; }
+  }
+  
