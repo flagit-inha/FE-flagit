@@ -40,7 +40,7 @@ function MyCrewPage() {
 
       {/* 크루프로필  */}
       <div className='crewProfile'>
-        <img src="/img/Ellipse2.svg" className="profile-image" /> 
+        <img src="/img/Ellipse2.svg"  /> 
       </div>
 
       {/* 크루이름 */}
