@@ -382,23 +382,6 @@
 
 .rw-bottom-gap { height:30px; }
 
-.bottom-nav {
-  position:fixed; bottom:0; left:50%; transform:translateX(-50%);
-  width:100%; max-width:var(--rw-max-w);
-  height:64px; display:flex; align-items:center; justify-content:space-between;
-  gap:4px; padding:0 12px; background:#fff;
-  box-shadow:0 -2px 8px rgba(0,0,0,.16); z-index:60;
-  box-sizing:border-box;
-}
-.bottom-nav .nav-item {
-  flex:1; display:flex; flex-direction:column; align-items:center;
-  justify-content:center; font-size:11px; font-weight:600; color:#555; gap:4px;
-}
-.bottom-nav .nav-item img {
-  width:24px; height:24px; object-fit:contain;
-  filter:drop-shadow(0 1px 2px rgba(0,0,0,.25)); opacity:.85;
-}
-
 @keyframes rwDropdownFade {
   from { opacity:0; transform:translateY(-4px); }
   to { opacity:1; transform:translateY(0); }
