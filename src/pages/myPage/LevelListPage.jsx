@@ -23,6 +23,7 @@ function LevelListPage() {
       {/* 상단바 */}
       <div className="badgePage-header">
         <img src="/img/bback.svg" alt="뒤로가기" className="back-icon" onClick={handleBackClick}/>
+
         <img src="/img/star.svg" alt="star 아이콘" className="starr-icon" />
       </div>
 
