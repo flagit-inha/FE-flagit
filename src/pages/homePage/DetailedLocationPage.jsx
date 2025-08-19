@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
-import { getRecord } from '../../services/recordsService';
+import { getRecord, deleteRecord } from '../../services/recordsService';
 import './RecordWritePage.css';
 import './DetailedLocationPage.css';
 
@@ -12,6 +12,7 @@ function DetailedLocationPage() {
 
   const [record, setRecord] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [deleting, setDeleting] = useState(false); // ← 추가
 
   useEffect(()=>{
     let alive = true;
@@ -20,7 +21,7 @@ function DetailedLocationPage() {
         setLoading(true);
         const r = await getRecord(id);
         if(alive){
-          if(!r.imagesData && stateImagesData.length){
+          if(r && !r.imagesData && stateImagesData.length){
             r.imagesData = stateImagesData;
           }
           setRecord(r);
@@ -63,6 +64,7 @@ function DetailedLocationPage() {
 
   const {
     place,
+    placeCanonical,
     activity,
     distance,
     duration,
@@ -78,10 +80,7 @@ function DetailedLocationPage() {
     images = []
   } = record;
 
-  // 실제 이미지 표시용(우선 URL 이 있는 경우만)
   const heroSrc = imageUrls[0] || previewUrl || null;
-
-  // 개수 판단(원본 이미지를 실제로 로드하지 않아도 '등록 완료' 메시지 표시)
   const imageCount =
     imageUrls.length ||
     imagesMeta.length ||
@@ -89,9 +88,8 @@ function DetailedLocationPage() {
     imagesData.length ||
     (previewUrl ? 1 : 0);
 
-  const hasDisplayableImage = !!heroSrc;     // 실제 보여줄 이미지가 있는지
-  const hasAnyImage = imageCount > 0;        // 메타/데이터 상 등록된 이미지가 있는지
-
+  const hasDisplayableImage = !!heroSrc;
+  const hasAnyImage = imageCount > 0;
   const noteBlock = [note?.trim() || '', (hashtags||'').trim()].filter(Boolean).join('\n');
 
   const ordinal = (nRaw)=>{
@@ -107,18 +105,39 @@ function DetailedLocationPage() {
     }
   };
 
+  const onDelete = async ()=>{
+    if(deleting) return;
+    setDeleting(true);
+    try {
+      await deleteRecord(id);
+      navigate('/fullmap');
+    } finally {
+      setDeleting(false);
+    }
+  };
+
   return (
     <div className="rw-container">
       <header className="rw-header dlp-header">
         <button type="button" className="rw-back-btn" onClick={()=>navigate(-1)}>〈</button>
         <div className="dlp-header-text">
-          <h1 className="rw-page-title dlp-page-title">{place || '장소 미지정'}</h1>
+          <h1 className="rw-page-title dlp-page-title">
+            {place && place.trim() ? place : '장소 미지정'}
+          </h1>
           <div className="dlp-meta-line dlp-meta-in-header">
             <span className="dlp-activity">{activity || '-'}</span>
             <span className="dlp-dot">|</span>
             <span className="dlp-date">{dateDot}</span>
           </div>
         </div>
+        <button
+          type="button"
+          className="dlp-del-btn"
+          onClick={onDelete}
+          aria-label="기록 삭제"
+          disabled={deleting}
+          style={deleting ? {opacity:.5, cursor:'default'}:{}}
+        >{deleting ? '삭제중...' : '삭제'}</button>
       </header>
 
       <div className="rw-scroll">
@@ -148,16 +167,16 @@ function DetailedLocationPage() {
 
         <div className="rw-block dlp-crew-block">
           <h2 className="dlp-sec-title">나와 함께한 사람들</h2>
-            <div className="dlp-crew-avatars">
-              {crew.length
-                ? crew.map((c,i)=>(
-                  <div key={i} className="dlp-avatar" title={String(c)}>
-                    <span className="dlp-avatar-text">{String(c).slice(0,2)}</span>
-                  </div>
-                ))
-                : [0,1,2].map(i=> <div key={i} className="dlp-avatar dlp-avatar-empty" />)
-              }
-            </div>
+          <div className="dlp-crew-avatars">
+            {crew.length
+              ? crew.map((c,i)=>(
+                <div key={i} className="dlp-avatar" title={String(c)}>
+                  <span className="dlp-avatar-text">{String(c).slice(0,2)}</span>
+                </div>
+              ))
+              : [0,1,2].map(i=> <div key={i} className="dlp-avatar dlp-avatar-empty" />)
+            }
+          </div>
         </div>
 
         <div className="rw-block dlp-separator-block">

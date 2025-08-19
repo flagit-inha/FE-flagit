@@ -129,12 +129,26 @@ function RecordWritePage() {
     setHashtags(v);
   };
 
+  // 장소 이름을 좌표로 변환 (요구사항: 올림픽공원 / 태백산 / 땅끝마을 외는 제주도)
+  const resolveCoords = (raw='')=>{
+    const name = raw.trim();
+    if(!name) return { lat:33.4996, lng:126.5312, canonical:'제주도' };
+    if(name.includes('올림픽공원')) return { lat:37.5163, lng:127.1215, canonical:'올림픽공원' };
+    if(name.includes('태백산')) return { lat:37.1009, lng:128.9153, canonical:'태백산' };
+    if(name.includes('땅끝마을')) return { lat:34.2980, lng:126.5233, canonical:'땅끝마을' };
+    return { lat:33.4996, lng:126.5312, canonical:'제주도' };
+  };
+
   const submit = async ()=>{
     if(submitting) return;
     setSubmitting(true);
     try {
+      const coord = resolveCoords(place);
       const record = await createRecord({
         place,
+        placeCanonical: coord.canonical,
+        latitude: coord.lat,
+        longitude: coord.lng,
         activity,
         date,
         timeStart,
@@ -144,12 +158,12 @@ function RecordWritePage() {
         crew,
         hashtags: hashtags.trim(),
         mediaMode,
-        images: files,   // File -> 새로고침 후 미복원 (임시)
+        images: files,
         note: recordText
       });
       navigate(`/location/${record.id}`);
     } catch(e){
-      alert('저장 실패: ' + e.message);
+      alert('저장 실패: ' + (e.message || e));
     } finally {
       setSubmitting(false);
     }
@@ -372,48 +386,48 @@ function RecordWritePage() {
       {dateTimeOpen && (
         <>
           <div className="rw-datetime-backdrop" />
-            <div
-              ref={dtPanelRef}
-              className="rw-datetime-panel rw-datetime-panel-fixed"
-              style={{top:panelRect.top, left:panelRect.left, width:panelRect.width}}
-            >
-              <label className="rw-dtp-row">
-                <span className="rw-dtp-label">날짜</span>
-                <input
-                  type="date"
-                  value={date}
-                  onChange={e=>setDate(e.target.value)}
-                />
-              </label>
-              <div className="rw-dtp-row rw-dtp-row-col">
-                <span className="rw-dtp-label">시간</span>
-                <div className="rw-time-edit-col">
-                  <label className="rw-time-line">
-                    <span className="rw-time-sub">시작</span>
-                    <input
-                      type="time"
-                      value={timeStart}
-                      onChange={e=>setTimeStart(e.target.value)}
-                    />
-                  </label>
-                  <label className="rw-time-line">
-                    <span className="rw-time-sub">종료</span>
-                    <input
-                      type="time"
-                      value={timeEnd}
-                      onChange={e=>setTimeEnd(e.target.value)}
-                    />
-                  </label>
-                </div>
-              </div>
-              <div className="rw-dtp-actions">
-                <button
-                  type="button"
-                  className="rw-btn-small"
-                  onClick={()=>setDateTimeOpen(false)}
-                >확인</button>
+          <div
+            ref={dtPanelRef}
+            className="rw-datetime-panel rw-datetime-panel-fixed"
+            style={{top:panelRect.top, left:panelRect.left, width:panelRect.width}}
+          >
+            <label className="rw-dtp-row">
+              <span className="rw-dtp-label">날짜</span>
+              <input
+                type="date"
+                value={date}
+                onChange={e=>setDate(e.target.value)}
+              />
+            </label>
+            <div className="rw-dtp-row rw-dtp-row-col">
+              <span className="rw-dtp-label">시간</span>
+              <div className="rw-time-edit-col">
+                <label className="rw-time-line">
+                  <span className="rw-time-sub">시작</span>
+                  <input
+                    type="time"
+                    value={timeStart}
+                    onChange={e=>setTimeStart(e.target.value)}
+                  />
+                </label>
+                <label className="rw-time-line">
+                  <span className="rw-time-sub">종료</span>
+                  <input
+                    type="time"
+                    value={timeEnd}
+                    onChange={e=>setTimeEnd(e.target.value)}
+                  />
+                </label>
               </div>
             </div>
+            <div className="rw-dtp-actions">
+              <button
+                type="button"
+                className="rw-btn-small"
+                onClick={()=>setDateTimeOpen(false)}
+              >확인</button>
+            </div>
+          </div>
         </>
       )}
     </div>

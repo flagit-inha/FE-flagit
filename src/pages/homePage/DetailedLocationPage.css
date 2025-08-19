@@ -1,35 +1,42 @@
-
 /* 헤더: 장소 제목 + 운동종류|날짜를 포함 (저장 버튼 없음) */
 .rw-header.dlp-header {
   position:sticky;
   top:0;
   z-index:30;
   background:var(--rw-bg);
-  /* 원래 header 의 높이는 124px (변수). 가변 높이로 전환 */
   height:auto;
   padding:0 var(--rw-pad) 20px;
   box-sizing:border-box;
 }
 
-/* 기존 RecordWritePage 는 제목/버튼 absolute.
-   여기서는 back 버튼만 absolute 유지, 제목/메타는 문서 흐름 */
-.rw-header.dlp-header .rw-back-btn {
-  /* RecordWritePage.css 에 정의된 position:absolute; top:var(--rw-header-btn-top); left:var(--rw-pad); 그대로 활용 */
+/* 삭제 버튼 */
+.dlp-del-btn {
+  position:absolute;
+  top:40px;
+  right:24px;
+  background:none;
+  border:none;
+  padding:4px 4px;
+  font-size:14px;
+  font-weight:600;
+  color:#d63636;
+  cursor:pointer;
+  letter-spacing:-0.3px;
 }
+.dlp-del-btn:active { opacity:.7; }
 
 /* 제목/메타 래퍼 */
 .dlp-header-text {
   display:flex;
   flex-direction:column;
   align-items:flex-start;
-  /* back 버튼 top 위치(40px)와 제목 목표 위치(88px) 차이 = 48px */
   margin-top:calc(var(--rw-title-offset) - var(--rw-header-btn-top) + 40px);
-  padding-left:8px; /* 기존 제목 left:calc(var(--rw-pad)+8px) 보정 */
+  padding-left:8px;
   box-sizing:border-box;
   max-width:100%;
 }
 
-/* 제목을 static 으로 (RecordWritePage 의 absolute 제거) */
+/* 제목 */
 .rw-header.dlp-header .rw-page-title {
   position:static;
   top:auto; left:auto;
@@ -40,7 +47,6 @@
   text-overflow:ellipsis;
 }
 
-/* 헤더 안 메타 정보 (운동종류 | 날짜) */
 .dlp-meta-line,
 .dlp-meta-in-header {
   display:flex;
@@ -54,11 +60,9 @@
   margin:0;
 }
 .dlp-meta-in-header .dlp-dot { color:#9aa5a6; }
-
-/* (스크롤 영역 내 기존 메타 블록은 사용하지 않음) */
 .dlp-meta-block { display:none; }
 
-/* HERO 영역 */
+/* HERO */
 .dlp-hero-block {
   margin-top:32px;
   display:flex;
@@ -135,7 +139,7 @@
   margin:0 16px;
   font-size:20px;
   font-weight:700;
-  letter-spacing:0; /* 한글 가독성 */
+  letter-spacing:0;
   font-family:'Inter','Pretendard','Noto Sans KR','Malgun Gothic',system-ui,sans-serif;
 }
 .dlp-crew-avatars {
@@ -207,10 +211,10 @@
   .dlp-avatar { width:74px; height:74px; }
 }
 
-/* 아주 작은 화면에서 제목이 2줄 가능하도록 */
 @media (max-width:360px){
   .rw-header.dlp-header .rw-page-title {
     white-space:normal;
     line-height:1.2;
   }
+  .dlp-del-btn { top:36px; right:20px; font-size:13px; }
 }
