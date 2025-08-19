@@ -18,7 +18,7 @@ function CreateNoticePage() {
     <div>
       <div className='to2p-bar'>
         <img src="/img/<.svg" onClick={handleBackClick} alt="mycrew" className="myc1rew-icon" />
-        <button className='writeBtn' onClick={handleBackClick}>작성하기</button>
+        <div className='writeBstn' onClick={handleBackClick}>작성하기</div>
       </div>
 
       <div className='t1itle'>공지 작성</div>

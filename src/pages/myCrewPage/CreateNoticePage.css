@@ -3,30 +3,28 @@
     align-items: center;
     justify-content: space-between;
     padding: 20px 40px;
-    border-bottom: 1px solid #e5e5e5;
+
     background-color: #ffffff;
     position: sticky;
     top: 0;
     z-index: 10;
 }
 
-.writeBtn {
+.writeBstn {
     border: none;
-    color: #fff;
-    background-color: #23AFB4;
-    font-size: 16px;
+    color:  #23AFB4;
+    background-color: none;
+    font-size: 18px;
     cursor: pointer;
     font-weight: bold;
-    padding: 12px 24px;
+    padding: 20px 24px;
     border-radius: 10px;
     transition: all 0.25s ease;
-    box-shadow: 0px 2px 6px rgba(0,0,0,0.08);
-   
 }
-.writeBtn:hover {
-    background-color: #1a8f91;
+.writeBstn:hover {
+    color: #238a8e;
     transform: translateY(-2px);
-    box-shadow: 0px 6px 12px rgba(35, 175, 180, 0.25);
+
 }
 
 .t1itle {

@@ -18,11 +18,11 @@ function MemberListPage() {
 
   // 초기 멤버 리스트 데이터
   const initialMemberList = [
-    { id: 1, name: '홍길동', profilePic: '/img/profile1.png', status: '🐣 입문자', joinedAt: '2023-08-01' },
-    { id: 2, name: '김철수', profilePic: '/img/profile2.png', status: '🐥 초보자', joinedAt: '2023-08-05' },
-    { id: 3, name: '이영희', profilePic: '/img/profile3.png', status: '🦉 숙련자', joinedAt: '2023-08-03' },
-    { id: 4, name: '박민수', profilePic: '/img/profile4.png', status: '🐣 입문자', joinedAt: '2023-08-02' },
-    { id: 5, name: '홍수진', profilePic: '/img/profile5.png', status: '🦉 숙련자', joinedAt: '2023-08-04' },
+    { id: 1, name: '홍길동', profilePic: '/img/Ellipse2.svg', status: '🐣 입문자', joinedAt: '2023-08-01' },
+    { id: 2, name: '김철수', profilePic: '/img/Ellipse2.svg', status: '🐥 초보자', joinedAt: '2023-08-05' },
+    { id: 3, name: '이영희', profilePic: '/img/Ellipse2.svg', status: '🦉 숙련자', joinedAt: '2023-08-03' },
+    { id: 4, name: '박민수', profilePic: '/img/Ellipse2.svg', status: '🐣 입문자', joinedAt: '2023-08-02' },
+    { id: 5, name: '홍수진', profilePic: '/img/Ellipse2.svg', status: '🦉 숙련자', joinedAt: '2023-08-04' },
   ];
 
   // 멤버 리스트 상태 관리
