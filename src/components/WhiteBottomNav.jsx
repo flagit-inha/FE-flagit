@@ -17,13 +17,13 @@ function guessActive(pathname){
   return '';
 }
 
-const BottomNav = ({ active }) => {
+const WhiteBottomNav = ({ active }) => {
   const navigate = useNavigate();
   const { pathname } = useLocation();
   const activeKey = active || guessActive(pathname);
 
   return (
-    <nav className="bottom-nav" aria-label="하단 네비게이션">
+    <nav className="white-bottom-nav" aria-label="하단 네비게이션">
       {NAV_ITEMS.map(item => {
         const isActive = item.key === activeKey;
         return (
@@ -43,4 +43,4 @@ const BottomNav = ({ active }) => {
   );
 };
 
-export default BottomNav;
+export default WhiteBottomNav;
