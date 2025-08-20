@@ -6,48 +6,69 @@ export default function JoinCrewPage() {
   const nav = useNavigate();
   const [teamName, setTeamName] = useState("");
   const [inviteCode, setInviteCode] = useState("");
+  const [loading, setLoading] = useState(false);
 
-  const onSubmit = (e) => {
+  const submit = async (e) => {
     e.preventDefault();
     if (!teamName || !inviteCode) {
-      alert("단체명과 초대코드를 입력하세요.");
+      alert("단체명과 초대코드를 입력해주세요.");
       return;
     }
-    // TODO: 실제 검증은 백엔드 연결 시 구현
-    alert(`참여 요청 전송!\n단체명: ${teamName}\n코드: ${inviteCode}`);
-    nav("/"); // 성공 가정
+    setLoading(true);
+    await new Promise(r => setTimeout(r, 250)); // TODO: 실제 API 연결
+    setLoading(false);
+    nav("/mycrew");
   };
 
   return (
-    <div className="auth-screen">
-      <div className="auth-card">
-        <button className="back-btn" onClick={() => nav(-1)} aria-label="뒤로가기">‹</button>
+    <div className="crewjoin-screen">
+      <div className="crewjoin-card">
+        <button
+          className="crewjoin-back"
+          aria-label="뒤로가기"
+          onClick={() => nav(-1)}
+        >
+          ‹
+        </button>
 
-        <img src="/img/flagit%20logo.svg" alt="Flagit" className="logo" />
-        <h1 className="title">모임 참여하기</h1>
+        <img
+          src="/img/flagitlogo3.svg"
+          alt="Flagit"
+          className="crewjoin-logo"
+        />
 
-        <form className="form" onSubmit={onSubmit}>
-          <label className="field">
-            <span className="label">단체명</span>
+        <h1 className="crewjoin-title">모임 참여하기</h1>
+
+        <form onSubmit={submit} className="crewjoin-form">
+          {/* 단체명 */}
+          <label className="crewjoin-field">
+            <span className="crewjoin-label">단체명</span>
             <input
-              className="input"
+              className="crewjoin-input"
+              placeholder="단체/모임 이름을 입력"
               value={teamName}
-              onChange={(e)=>setTeamName(e.target.value)}
-              placeholder="예) 플래깃 러닝크루"
+              onChange={(e) => setTeamName(e.target.value)}
             />
           </label>
 
-          <label className="field">
-            <span className="label blue">초대코드입력</span>
+          {/* 초대코드 */}
+          <label className="crewjoin-field">
+            <span className="crewjoin-label crewjoin-label--link">초대코드입력</span>
             <input
-              className="input"
+              className="crewjoin-input"
+              placeholder=""
               value={inviteCode}
-              onChange={(e)=>setInviteCode(e.target.value.toUpperCase())}
-              placeholder="예) RW0DKNSLQB"
+              onChange={(e) => setInviteCode(e.target.value)}
             />
           </label>
 
-          <button className="cta-blue" type="submit">참여하기</button>
+          <button
+            type="submit"
+            className="crewjoin-cta"
+            disabled={loading}
+          >
+            {loading ? "참여 중..." : "완료하기"}
+          </button>
         </form>
       </div>
     </div>

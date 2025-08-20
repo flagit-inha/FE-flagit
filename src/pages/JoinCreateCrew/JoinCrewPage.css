@@ -1,58 +1,106 @@
-.auth-screen {
-    min-height: 100vh;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #fff;
-  }
-  
-  .auth-card {
-    width: 360px;
-    max-width: 92%;
-    background: #fff;
-    padding: 28px 20px 20px;
-    border-radius: 28px;
-    box-shadow: 0 10px 30px rgba(0,0,0,.08);
-    position: relative;
-  }
-  
-  .back-btn {
-    position: absolute;
-    top: 16px;
-    left: 14px;
-    border: none;
-    background: transparent;
-    font-size: 20px;
-    color: #6b7280;
-    cursor: pointer;
-  }
-  
-  .logo { height: 32px; margin-bottom: 24px; margin-left: 4px; }
-  .title { font-size: 24px; font-weight: 700; margin: 6px 0 16px; }
-  
-  .form { display: grid; gap: 18px; }
-  .field { display: grid; gap: 8px; }
-  
-  .label { font-size: 12px; color: #6b7280; }
-  .label.blue { color: #3b82f6; }
-  
-  .input {
-    border: none;
-    border-bottom: 1px solid #d1d5db;
-    padding: 10px 0;
-    outline: none;
-    background: transparent;
-  }
-  .input:focus { border-bottom-color: #111827; }
-  
-  .cta-blue {
-    width: 100%;
-    padding: 12px 0;
-    border: none;
-    border-radius: 10px;
-    background: #3b82f6;
-    color: #fff;
-    font-weight: 600;
-    cursor: pointer;
-  }
-  
+/* JoinCrew 전용 — CreateCrew와 톤 일치 */
+.crewjoin-screen {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #fff;
+  padding: 3.5rem;
+}
+
+.crewjoin-card {
+  width: min(92vw, 26rem);
+  min-height: 70svh;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  text-align: left;
+}
+
+/* 뒤로가기: CreateCrew와 동일한 위치/크기 */
+.crewjoin-back {
+  position: absolute;
+  top: -5rem;
+  left: -1rem;
+  background: transparent;
+  border: 0;
+  font-size: 2rem;
+  font-weight: 600;
+  color: #3b82f6;
+  line-height: 1;
+  cursor: pointer;
+}
+
+/* 로고/타이틀: 크기/여백 CreateCrew와 동일 */
+.crewjoin-logo {
+  display: block;
+  width: 8rem;
+  height: auto;
+  margin: 0 0 2rem -0.25rem;
+}
+
+.crewjoin-title {
+  font-size: 1.8rem;
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 3cqh; /* 너가 쓰던 값 그대로 */
+}
+
+/* 폼 */
+.crewjoin-form {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  height: 100%;
+  gap: 1rem;
+}
+
+.crewjoin-field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.crewjoin-label {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+/* 파란 라벨 느낌 (CreateCrew의 --link 톤과 동일) */
+.crewjoin-label--link {
+  color: #6b7280;
+  font-size: 0.8rem;
+}
+
+.crewjoin-input {
+  width: 100%;
+  border: none;
+  border-bottom: 2px solid #d1d5db;
+  background: transparent;
+  padding: 0.75rem 0;
+  font-size: 0.9rem;
+  outline: none;
+}
+
+.crewjoin-input:focus {
+  border-bottom-color: #3b82f6;
+}
+
+/* CTA: 카드 하단에 붙이기 (CreateCrew와 동일한 방식) */
+.crewjoin-cta {
+  position: absolute;
+  bottom: 1.5rem;
+  width: 100%;
+  padding: 0.75rem 0;
+  border: none;
+  border-radius: 0.7rem;
+  background: #3b82f6; /* 참여 버튼은 블루 */
+  color: #fff;
+  font-weight: 600;
+  font-size: 0.95rem;
+  cursor: pointer;
+}
+
+.crewjoin-cta:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
