@@ -32,10 +32,21 @@ function project(lat, lng) {
   return { left: xRatio * 100, top: yRatio * 100 };
 }
 
+function unproject(leftPercent, topPercent) {
+  const { latMin, latMax, lngMin, lngMax } = GEO_BOUNDS;
+  const lng = lngMin + (lngMax - lngMin) * (leftPercent / 100);
+  const lat = latMin + (latMax - latMin) * (1 - topPercent / 100);
+  return { lat, lng };
+}
+
 function FullMapPage({ userName='홍길동' }) {
   const navigate = useNavigate();
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  // 깃발 선택 모드
+  const [selectingFlag, setSelectingFlag] = useState(false);
+  const [selectedFlag, setSelectedFlag] = useState(null);
 
   useEffect(()=>{
     let alive = true;
@@ -62,7 +73,7 @@ function FullMapPage({ userName='홍길동' }) {
           id: r.id,
           place: placeName,
           activity: r.activity || 'running',
-            date: r.date || '',
+          date: r.date || '',
           ...p
         };
       })
@@ -71,7 +82,39 @@ function FullMapPage({ userName='홍길동' }) {
 
   const coordCount = projectedFlags.length;
   const openRecord = id => navigate(`/location/${id}`);
-  const goWrite = ()=> navigate('/record-write');
+
+  // +버튼 클릭 시 지도에서 위치 선택 모드 진입
+  const startFlagSelect = () => {
+    setSelectingFlag(true);
+    setSelectedFlag(null);
+  };
+
+  // 지도 클릭 시 좌표 계산
+  const handleMapClick = (e) => {
+    if (!selectingFlag) return;
+    const mapArea = e.currentTarget;
+    const rect = mapArea.getBoundingClientRect();
+    const x = e.clientX - rect.left;
+    const y = e.clientY - rect.top;
+    const leftPercent = (x / rect.width) * 100;
+    const topPercent = (y / rect.height) * 100;
+    setSelectedFlag({ left: leftPercent, top: topPercent });
+  };
+
+  // 깃발 위치 확정 후 기록 작성 페이지로 이동
+  const confirmFlag = () => {
+    if (!selectedFlag) return;
+    const { lat, lng } = unproject(selectedFlag.left, selectedFlag.top);
+    navigate(`/record-write?lat=${lat}&lng=${lng}`);
+    setSelectingFlag(false);
+    setSelectedFlag(null);
+  };
+
+  // 선택 취소
+  const cancelFlag = () => {
+    setSelectingFlag(false);
+    setSelectedFlag(null);
+  };
 
   const line1 = `${userName}님의`;
   const line2 = '기록';
@@ -88,7 +131,7 @@ function FullMapPage({ userName='홍길동' }) {
       </div>
 
       <div className="fullmap-content">
-        <div className="map-area">
+        <div className="map-area" onClick={handleMapClick} style={{cursor: selectingFlag ? 'crosshair' : 'default'}}>
           <div className="geo-wrapper">
             <div className="geo-canvas">
               <img src="/img/main_map.svg" alt="대한민국 지도" className="geo-main" draggable="false" />
@@ -122,11 +165,30 @@ function FullMapPage({ userName='홍길동' }) {
                     </div>
                   );
                 })}
+                {/* 선택 중인 깃발 미리보기 */}
+                {selectingFlag && selectedFlag && (
+                  <div className="map-flag new-flag" style={{left:`${selectedFlag.left}%`, top:`${selectedFlag.top}%`}}>
+                    <img src="/img/flag_running.svg" alt="새 깃발" className="flag-icon" draggable="false" />
+                  </div>
+                )}
               </div>
-
             </div>
           </div>
         </div>
+        {/* 깃발 선택 안내 및 확인/취소 버튼 */}
+        {selectingFlag && (
+          <div className="flag-select-bar">
+            <span>
+              {selectedFlag
+                ? '깃발을 꽂으시겠습니까?'
+                : '클릭해서 깃발을 꽂으세요.'}
+            </span>
+            <div className="flag-select-actions">
+              <button type="button" className="flag-confirm-btn" disabled={!selectedFlag} onClick={confirmFlag}>확인</button>
+              <button type="button" className="flag-cancel-btn" onClick={cancelFlag}>취소</button>
+            </div>
+          </div>
+        )}
       </div>
 
       <div className="map-footer">
@@ -136,7 +198,12 @@ function FullMapPage({ userName='홍길동' }) {
             {loading ? '로딩 중' : `내 누적 깃발 ${coordCount}개`}
           </div>
         </div>
-        <button type="button" className="add-button" aria-label="기록 추가" onClick={goWrite}>
+        <button
+          type="button"
+          className="add-button"
+          aria-label="기록 추가"
+          onClick={startFlagSelect}
+        >
           <img src="/img/plus.svg" alt="" aria-hidden="true" className="add-button-icon" draggable="false" />
         </button>
       </div>
