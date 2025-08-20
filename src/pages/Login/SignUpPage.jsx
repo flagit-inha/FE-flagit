@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { registerLocal } from "./authLocal";
 import "./SignUpPage.css";
 
@@ -21,7 +21,7 @@ export default function SignUpPage() {
     if (!/^\S+@\S+\.\S+$/.test(email)) return setErr("이메일 형식을 확인하세요.");
 
     setLoading(true);
-    await new Promise(r => setTimeout(r, 250));
+    await new Promise((r) => setTimeout(r, 250));
     try {
       await registerLocal({ name, email, password: pw });
       nav("/"); // 가입 후 홈으로
@@ -33,70 +33,61 @@ export default function SignUpPage() {
   };
 
   return (
-    <div className="auth-screen">
-      <div className="auth-card">
-        <img src="/img/flagitlogo3.svg" alt="Flagit" className="logo" />
-        <h1 className="title">가입하기</h1>
+    <div className="signup-screen">
+      <div className="signup-card">
+        <img src="/img/flagitlogo3.svg" alt="Flagit" className="signup-logo" />
+        <h1 className="signup-title">가입하기</h1>
 
-        <form onSubmit={onSubmit} className="form">
-          <label className="field">
-            <span className="label">사용할 닉네임</span>
+        <form onSubmit={onSubmit} className="signup-form">
+          <label className="signup-field">
+            <span className="signup-label">사용할 닉네임</span>
             <input
               value={name}
-              onChange={(e)=>setName(e.target.value)}
-              placeholder="별라온 갓냥이"
-              className="input"
+              onChange={(e) => setName(e.target.value)}
+              placeholder="빌려온 깃냥이"
+              className="signup-input"
             />
           </label>
 
-          <label className="field">
-            <span className="label linkish">이메일(아이디)</span>
+          <label className="signup-field">
+            <span className="signup-label">이메일(아이디)</span>
             <input
               type="email"
               value={email}
-              onChange={(e)=>setEmail(e.target.value)}
+              onChange={(e) => setEmail(e.target.value)}
               placeholder="you@example.com"
-              className="input"
+              className="signup-input"
               autoComplete="email"
             />
           </label>
 
-          <label className="field">
-            <span className="label">비밀번호</span>
+          <label className="signup-field">
+            <span className="signup-label">비밀번호</span>
             <input
               type="password"
               value={pw}
-              onChange={(e)=>setPw(e.target.value)}
-              className="input"
+              onChange={(e) => setPw(e.target.value)}
+              className="signup-input"
               autoComplete="new-password"
             />
           </label>
 
-          <label className="field">
-            <span className="label">비밀번호 확인</span>
+          <label className="signup-field">
+            <span className="signup-label">비밀번호 확인</span>
             <input
               type="password"
               value={pw2}
-              onChange={(e)=>setPw2(e.target.value)}
-              className="input"
+              onChange={(e) => setPw2(e.target.value)}
+              className="signup-input"
               autoComplete="new-password"
             />
           </label>
 
-          
+          {err && <p className="signup-error">{err}</p>}
 
-          {err && <p className="error">{err}</p>}
-
-          <button type="submit" disabled={loading} className="cta">
+          <button type="submit" disabled={loading} className="signup-cta">
             {loading ? "가입 중..." : "가입하기"}
           </button>
-
-          <div className='description'> 
-                <h className='imi'>이미 계정이 있나요? </h>
-                <a href="/login" className="loginLink">로그인하기</a> 
-            </div>
-
-         
         </form>
       </div>
     </div>
