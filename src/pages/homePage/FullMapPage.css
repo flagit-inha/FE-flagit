@@ -120,7 +120,7 @@ html, body {
 .map-flag {
   position:absolute;
   width: var(--flag-card-width);
-  transform: translate(-50%, -100%);
+  transform: translate(-50%, -60%);
   background:transparent;
   border:none;
   padding:0;
