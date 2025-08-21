@@ -152,7 +152,7 @@ function DetailedLocationPage() {
               </div>
             ) : (
               <div className="dlp-hero-fallback">
-                {mediaMode === 'note' ? '기록 모드 (이미지 없음)' : '이미지가 없습니다.'}
+                {mediaMode === 'note' ? '이미지가 없습니다' : '이미지가 없습니다.'}
               </div>
             )}
           </div>

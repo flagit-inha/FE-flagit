@@ -1,11 +1,17 @@
 import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import './RecordWritePage.css';
 import { createRecord } from '../../services/recordsService';
 import BottomNav from '../../components/BottomNav';
 
 function RecordWritePage() {
   const navigate = useNavigate();
+  const location = useLocation();
+
+  // 지도에서 전달된 좌표 파싱
+  const params = new URLSearchParams(location.search);
+  const lat = params.get('lat');
+  const lng = params.get('lng');
 
   const [place, setPlace] = useState('');
   const [activity, setActivity] = useState('');
@@ -130,8 +136,11 @@ function RecordWritePage() {
     setHashtags(v);
   };
 
-  // 장소 이름을 좌표로 변환 (요구사항: 올림픽공원 / 태백산 / 땅끝마을 외는 제주도)
+  // 장소 이름을 좌표로 변환 (지도에서 선택한 좌표 우선)
   const resolveCoords = (raw='')=>{
+    if(lat && lng) {
+      return { lat: Number(lat), lng: Number(lng), canonical: raw.trim() || '선택 위치' };
+    }
     const name = raw.trim();
     if(!name) return { lat:33.4996, lng:126.5312, canonical:'제주도' };
     if(name.includes('올림픽공원')) return { lat:36.4163, lng:127.2215, canonical:'올림픽공원' };
@@ -187,7 +196,7 @@ function RecordWritePage() {
             <img src="/img/question.svg" alt="검색" className="rw-search-icon" />
             <input
               type="text"
-              placeholder="장소를 검색하세요"
+              placeholder="장소를 입력하세요"
               value={place}
               onChange={e=>setPlace(e.target.value)}
             />
