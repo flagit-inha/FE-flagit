@@ -32,10 +32,10 @@ function AppRoutes() {
     <Routes>
       <Route path="/" element={<Opening />} />
       <Route path="/landing" element={<LandingPage />} />
-      <Route path="/signup" element={<SignUpPage />} />
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/users/signup" element={<SignUpPage />} />
+      <Route path="/users/login" element={<LoginPage />} />
       <Route path="/crew-select" element={<CrewSelectPage />} />
-      <Route path="/create-crew" element={<CreateCrewPage />} />
+      <Route path="/crews" element={<CreateCrewPage />} />
       <Route path="/join-crew" element={<JoinCrewPage />} />
       <Route path="/find-route" element={<FindRoutePage />} />
       <Route path="/loading" element={<LoadingPage />} />

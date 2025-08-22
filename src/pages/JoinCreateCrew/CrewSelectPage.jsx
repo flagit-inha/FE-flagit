@@ -29,7 +29,7 @@ export default function CrewSelectPage() {
         <div className="crewsel-actions">
           <button
             className="crewsel-btn crewsel-btn--primary"
-            onClick={() => nav("/create-crew")}
+            onClick={() => nav("/crews")}
           >
             나는 크루를 생성해요 (초대코드 생성)
           </button>

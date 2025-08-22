@@ -4,9 +4,9 @@ import "./CreateCrewPage.css";
 
 export default function CreateCrewPage() {
   const nav = useNavigate();
-  const [teamName, setTeamName] = useState("");
+  const [crewname, setTeamName] = useState("");
   const [typeOpen, setTypeOpen] = useState(false);
-  const [teamType, setTeamType] = useState("등산 모임");
+  const [crew_type, setTeamType] = useState("등산 모임");
   const [code, setCode] = useState("");
 
   const genCode = () => {
@@ -27,11 +27,44 @@ export default function CreateCrewPage() {
     }
   };
 
-  const submit = (e) => {
+  const typeMap = {
+    "등산 모임": "hiking",
+    "러닝 크루": "running",
+    "자전거": "cycling"
+  };
+
+  const submit = async (e) => {
     e.preventDefault();
-    if (!teamName || !teamType || !code) return alert("모든 항목을 채워주세요.");
-    // TODO: 생성 로직 연결
-    nav("/mycrew");
+    if (!crewname || !crew_type || !code) return alert("모든 항목을 채워주세요.");
+
+    try {
+      const token = localStorage.getItem("token");
+      console.log("토큰값:", token);
+      const payload = {
+        crewname: crewname, // 필드명 변경
+        crew_type: typeMap[crew_type], // 영문 코드로 변환
+        invitecode: code
+      };
+      console.log("보내는 데이터:", payload);
+
+      const res = await fetch("https://flagit.p-e.kr/crews/", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify(payload)
+      });
+      const data = await res.json();
+      console.log("응답 데이터:", data);
+      if (!res.ok) {
+        alert(data.message || "크루 생성 실패");
+        return;
+      }
+      nav("/mycrew");
+    } catch (err) {
+      alert("서버 연결 오류");
+    }
   };
 
   return (
@@ -49,7 +82,7 @@ export default function CreateCrewPage() {
             <input
               className="crewcreate-input"
               placeholder="단체/모임 이름을 입력"
-              value={teamName}
+              value={crewname}
               onChange={(e) => setTeamName(e.target.value)}
             />
           </label>
@@ -61,7 +94,7 @@ export default function CreateCrewPage() {
               <input
                 className="crewcreate-input"
                 readOnly
-                value={teamType}
+                value={crew_type}
                 placeholder="유형을 선택하세요"
               />
               <button
@@ -70,7 +103,7 @@ export default function CreateCrewPage() {
                 onClick={() => setTypeOpen((v) => !v)}
                 aria-expanded={typeOpen}
               >
-                {teamType} ▾
+                {crew_type} ▾
               </button>
               {typeOpen && (
                 <ul className="crewcreate-select">

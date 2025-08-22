@@ -1,14 +1,13 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { registerLocal } from "./authLocal";
 import "./SignUpPage.css";
 
 export default function SignUpPage() {
   const nav = useNavigate();
-  const [name, setName] = useState("");
+  const [nickname, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [pw, setPw] = useState("");
-  const [pw2, setPw2] = useState("");
+  const [password, setPw] = useState("");
+  const [password_check, setPw2] = useState("");
   const [err, setErr] = useState(null);
   const [loading, setLoading] = useState(false);
 
@@ -16,19 +15,25 @@ export default function SignUpPage() {
     e.preventDefault();
     setErr(null);
 
-    if (!name || !email || !pw || !pw2) return setErr("모든 항목을 입력하세요.");
-    if (pw !== pw2) return setErr("비밀번호가 일치하지 않습니다.");
+    if (!nickname || !email || !password || !password_check) return setErr("모든 항목을 입력하세요.");
+    if (password !== password_check) return setErr("비밀번호가 일치하지 않습니다.");
     if (!/^\S+@\S+\.\S+$/.test(email)) return setErr("이메일 형식을 확인하세요.");
 
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 250));
     try {
-      await registerLocal({ name, email, password: pw });
-      nav("/"); // 가입 후 홈으로
-    } catch (e2) {
-      setErr(e2.message || "가입에 실패했습니다.");
-    } finally {
+      const res = await fetch("https://flagit.p-e.kr/users/signup/", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ nickname, email, password, password_check })
+      });
+      const data = await res.json();
       setLoading(false);
+
+      if (!res.ok) return setErr(data.message || "가입에 실패했습니다.");
+      nav("/"); // 가입 성공 시 홈으로 이동
+    } catch (e2) {
+      setLoading(false);
+      setErr("서버 연결 오류");
     }
   };
 
@@ -42,7 +47,7 @@ export default function SignUpPage() {
           <label className="signup-field">
             <span className="signup-label">사용할 닉네임</span>
             <input
-              value={name}
+              value={nickname}
               onChange={(e) => setName(e.target.value)}
               placeholder="빌려온 깃냥이"
               className="signup-input"
@@ -65,7 +70,7 @@ export default function SignUpPage() {
             <span className="signup-label">비밀번호</span>
             <input
               type="password"
-              value={pw}
+              value={password}
               onChange={(e) => setPw(e.target.value)}
               className="signup-input"
               autoComplete="new-password"
@@ -76,7 +81,7 @@ export default function SignUpPage() {
             <span className="signup-label">비밀번호 확인</span>
             <input
               type="password"
-              value={pw2}
+              value={password_check}
               onChange={(e) => setPw2(e.target.value)}
               className="signup-input"
               autoComplete="new-password"
