@@ -1,0 +1,67 @@
+/* 화면 중앙 레이아웃 */
+.qrpage-screen{
+    min-height:100svh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#fff;
+  }
+  
+  .qrpage-card{
+    width:min(92vw,26rem);
+    min-height:70svh;
+    background:#fff;
+    position:relative;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    padding:2.25rem 1.25rem 1.75rem;
+    text-align:center;
+  }
+  
+  /* 뒤로가기 */
+  .qrpage-back{
+    position: absolute;
+    top: -5rem;
+    left: 2rem;
+    background: transparent;
+    border: 0;
+    font-size: 2rem;
+    font-weight: 600;
+    color:#3b82f6;
+    line-height: 1;
+    cursor: pointer;
+  }
+  
+  /* 타이틀 */
+  .qrpage-title{
+    font-size:1.75rem;
+    font-weight:800;
+    color:#1c40b6;  /* 파랑 톤 */
+    margin:0 0 1.25rem;
+  }
+  
+  /* QR 담는 박스 */
+  .qrpage-box{
+    width: min(70vw, 16rem);
+    height: min(70vw, 16rem);
+    display:grid;
+    place-items:center;
+    margin: 0.5rem 0 1.25rem;
+  }
+  
+  /* QR 이미지 (정사각형, 선명하게) */
+  .qrpage-img{
+    width:100%;
+    height:100%;
+    object-fit:contain;
+    image-rendering: pixelated;      /* qr 경계 또렷 */
+    -ms-interpolation-mode: nearest-neighbor;
+  }
+  
+  /* 안내 문구 */
+  .qrpage-note{
+    font-size:.9rem;
+    color:#6b7280;
+  }
+  
