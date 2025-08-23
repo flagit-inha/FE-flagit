@@ -10,6 +10,7 @@ export default function SignUpPage() {
   const [password_check, setPw2] = useState("");
   const [err, setErr] = useState(null);
   const [loading, setLoading] = useState(false);
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -21,7 +22,7 @@ export default function SignUpPage() {
 
     setLoading(true);
     try {
-      const res = await fetch("https://flagit.p-e.kr/users/signup/", {
+      const res = await fetch(`${apiBaseUrl}/users/signup/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ nickname, email, password, password_check })

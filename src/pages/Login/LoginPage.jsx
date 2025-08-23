@@ -9,6 +9,7 @@ export default function LoginPage() {
   const [showPw, setShowPw] = useState(false);
   const [err, setErr] = useState(null);
   const [loading, setLoading] = useState(false);
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -17,7 +18,7 @@ export default function LoginPage() {
 
     setLoading(true);
     try {
-      const res = await fetch("https://flagit.p-e.kr/users/login/", {
+      const res = await fetch(`${apiBaseUrl}/users/login/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({ email, password: pw })

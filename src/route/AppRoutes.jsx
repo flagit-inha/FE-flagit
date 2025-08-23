@@ -36,7 +36,7 @@ function AppRoutes() {
       <Route path="/users/login" element={<LoginPage />} />
       <Route path="/crew-select" element={<CrewSelectPage />} />
       <Route path="/crews" element={<CreateCrewPage />} />
-      <Route path="/join-crew" element={<JoinCrewPage />} />
+      <Route path="/crews/join" element={<JoinCrewPage />} />
       <Route path="/find-route" element={<FindRoutePage />} />
       <Route path="/loading" element={<LoadingPage />} />
       <Route path="/suggested-route" element={<SuggestedRoutePage />} />

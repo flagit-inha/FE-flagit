@@ -8,6 +8,7 @@ export default function CreateCrewPage() {
   const [typeOpen, setTypeOpen] = useState(false);
   const [crew_type, setTeamType] = useState("등산 모임");
   const [code, setCode] = useState("");
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
   const genCode = () => {
     // 대문자+숫자 10자
@@ -30,7 +31,7 @@ export default function CreateCrewPage() {
   const typeMap = {
     "등산 모임": "hiking",
     "러닝 크루": "running",
-    "자전거": "cycling"
+    "자전거 동호회": "cycling"
   };
 
   const submit = async (e) => {
@@ -47,7 +48,7 @@ export default function CreateCrewPage() {
       };
       console.log("보내는 데이터:", payload);
 
-      const res = await fetch("https://flagit.p-e.kr/crews/", {
+      const res = await fetch(`${apiBaseUrl}/crews/`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -58,7 +59,12 @@ export default function CreateCrewPage() {
       const data = await res.json();
       console.log("응답 데이터:", data);
       if (!res.ok) {
-        alert(data.message || "크루 생성 실패");
+        // 이미 생성한 크루가 있을 때 에러 메시지 처리
+        if (data.detail && data.detail.includes("이미 생성한 크루")) {
+          alert("이미 생성한 크루가 있습니다");
+        } else {
+          alert(data.message || data.detail || "크루 생성 실패");
+        }
         return;
       }
       nav("/mycrew");
@@ -107,7 +113,7 @@ export default function CreateCrewPage() {
               </button>
               {typeOpen && (
                 <ul className="crewcreate-select">
-                  {["등산 모임", "러닝 크루", "자전거"].map((t) => (
+                  {["등산 모임", "러닝 크루", "자전거 동호회"].map((t) => (
                     <li key={t} onClick={() => { setTeamType(t); setTypeOpen(false); }}>
                       {t}
                     </li>

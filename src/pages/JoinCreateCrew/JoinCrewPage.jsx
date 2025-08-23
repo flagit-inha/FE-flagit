@@ -4,20 +4,43 @@ import "./JoinCrewPage.css";
 
 export default function JoinCrewPage() {
   const nav = useNavigate();
-  const [teamName, setTeamName] = useState("");
-  const [inviteCode, setInviteCode] = useState("");
+  const [crewname, setTeamName] = useState("");
+  const [invitecode, setInviteCode] = useState("");
   const [loading, setLoading] = useState(false);
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
   const submit = async (e) => {
     e.preventDefault();
-    if (!teamName || !inviteCode) {
+    if (!crewname || !invitecode) {
       alert("단체명과 초대코드를 입력해주세요.");
       return;
     }
     setLoading(true);
-    await new Promise(r => setTimeout(r, 250)); // TODO: 실제 API 연결
-    setLoading(false);
-    nav("/mycrew");
+
+    try {
+      const token = localStorage.getItem("token");
+      console.log({ crewname, invitecode }); // 값 확인
+      const res = await fetch(`${apiBaseUrl}/crews/join/`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Authorization": `Bearer ${token}`
+        },
+        body: JSON.stringify({ crewname, invitecode })
+      });
+      const data = await res.json();
+      console.log(data); // 응답 확인
+      setLoading(false);
+
+      if (res.ok) {
+        nav("/mycrew");
+      } else {
+        alert(data.message || "단체명과 초대코드가 일치하지 않습니다.");
+      }
+    } catch (err) {
+      setLoading(false);
+      alert("서버 연결 오류");
+    }
   };
 
   return (
@@ -46,7 +69,7 @@ export default function JoinCrewPage() {
             <input
               className="crewjoin-input"
               placeholder="단체/모임 이름을 입력"
-              value={teamName}
+              value={crewname}
               onChange={(e) => setTeamName(e.target.value)}
             />
           </label>
@@ -57,7 +80,7 @@ export default function JoinCrewPage() {
             <input
               className="crewjoin-input"
               placeholder=""
-              value={inviteCode}
+              value={invitecode}
               onChange={(e) => setInviteCode(e.target.value)}
             />
           </label>

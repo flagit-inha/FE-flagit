@@ -1,23 +1,23 @@
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import "./CrewSelectPage.css";
 
 export default function CrewSelectPage() {
   const nav = useNavigate();
   const [showHintBox, setShowHintBox] = useState(false);
 
+  // 로그인 체크: 토큰 없으면 로그인 페이지로 이동
+ useEffect(() => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      nav("/users/login");
+      return null;
+    }
+  }, [nav]);
+
   return (
     <div className="crewsel-screen">
       <div className="crewsel-card">
-        {/* 뒤로가기 */}
-        <button
-          className="crewsel-back"
-          aria-label="뒤로가기"
-          onClick={() => nav(-1)}
-        >
-          ‹
-        </button>
-
         <img
           src="/img/flagitlogo3.svg"
           alt="Flagit"
@@ -36,11 +36,10 @@ export default function CrewSelectPage() {
 
           <button
             className="crewsel-btn crewsel-btn--secondary"
-            onClick={() => nav("/join-crew")}
+            onClick={() => nav("/crews/join")}
           >
             나는 크루가 이미 있어요 (초대코드 보유)
           </button>
-
           {/* 안내 토글 */}
           <p
             className="crewsel-hint clickable"
