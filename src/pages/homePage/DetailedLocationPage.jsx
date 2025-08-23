@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useMemo } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { getRecord, deleteRecord } from '../../services/recordsService';
-import BottomNav from '../../components/BottomNav';
+import WhiteBottomNav from '../../components/WhiteBottomNav';
 import './RecordWritePage.css';
 import './DetailedLocationPage.css';
 
@@ -195,7 +195,7 @@ function DetailedLocationPage() {
         <div style={{height:40}} />
       </div>
 
-      <BottomNav />
+      <WhiteBottomNav />
     </div>
   );
 }
