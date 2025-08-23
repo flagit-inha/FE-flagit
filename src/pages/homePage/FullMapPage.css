@@ -69,7 +69,7 @@ html, body {
   letter-spacing:var(--title-letter-spacing);
   display:flex; flex-direction:column; align-items:flex-end;
   gap:var(--title-line-gap); margin:0; padding:0;
-  max-width:var(--title-max-width); text-align:right; color:#222;
+  max-width:var(--title-max-width); text-align:right; color:#454545;
   word-break:keep-all;
   transform:translate(var(--title-shift-x), var(--title-shift-y));
   transform-origin:right top;
