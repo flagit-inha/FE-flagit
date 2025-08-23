@@ -1,0 +1,39 @@
+/* 화면 전체 중앙 정렬 */
+.qrgen-screen{
+    min-height:100svh;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    background:#fff;
+  }
+  
+  /* 콘텐츠 박스 */
+  .qrgen-content{
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    gap:1rem;
+  }
+  
+  /* 체크 이미지(아이콘 아님) */
+  .qrgen-icon{
+    width:4.25rem;          /* 스샷과 비슷한 크기 */
+    height:4.25rem;
+    display:block;
+    animation:qrgen-pulse 1.4s infinite ease-in-out;
+  }
+  
+  /* 살짝 커졌다 줄어드는 효과 */
+  @keyframes qrgen-pulse{
+    0%   { transform:scale(1);    opacity:.95; }
+    50%  { transform:scale(1.12); opacity:1;   }
+    100% { transform:scale(1);    opacity:.95; }
+  }
+  
+  /* 하단 문구 */
+  .qrgen-text{
+    font-size:.95rem;
+    color:#6b7280;   /* gray-500 */
+    text-align:center;
+  }
+  
