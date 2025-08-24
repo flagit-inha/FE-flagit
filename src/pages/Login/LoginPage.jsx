@@ -35,7 +35,7 @@ export default function LoginPage() {
         return setErr("로그인 응답에 토큰이 없습니다.");
       }
 
-      nav("/crew-select");
+      nav("/fullmap");// 로그인 성공 시 전체 지도 페이지로 이동
     } catch (e) {
       setLoading(false);
       setErr("서버 연결 오류");

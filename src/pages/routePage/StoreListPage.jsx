@@ -16,14 +16,10 @@ export default function StoreListPage() {
         const { latitude, longitude } = pos.coords;
 
         try {
-          const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/stores/nearby`, {
-            method: "POST",
-            headers: { "Content-Type": "application/json" },
-            body: JSON.stringify({
-              lat: latitude,
-              lng: longitude,
-            }),
-          });
+          // ✅ 쿼리 파라미터 방식으로 변경
+          const res = await fetch(
+            `${import.meta.env.VITE_API_BASE_URL}/stores/nearby?lat=${latitude}&lng=${longitude}`
+          );
 
           if (!res.ok) throw new Error("가게 조회 실패");
           const data = await res.json();
@@ -68,11 +64,7 @@ export default function StoreListPage() {
             <br />
             할인받아보세요
           </h1>
-          <img
-            className="store-illu"
-            src="/img/map1.svg"
-            alt="지도 일러스트"
-          />
+          <img className="store-illu" src="/img/map1.svg" alt="지도 일러스트" />
         </header>
 
         {/* 리스트 */}

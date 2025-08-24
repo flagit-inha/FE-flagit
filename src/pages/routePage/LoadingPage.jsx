@@ -5,7 +5,7 @@ import "./LoadingPage.css";
 export default function LoadingPage() {
   const nav = useNavigate();
   const location = useLocation();
-  const { start_place, target_distance } = location.state || {}; // FindRoutePage에서 받은 값
+  const { start_location, target_distance } = location.state || {}; // FindRoutePage에서 받은 값
 
   // 점 3개의 기준 x 오프셋
   const bases = useMemo(() => [-35, 0, 35], []);
@@ -30,18 +30,41 @@ export default function LoadingPage() {
   useEffect(() => {
     const fetchRoute = async () => {
       try {
+        // 로그인 시 저장해둔 토큰 꺼내오기
+        const token = localStorage.getItem("access_token"); // ✅ 로그인 시 저장된 access_token
+
+        console.log("📌 저장된 토큰:", token);
+        console.log("📌 요청 헤더:", {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        });
+        
+
+        if (!token) {
+          alert("로그인이 필요합니다.");
+          nav("/login");
+          return;
+        }
+
         const res = await fetch(`${import.meta.env.VITE_API_BASE_URL}/routes/`, {
           method: "POST",
-          headers: { "Content-Type": "application/json" },
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`, // ✅ Bearer 붙여서 전송
+          },
           body: JSON.stringify({
-            start_place,
+            start_location,
             target_distance: parseFloat(target_distance),
           }),
         });
 
-        if (!res.ok) throw new Error("경로 추천 실패");
-        const data = await res.json();
+        console.log("📡 응답 상태 코드:", res.status);
 
+        if (!res.ok) {
+          throw new Error("경로 추천 실패");
+        }
+
+        const data = await res.json();
         console.log("✅ 경로 추천 응답:", data);
 
         // 성공 시 SuggestedRoutePage로 이동
@@ -53,13 +76,13 @@ export default function LoadingPage() {
       }
     };
 
-    if (start_place && target_distance) {
+    if (start_location && target_distance) {
       fetchRoute();
     } else {
       alert("잘못된 접근입니다.");
       nav(-1);
     }
-  }, [start_place, target_distance, nav]);
+  }, [start_location, target_distance, nav]);
 
   return (
     <div className="loading-screen">
