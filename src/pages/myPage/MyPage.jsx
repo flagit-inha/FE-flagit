@@ -44,7 +44,7 @@ function MyPage() {
         });
 
         console.log('배지 정보:', badgeResponse.data);
-        setBadgeName(badgeResponse.data.badgeㄴ); // 배지 이름 상태 업데이트
+        setBadgeName(badgeResponse.data.badge_name); // 배지 이름 상태 업데이트
 
 
 

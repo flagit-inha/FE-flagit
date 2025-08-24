@@ -1,15 +1,88 @@
 
-import React , { useState }from 'react';
+import React , { useState , useEffect}from 'react';
+import { useParams  } from "react-router-dom";
 import './MyCrewPage.css'; 
+import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import WhiteBottomNav from '../../components/WhiteBottomNav'; // 하단 네비게이션 스타일
 
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 function MyCrewPage() {
+  const { crew_id } = useParams();
   const navigate = useNavigate();
 
+  const [crew, setCrew] = useState(null); // crew 데이터 상태
+  const [loading, setLoading] = useState(true); // 로딩 상태
+  const [error, setError] = useState(null); // 에러 상태
   const [backgroundImage, setBackgroundImage] = useState(null); // 기본 이미지 경로
   const [profileImage, setProfileImage] = useState('/img/person1.svg'); // 기본 프로필 이미지 경로
+
+
+  const [crewCount, setCrewCount] = useState(1);
+
+
+  useEffect(() => {
+    const fetchCrew = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`${apiBaseUrl}/crews/${crew_id}/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        setCrew(response.data); // 크루 데이터 설정
+      } catch (err) {
+        console.error('크루 데이터를 가져오는 중 오류 발생:', err);
+        setError('크루 데이터를 불러올 수 없습니다.');
+      } finally {
+        setLoading(false); // 로딩 상태 해제
+      }
+    };
+
+
+    const fetchCrewCount = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`${apiBaseUrl}/crews/${crew_id}/members/`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+
+        // crew_count만 상태에 저장
+        setCrewCount(response.data.crew_count);
+      } catch (err) {
+        console.error('크루 데이터를 가져오는 중 오류 발생:', err);
+        setError('크루 데이터를 불러올 수 없습니다.');
+      } finally {
+        setLoading(false); // 로딩 상태 해제
+      }
+    };
+
+    
+    if (crew_id) {
+      fetchCrew();
+    } else {
+      setError('유효하지 않은 크루 ID입니다.');
+      setLoading(false);
+    }
+  }, [crew_id]);
+
+  
+
+  if (loading) {
+    return <div>데이터를 불러오는 중...</div>;
+  }
+
+  if (error) {
+    return <div>{error}</div>;
+  }
+
+  if (!crew) {
+    return <div>크루 데이터를 찾을 수 없습니다.</div>;
+  }
 
 
   // 이미지 업로드 핸들러
@@ -45,7 +118,7 @@ function MyCrewPage() {
   };
 
   // 공지사항 예시 (실제 공지는 crew.noticeList 등으로 받아올 수 있음)
-  const noticeList = crew?.noticeList || [
+  const noticeList = crew.noticeList || [
     '크루 가입을 환영합니다! 크루 활동을 즐겨주세요.',
     '다음 주 모임은 오후 3시에 시작합니다.',
     '새로운 크루원을 모집합니다!',
@@ -56,7 +129,8 @@ function MyCrewPage() {
     '다음 모임 장소는 중앙공원입니다.'
   ];
 
-  if (!crew) return <div>크루 정보를 불러오는 중...</div>;
+  
+
 
   return (
     <div>
@@ -111,12 +185,7 @@ function MyCrewPage() {
         <img src='/img/fxemoji_fire.svg' alt='crew' className='fireIcon' />
       </div>
 
-      {/* 크루 총원 */}
-      <div className='crewMemberCount'>
-        <span className='memberCountText'>
-          {crew.member_count ? `멤버 ${crew.member_count}명` : "멤버 정보 없음"}
-        </span>
-      </div>
+    
 
       {/* 공지 회원 선택 바 */}
       <div className='notic-member1'> 
