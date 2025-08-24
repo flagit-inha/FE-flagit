@@ -1,5 +1,6 @@
 const PREFIX = 'record:';
 const META_VERSION = 1;
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 /* ===== Utilities ===== */
 function genId() {
@@ -47,41 +48,21 @@ function rebuildFlagOrdersIfNeeded(records) {
 }
 
 /* ===== CRUD ===== */
-export async function createRecord(data) {
-  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+export async function createRecord(formData) {
   const token = localStorage.getItem("token");
-  const formData = new FormData();
-  Object.entries(data).forEach(([key, value]) => {
-    if (value !== undefined && value !== null) {
-      // crew-members가 배열이면 각각 추가
-      if (key === "crew-members" && Array.isArray(value)) {
-        value.forEach(v => formData.append("crew-members", v));
-      } else if (key === "group_photo" && value) {
-        formData.append("group_photo", value); // 파일 1장
-      } else {
-        formData.append(key, value);
-      }
-    }
-  });
   const res = await fetch(`${apiBaseUrl}/users/flag/`, {
-    method: "POST",
+    method: 'POST',
     headers: {
-      "Authorization": `Bearer ${token}`
-      // Content-Type은 FormData일 때 자동 설정됨
+      Authorization: `Bearer ${token}`
+      // Content-Type은 지정하지 않음!
     },
     body: formData
   });
-  if (!res.ok) throw new Error("기록 저장 실패");
-  return await res.json();
-}
-
-export async function listLocations() {
-  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-  const token = localStorage.getItem("token");
-  const res = await fetch(`${apiBaseUrl}/users/location/`, {
-    headers: { "Authorization": `Bearer ${token}` }
-  });
-  if (!res.ok) throw new Error("장소 목록 조회 실패");
+  if (!res.ok) {
+    const errorText = await res.text();
+    console.log(errorText);
+    throw new Error('기록 저장 실패');
+  }
   return await res.json();
 }
 

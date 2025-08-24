@@ -1,116 +1,78 @@
-import React, { useState, useRef, useEffect, useMemo } from 'react';
-import { useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useMemo, useRef } from 'react';
 import './RecordWritePage.css';
-import { createRecord } from '../../services/recordsService';
-import BottomNav from '../../components/BottomNav';
+import { useNavigate } from 'react-router-dom';
+import WhiteBottomNav from '../../components/WhiteBottomNav';
 
 function RecordWritePage() {
-  const navigate = useNavigate();
-  const location = useLocation();
-
-  // 지도에서 전달된 좌표 파싱
-  const params = new URLSearchParams(location.search);
-  const lat = params.get('lat');
-  const lng = params.get('lng');
-
+  // 상태 선언
+  const [crewModalOpen, setCrewModalOpen] = useState(false);
+  const [selectedCrew, setSelectedCrew] = useState([]);
+  const [crewMembers, setCrewMembers] = useState([]);
+  const [crewId, setCrewId] = useState('');
+  const [placeId, setPlaceId] = useState('');
   const [place, setPlace] = useState('');
+  const [locationOptions, setLocationOptions] = useState([]);
   const [activity, setActivity] = useState('');
-  const [activityOpen, setActivityOpen] = useState(false);
-
   const [date, setDate] = useState(new Date().toISOString().slice(0,10));
   const [timeStart, setTimeStart] = useState('');
   const [timeEnd, setTimeEnd] = useState('');
-  const [dateTimeOpen, setDateTimeOpen] = useState(false);
-
   const [distance, setDistance] = useState('');
-  const [crew, setCrew] = useState([]);
-
   const [files, setFiles] = useState([]);
-
   const [mediaMode, setMediaMode] = useState('photo');
   const [recordText, setRecordText] = useState('');
-
   const [submitting, setSubmitting] = useState(false);
-
-  // 장소 드롭다운 관련 상태
-  const [locationOptions, setLocationOptions] = useState([]);
-  const [locationOpen, setLocationOpen] = useState(false);
-
-  const activities = [
-    { key:'running', label:'러닝' },
-    { key:'hiking',  label:'하이킹' },
-    { key:'riding',  label:'라이딩' },
-  ];
-
-  // 장소 API 호출
-  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-  const token = localStorage.getItem("token");
-
-  const fetchLocations = async () => {
-    try {
-      const res = await fetch(`${apiBaseUrl}/users/location/`, {
-        headers: { "Authorization": `Bearer ${token}` }
-      });
-      if (!res.ok) return;
-      const data = await res.json();
-      setLocationOptions(data);
-    } catch (e) {
-      setLocationOptions([]);
-    }
-  };
-
-  const handlePlaceClick = () => {
-    setLocationOpen(o => !o);
-    if (!locationOptions.length) fetchLocations();
-  };
-
-  const selectLocation = (loc) => {
-    setPlace(loc.location_name);
-    setDistance(loc.location_distance);
-    setLocationOpen(false);
-  };
-
-  const activityWrapperRef = useRef(null);
-  useEffect(()=>{
-    if(!activityOpen) return;
-    const handler = e=>{
-      if(activityWrapperRef.current && !activityWrapperRef.current.contains(e.target)){
-        setActivityOpen(false);
-      }
-    };
-    document.addEventListener('mousedown', handler);
-    return ()=>document.removeEventListener('mousedown', handler);
-  },[activityOpen]);
-
-  const toggleActivityOpen = ()=>setActivityOpen(o=>!o);
-  const chooseActivity = key => { setActivity(key); setActivityOpen(false); };
-  const activityLabel = activity ? activities.find(a=>a.key===activity)?.label : '운동 종류를 선택하세요';
-
-  const formatKTime = t => {
-    if(!t) return '--:--';
-    const [h,m] = t.split(':').map(Number);
-    const period = h < 12 ? '오전':'오후';
-    const h12 = (h % 12) === 0 ? 12 : (h % 12);
-    return `${period} ${h12}:${String(m).padStart(2,'0')}`;
-  };
-  const dateDisplay = date.replace(/-/g,'.');
-
-  const computedDuration = useMemo(()=>{
-    if(!timeStart || !timeEnd) return '';
-    const [sh,sm] = timeStart.split(':').map(Number);
-    const [eh,em] = timeEnd.split(':').map(Number);
-    const start = sh*60+sm;
-    const end = eh*60+em;
-    if(end < start) return '';
-    const diff = end - start;
-    const h = String(Math.floor(diff/60)).padStart(2,'0');
-    const m = String(diff % 60).padStart(2,'0');
-    return `${h}:${m}:00`;
-  },[timeStart,timeEnd]);
-
+  const navigate = useNavigate();
+  
+  // 날짜 및 시간 선택 패널 관련 상태
+  const [dateTimeOpen, setDateTimeOpen] = useState(false);
   const dateTimeDisplayRef = useRef(null);
   const dtPanelRef = useRef(null);
   const [panelRect, setPanelRect] = useState({top:0,left:0,width:0});
+
+  // 내가 가입한 크루 id 가져오기
+  useEffect(() => {
+    const fetchMyCrewId = async () => {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${apiBaseUrl}/users/`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        if (data.crew_info && data.crew_info.crew_id) {
+          setCrewId(data.crew_info.crew_id);
+        }
+      }
+    };
+    fetchMyCrewId();
+  }, []);
+
+  // 크루원 목록 불러오기
+  useEffect(() => {
+    if (crewId) {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+      const token = localStorage.getItem("token");
+      fetch(`${apiBaseUrl}/crews/${crewId}/members/`, {
+        headers: { Authorization: `Bearer ${token}` }
+      })
+        .then(res => res.ok ? res.json() : Promise.resolve({members: []}))
+        .then(data => setCrewMembers(data.members || []));
+    }
+  }, [crewId]);
+
+  // 장소 목록 불러오기
+  const fetchLocations = async () => {
+    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+    const token = localStorage.getItem("token");
+    const res = await fetch(`${apiBaseUrl}/users/location/`, {
+      headers: { "Authorization": `Bearer ${token}` }
+    });
+    if (!res.ok) return;
+    const data = await res.json();
+    setLocationOptions(data);
+  };
+
+  // 날짜/시간 패널 위치 측정
   const measurePanel = ()=>{
     if(!dateTimeDisplayRef.current) return;
     const r = dateTimeDisplayRef.current.getBoundingClientRect();
@@ -129,6 +91,7 @@ function RecordWritePage() {
     }
   },[dateTimeOpen]);
 
+  // 패널 외부 클릭 시 닫기
   useEffect(()=>{
     if(!dateTimeOpen) return;
     const handler = e=>{
@@ -145,75 +108,122 @@ function RecordWritePage() {
     return ()=>document.removeEventListener('mousedown', handler);
   },[dateTimeOpen]);
 
-  const pickImages = e=>{
-    const arr = Array.from(e.target.files||[]);
-    setFiles(prev=>[...prev,...arr].slice(0,6));
+  // 시간 표시 포맷 함수
+  const formatKTime = t => {
+    if(!t) return '--:--';
+    const [h,m] = t.split(':').map(Number);
+    const period = h < 12 ? '오전':'오후';
+    const h12 = (h % 12) === 0 ? 12 : (h % 12);
+    return `${period} ${h12}:${String(m).padStart(2,'0')}`;
   };
-  const removeFile = i => setFiles(list=>list.filter((_,idx)=>idx!==i));
+  const dateDisplay = date.replace(/-/g,'.');
 
-  const onDistanceChange = e=>{
+  // 거리 입력
+  const onDistanceChange = e => {
     const val = e.target.value.replace(/[^\d.]/g,'');
     setDistance(val);
   };
 
-  const handleHashtagChange = e=>{
-    let v = e.target.value;
-    const parts = v.split(/(\s+)/);
-    v = parts.map(p=>{
-      if(p === '' || /^\s+$/.test(p)) return p;
-      if(p === '#') return p;
-      return p.startsWith('#') ? p : '#'+p;
-    }).join('');
-    setHashtags(v);
-  };
+  // 자동 소요시간 계산
+  const computedDuration = useMemo(()=>{
+    if(!timeStart || !timeEnd) return '';
+    const [sh,sm] = timeStart.split(':').map(Number);
+    const [eh,em] = timeEnd.split(':').map(Number);
+    const start = sh*60+sm;
+    const end = eh*60+em;
+    if(end < start) return '';
+    const diff = end - start;
+    const h = String(Math.floor(diff/60)).padStart(2,'0');
+    const m = String(diff % 60).padStart(2,'0');
+    return `${h}:${m}:00`;
+  },[timeStart,timeEnd]);
+  
+  function getDurationString(start, end) {
+  if (!start || !end) return '';
+  const [sh, sm] = start.split(':').map(Number);
+  const [eh, em] = end.split(':').map(Number);
+  const startSec = sh * 3600 + sm * 60;
+  const endSec = eh * 3600 + em * 60;
+  let diff = endSec - startSec;
+  if (diff < 0) return '';
+  const h = String(Math.floor(diff / 3600)).padStart(2, '0');
+  const m = String(Math.floor((diff % 3600) / 60)).padStart(2, '0');
+  const s = String(diff % 60).padStart(2, '0');
+  return `${h}:${m}:${s}`;
+}
 
-  // 장소 이름을 좌표로 변환 (지도에서 선택한 좌표 우선)
-  const resolveCoords = (raw='')=>{
-    if(lat && lng) {
-      return { lat: Number(lat), lng: Number(lng), canonical: raw.trim() || '선택 위치' };
+  // 이미지 선택/삭제
+  const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
+  const pickImages = e => {
+    const arr = Array.from(e.target.files || []);
+    const filtered = arr.filter(file => file.size <= MAX_FILE_SIZE);
+    if (filtered.length < arr.length) {
+      alert('이미지 파일은 2MB 이하만 업로드할 수 있습니다.');
     }
-    const name = raw.trim();
-    if(!name) return { lat:33.4996, lng:126.5312, canonical:'제주도' };
-    if(name.includes('올림픽공원')) return { lat:36.4163, lng:127.2215, canonical:'올림픽공원' };
-    if(name.includes('태백산')) return { lat:36.1009, lng:128.5153, canonical:'태백산' };
-    if(name.includes('땅끝마을')) return { lat:34.0980, lng:127.5233, canonical:'땅끝마을' };
-    return { lat:33.4996, lng:126.5312, canonical:'제주도' };
+    setFiles(prev => [...prev, ...filtered].slice(0, 6));
   };
+  const removeFile = i => setFiles(list => list.filter((_,idx)=>idx!==i));
 
-  const submit = async ()=>{
-    if(submitting) return;
-    setSubmitting(true);
-    try {
-      const coord = resolveCoords(place);
-      const record = await createRecord({
-        place,
-        placeCanonical: coord.canonical,
-        latitude: coord.lat,
-        longitude: coord.lng,
-        activity,
-        date,
-        timeStart,
-        timeEnd,
-        distance: distance || '0',
-        duration: computedDuration || '00:00:00',
-        crew,
-        hashtags: hashtags.trim(),
-        mediaMode,
-        images: files,
-        note: recordText
-      });
-      navigate(`/location/${record.id}`);
-    } catch(e){
-      alert('저장 실패: ' + (e.message || e));
-    } finally {
-      setSubmitting(false);
+  // 기록 저장
+  const submit = async () => {
+  if (submitting) return;
+  setSubmitting(true);
+  try {
+    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+    const token = localStorage.getItem("token");
+    const formData = new FormData();
+
+    formData.append('location_id', Number(placeId));
+    formData.append('location_name', place);
+    formData.append('activity_type', activity);
+    formData.append('date', date);
+    formData.append('distance_km', Number(distance));
+    formData.append('time_record', getDurationString(timeStart, timeEnd));
+    formData.append('description', recordText);
+
+    // crew_members를 각각 append (배열로 전송)
+    selectedCrew.map(Number).forEach(id => formData.append('crew_members', id));
+
+    if (files.length > 0) {
+      formData.append('group_photo', files[0]);
     }
-  };
+
+    const res = await fetch(`${apiBaseUrl}/users/flag/`, {
+      method: 'POST',
+      headers: {
+        "Authorization": `Bearer ${token}`
+      },
+      body: formData
+    });
+    if (!res.ok) throw new Error('저장 실패');
+    alert('저장 완료!');
+  } catch (e) {
+    console.log({
+      location_id: Number(placeId),
+      location_name: place,
+      activity_type: activity,
+      date,
+      distance_km: Number(distance),
+      time_record: getDurationString(timeStart, timeEnd),
+      crew_members: selectedCrew,
+      description: recordText,
+      group_photo: files[0]
+    });
+    alert(e.message);
+  } finally {
+    setSubmitting(false);
+  }
+};
 
   return (
     <div className="rw-container">
       <header className="rw-header">
-        <button type="button" className="rw-back-btn" aria-label="뒤로가기" onClick={()=>navigate(-1)}>〈</button>
+        <button
+          type="button"
+          className="rw-back-btn"
+          aria-label="뒤로가기"
+          onClick={() => navigate(-1)}
+        >〈</button>
         <h1 className="rw-page-title">기록 작성</h1>
         <button type="button" className="rw-save-btn" onClick={submit} disabled={submitting}>
           {submitting ? '저장 중...' : '저장하기'}
@@ -230,11 +240,12 @@ function RecordWritePage() {
             <select
               id="rw-location-select"
               className="rw-location-select"
-              style={{paddingLeft: 44}} // 아이콘 공간 확보
-              value={place}
+              style={{paddingLeft: 44}}
+              value={placeId}
               onChange={e => {
-                const selected = locationOptions.find(loc => loc.location_name === e.target.value);
-                setPlace(e.target.value);
+                const selected = locationOptions.find(loc => String(loc.id) === e.target.value);
+                setPlaceId(e.target.value);
+                setPlace(selected ? selected.location_name : '');
                 setDistance(selected ? selected.location_distance : '');
               }}
               onFocus={() => {
@@ -242,8 +253,8 @@ function RecordWritePage() {
               }}
             >
               <option value="">장소를 선택하세요</option>
-              {locationOptions.map((loc, idx) => (
-                <option key={idx} value={loc.location_name}>
+              {locationOptions.map((loc) => (
+                <option key={loc.id} value={loc.id}>
                   {loc.location_name}
                 </option>
               ))}
@@ -259,11 +270,9 @@ function RecordWritePage() {
             onChange={e => setActivity(e.target.value)}
           >
             <option value="">운동 종류를 선택하세요</option>
-            {activities.map(a => (
-              <option key={a.key} value={a.key}>
-                {a.label}
-              </option>
-            ))}
+            <option value="running">러닝</option>
+            <option value="hiking">하이킹</option>
+            <option value="riding">라이딩</option>
           </select>
         </div>
 
@@ -288,6 +297,55 @@ function RecordWritePage() {
             </span>
           </div>
         </div>
+
+        {/* 날짜 및 시간 선택 패널 */}
+        {dateTimeOpen && (
+          <>
+            <div className="rw-datetime-backdrop" />
+            <div
+              ref={dtPanelRef}
+              className="rw-datetime-panel rw-datetime-panel-fixed"
+              style={{top:panelRect.top, left:panelRect.left, width:panelRect.width}}
+            >
+              <label className="rw-dtp-row">
+                <span className="rw-dtp-label">날짜</span>
+                <input
+                  type="date"
+                  value={date}
+                  onChange={e=>setDate(e.target.value)}
+                />
+              </label>
+              <div className="rw-dtp-row rw-dtp-row-col">
+                <span className="rw-dtp-label">시간</span>
+                <div className="rw-time-edit-col">
+                  <label className="rw-time-line">
+                    <span className="rw-time-sub">시작</span>
+                    <input
+                      type="time"
+                      value={timeStart}
+                      onChange={e=>setTimeStart(e.target.value)}
+                    />
+                  </label>
+                  <label className="rw-time-line">
+                    <span className="rw-time-sub">종료</span>
+                    <input
+                      type="time"
+                      value={timeEnd}
+                      onChange={e=>setTimeEnd(e.target.value)}
+                    />
+                  </label>
+                </div>
+              </div>
+              <div className="rw-dtp-actions">
+                <button
+                  type="button"
+                  className="rw-btn-small"
+                  onClick={()=>setDateTimeOpen(false)}
+                >확인</button>
+              </div>
+            </div>
+          </>
+        )}
 
         {/* 기록 (거리 + 자동 소요시간) */}
         <div className="rw-block rw-stats">
@@ -315,26 +373,57 @@ function RecordWritePage() {
           </div>
         </div>
 
-        {/* 크루원 선택 */}
+        {/* 크루원 추가 버튼 */}
         <div className="rw-block">
           <label className="rw-label rw-crew-label">크루원</label>
           <button
             type="button"
             className="rw-select-row"
-            onClick={()=>alert('크루원 선택 모달 구현 예정')}
+            onClick={() => setCrewModalOpen(true)}
           >
             <span className="rw-select-placeholder">
-              {crew.length ? `선택된 크루원 ${crew.length}명` : '크루원 추가'}
+              {selectedCrew.length ? `선택된 크루원 ${selectedCrew.length}명` : '크루원 추가'}
             </span>
             <span className="rw-row-arrow">›</span>
           </button>
         </div>
 
+        {/* 크루원 선택 모달 */}
+        {crewModalOpen && (
+          <div className="rw-modal-backdrop">
+            <div className="rw-modal">
+              <div className="rw-modal-title">크루원 선택</div>
+              <div className="rw-modal-list">
+                {crewMembers.map(member => (
+                  <label key={member.user_id} className="rw-modal-item">
+                    <input
+                      type="checkbox"
+                      checked={selectedCrew.includes(String(member.user_id))}
+                      onChange={e => {
+                        if (e.target.checked) {
+                          setSelectedCrew([...selectedCrew, String(member.user_id)]);
+                        } else {
+                          setSelectedCrew(selectedCrew.filter(id => id !== String(member.user_id)));
+                        }
+                      }}
+                    />
+                    <span>{member.nickname}</span>
+                  </label>
+                ))}
+              </div>
+              <button
+                type="button"
+                className="rw-modal-confirm"
+                onClick={() => setCrewModalOpen(false)}
+              >확인</button>
+            </div>
+          </div>
+        )}
+
         {/* 사진 / 기록 */}
         <div className="rw-block">
           <div className="rw-media-section">
             <div className="rw-subtitle">사진 / 기록</div>
-
             <div className="rw-media-toggle" role="tablist" aria-label="사진 또는 기록 선택">
               <button
                 type="button"
@@ -351,7 +440,6 @@ function RecordWritePage() {
                 onClick={()=>setMediaMode('note')}
               >기록</button>
             </div>
-
             {mediaMode === 'photo' && (
               <div className="rw-media-box">
                 <div className="rw-media-grid">
@@ -381,7 +469,6 @@ function RecordWritePage() {
                 </div>
               </div>
             )}
-
             {mediaMode === 'note' && (
               <div className="rw-note-box">
                 <textarea
@@ -395,59 +482,9 @@ function RecordWritePage() {
             )}
           </div>
         </div>
-
         <div className="rw-bottom-gap" />
       </div>
-
-      <BottomNav />
-
-      {dateTimeOpen && (
-        <>
-          <div className="rw-datetime-backdrop" />
-          <div
-            ref={dtPanelRef}
-            className="rw-datetime-panel rw-datetime-panel-fixed"
-            style={{top:panelRect.top, left:panelRect.left, width:panelRect.width}}
-          >
-            <label className="rw-dtp-row">
-              <span className="rw-dtp-label">날짜</span>
-              <input
-                type="date"
-                value={date}
-                onChange={e=>setDate(e.target.value)}
-              />
-            </label>
-            <div className="rw-dtp-row rw-dtp-row-col">
-              <span className="rw-dtp-label">시간</span>
-              <div className="rw-time-edit-col">
-                <label className="rw-time-line">
-                  <span className="rw-time-sub">시작</span>
-                  <input
-                    type="time"
-                    value={timeStart}
-                    onChange={e=>setTimeStart(e.target.value)}
-                  />
-                </label>
-                <label className="rw-time-line">
-                  <span className="rw-time-sub">종료</span>
-                  <input
-                    type="time"
-                    value={timeEnd}
-                    onChange={e=>setTimeEnd(e.target.value)}
-                  />
-                </label>
-              </div>
-            </div>
-            <div className="rw-dtp-actions">
-              <button
-                type="button"
-                className="rw-btn-small"
-                onClick={()=>setDateTimeOpen(false)}
-              >확인</button>
-            </div>
-          </div>
-        </>
-      )}
+      <WhiteBottomNav />
     </div>
   );
 }

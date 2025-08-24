@@ -76,23 +76,16 @@
   font-size:15px;
   box-sizing:border-box;
 }
-.rw-search-icon {
-  width: 20px;
-  height: 20px;
-  opacity: .65;
-  position: absolute;
-  left: 28px;
-  top: 50%;
-  transform: translateY(-50%);
-  z-index: 2;
-}
+.rw-search-icon { width:20px; height:20px; opacity:.65; }
 .rw-search-bar input {
   flex:1; border:none; outline:none; background:transparent;
   font-size:15px; font-weight:500;
 }
 
-/* select 드롭다운 스타일 (장소/활동 공통) */
-.rw-location-select {
+/* select 드롭다운 스타일 (장소/활동/크루원 공통) */
+.rw-location-select,
+.rw-activity-select,
+.rw-crew-select {
   width: calc(100% - 32px);
   margin: 0 16px;
   height: var(--rw-large-row-h);
@@ -100,37 +93,28 @@
   border: 1px solid var(--rw-border);
   background: #fff;
   font-size: 15px;
-  font-weight: 600;
+  font-weight: 500;
   color: #222;
-  padding: 0 22px 0 44px; /* 왼쪽 아이콘 공간 확보 */
+  padding: 0 22px 0 18px;
   box-sizing: border-box;
-  appearance: none;
-  outline: none;
-  transition: border-color .25s, box-shadow .25s;
-}
-.rw-activity-select {
-  width: calc(100% - 32px);
-  margin: 0 16px;
-  height: var(--rw-large-row-h);
-  border-radius: 16px;
-  border: 1px solid var(--rw-border);
-  background: #fff;
-  font-size: 15px;
-  font-weight: 600;
-  color: #222;
-  padding: 0 22px 0 18px; /* 날짜/시간 선택창과 동일하게 */
-  box-sizing: border-box;
-  appearance: none;
+  appearance: revert;
   outline: none;
   transition: border-color .25s, box-shadow .25s;
 }
 .rw-location-select:focus,
-.rw-activity-select:focus {
+.rw-activity-select:focus,
+.rw-crew-select:focus {
   border-color: var(--rw-teal);
-  box-shadow: 0 0 0 3px rgba(0,160,170,.18);
+  box-shadow: 0 0 0 4px rgba(0,160,170,.2);
+}
+.rw-location-select option[value=""],
+.rw-activity-select option[value=""] {
+  color: #888;
+  font-weight: 500;
 }
 .rw-location-select option,
-.rw-activity-select option {
+.rw-activity-select option,
+.rw-crew-select option {
   color: #222;
   font-size: 15px;
   font-weight: 500;
@@ -334,6 +318,23 @@
 }
 .rw-select-placeholder { opacity:.55; }
 .rw-row-arrow { font-size:20px; opacity:.5; }
+
+.rw-modal-backdrop {
+  position: fixed; inset: 0; background: rgba(0,0,0,.18); z-index: 999;
+  display: flex; align-items: center; justify-content: center;
+}
+.rw-modal {
+  background: #fff; border-radius: 18px; padding: 24px 20px;
+  min-width: 260px; max-width: 90vw; box-shadow: 0 8px 32px -8px rgba(0,0,0,.18);
+}
+.rw-modal-title { font-size: 18px; font-weight: 700; margin-bottom: 16px; }
+.rw-modal-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+.rw-modal-item { display: flex; align-items: center; gap: 8px; font-size: 15px; }
+.rw-modal-confirm {
+  width: 100%; height: 38px; border-radius: 12px; border: none;
+  background: var(--rw-accent-grad); color: #fff; font-size: 15px; font-weight: 600;
+  cursor: pointer;
+}
 
 .rw-media-section {
   width:100%;
