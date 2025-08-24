@@ -5,13 +5,12 @@ import "./LoadingPage.css";
 export default function LoadingPage() {
   const nav = useNavigate();
   const location = useLocation();
-  const { start_location, target_distance } = location.state || {}; // FindRoutePage에서 받은 값
+  const { start_location, target_distance } = location.state || {}; // FindRoutePage에서 전달받은 값
 
-  // 점 3개의 기준 x 오프셋
+  // 점 애니메이션 (로딩 중 효과)
   const bases = useMemo(() => [-35, 0, 35], []);
   const [dots, setDots] = useState(bases.map((bx) => ({ x: bx, y: 0 })));
 
-  // 점 애니메이션 효과
   useEffect(() => {
     const tick = () => {
       setDots((prev) =>
@@ -26,20 +25,11 @@ export default function LoadingPage() {
     return () => clearInterval(id);
   }, [bases]);
 
-  // 🚀 API 요청 → 끝나면 SuggestedRoutePage로 이동
+  // 🚀 API 요청 → 성공하면 SuggestedRoutePage로 이동
   useEffect(() => {
     const fetchRoute = async () => {
       try {
-        // 로그인 시 저장해둔 토큰 꺼내오기
-        const token = localStorage.getItem("access_token"); // ✅ 로그인 시 저장된 access_token
-
-        console.log("📌 저장된 토큰:", token);
-        console.log("📌 요청 헤더:", {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        });
-        
-
+        const token = localStorage.getItem("token"); // 로그인 시 저장된 access_token
         if (!token) {
           alert("로그인이 필요합니다.");
           nav("/login");
@@ -50,7 +40,7 @@ export default function LoadingPage() {
           method: "POST",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // ✅ Bearer 붙여서 전송
+            Authorization: `Bearer ${token}`,
           },
           body: JSON.stringify({
             start_location,
@@ -67,12 +57,18 @@ export default function LoadingPage() {
         const data = await res.json();
         console.log("✅ 경로 추천 응답:", data);
 
-        // 성공 시 SuggestedRoutePage로 이동
-        nav("/suggested-route", { state: data.data });
+        // ✅ 성공 시 SuggestedRoutePage로 이동
+        // 👉 백엔드 응답 데이터 + 사용자가 입력한 거리도 함께 전달
+        nav("/suggested-route", {
+          state: {
+            ...data.data, 
+            distanceKm: parseFloat(target_distance), // ✅ 여기 추가됨
+          },
+        });
       } catch (err) {
         console.error(err);
         alert("경로 요청 중 오류 발생!");
-        nav(-1); // 이전 페이지로 돌려보내기
+        nav(-1); // 이전 페이지로 돌아가기
       }
     };
 

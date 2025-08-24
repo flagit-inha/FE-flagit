@@ -5,7 +5,7 @@ import "./RouteViewPage.css";
 export default function RouteViewPage() {
   const nav = useNavigate();
   const { state } = useLocation();
-  const route = state?.route || [];
+  const route = state?.route || []; // 👉 SuggestedRoutePage에서 넘긴 route_path
   const distanceKm = state?.distanceKm || 0;
   const mapRef = useRef(null);
 
@@ -13,14 +13,19 @@ export default function RouteViewPage() {
     if (!window.kakao || !route.length) return;
     const { kakao } = window;
     const container = mapRef.current;
+    if (!container) return;
 
+    // 지도 초기화 → route 첫 좌표 기준
     const options = {
       center: new kakao.maps.LatLng(route[0].lat, route[0].lng),
       level: 4,
     };
     const map = new kakao.maps.Map(container, options);
 
+    // 경로 좌표 배열 → LatLng 변환
     const path = route.map((p) => new kakao.maps.LatLng(p.lat, p.lng));
+
+    // Polyline 경로 그리기
     const polyline = new kakao.maps.Polyline({
       path,
       strokeWeight: 5,
@@ -30,6 +35,7 @@ export default function RouteViewPage() {
     });
     polyline.setMap(map);
 
+    // 지도 영역을 경로에 맞게 자동 조정
     const bounds = new kakao.maps.LatLngBounds();
     path.forEach((p) => bounds.extend(p));
     map.setBounds(bounds);
