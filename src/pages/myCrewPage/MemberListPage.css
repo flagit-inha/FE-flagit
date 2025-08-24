@@ -4,8 +4,13 @@
     /* position: relative; ✅ 제거 */
 }
 
+.crewprodv{
+    display: flex;
+    justify-content: center;
+  }
+
 .crewProfile {
-    transform: translate(165%, -40%);
+    transform: translateY(-40%);
     width: 100px;
     height: 100px;
     border-radius: 50%;
@@ -17,6 +22,8 @@
     height: 100%;
     object-fit: cover;
 }
+
+
 
 .crewName {
     /* position: absolute; ✅ 제거 */
@@ -34,19 +41,17 @@
     color: rgba(0, 0, 0, 0.6);
 }
 /*  */
-.notic-member {
+.notic-member2 {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    /* position: absolute; ✅ 제거 */
-    width: 430px;
+    width: 100%;
     height: 50px;
     padding: 0 40px;
     box-sizing: border-box;
     margin-top: 40px;
 }
 
-.noticeButton1 {
+.noticeButton2 {
     flex: 1;
     color: #000000;
     background-color: #ffffff;
@@ -54,16 +59,16 @@
     border-color: #b5b5b5;
     border-radius: 15px;
     height: 34px;
-    width: 40px;
+    min-width: 50px;
+    max-width: 50px;
     margin-right: 10px;
     padding: 0 10px;
 }
-.noticeButton1:hover {
+.noticeButton2:hover {
     background-color: #f0f0f0;
 }
 
-.memberButton1 {
-
+.memberButton2 {
     flex: 1;
     color: #ffffff;
     background-color: #23AFB4;
@@ -71,21 +76,25 @@
     border-color: #b5b5b5;
     border-radius: 15px;
     height: 34px;
-    width: 49px;
+    min-width: 50px;
+    max-width: 50px;
     padding: 0 10px;
-    margin-right: 38%;
 }
-.memberButton1:hover {
+.memberButton2:hover {
     background-color: #1e9f9f;
 }
 
 .dropdownContainer {
     position: relative; /* 드롭다운 기준점 */
-    display: inline-block;
-  }
-  
+    display: flex; /* Flexbox 활성화 */
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    align-items: center; /* 세로 가운데 정렬 */
+    margin-left: auto;
+}
+
   .dropdownButton {
     padding: 8px 12px;
+    right: 0;
     background: #eeeeee;
     color: rgb(111, 111, 111);
     border: none;
@@ -154,12 +163,10 @@
     padding-bottom: 20px;
     border: 2px solid #3CBEA5;
     margin: 20px 40px;
-    padding: 10px 50px;
+    padding: 10px 40px;
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    
-    
+    justify-content: space-between;  
 }
 
 .profilePic{

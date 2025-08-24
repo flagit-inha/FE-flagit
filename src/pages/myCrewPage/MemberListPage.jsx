@@ -1,10 +1,25 @@
 import React , { useState }from 'react';
 import './MemberListPage.css'; 
 import { useNavigate } from 'react-router-dom';
+import WhiteBottomNav from '../../components/WhiteBottomNav'; // 하단 네비게이션 스타일
+
 
 
 function MemberListPage() {
   const navigate = useNavigate();
+
+   const [backgroundImage, setBackgroundImage] = useState(null); // 기본 이미지 경로
+  
+  
+    // 이미지 업로드 핸들러
+    const handleBackgroundUpload = (event) => {
+      const file = event.target.files[0];
+      if (file) {
+        const imageUrl = URL.createObjectURL(file); // 업로드된 파일의 URL 생성
+        setBackgroundImage(imageUrl); // 상태 업데이트
+      }
+    };
+    
 
   const handleFullMapClick = () => {
     navigate('/fullmap'); // 전체지도 페이지로 이동
@@ -63,14 +78,34 @@ function MemberListPage() {
   
   return (
     <div>
-      {/* 크루이미지 */}
-      <img src="/img/crep.png" alt="mycrew" className="mycrew-icon" />
-
+         {/* 크루 배경 이미지 */}
+         <div className="backgroundImageContainer">
+        {backgroundImage ? (
+          <img src={backgroundImage} alt="mycrew" className="mycrew-icon" />
+        ) : (
+          <div className="placeholder">
+            <label htmlFor="backgroundUpload" className="upploadButton">
+              +
+            </label>
+          </div>
+        )}
+        <input
+          type="file"
+          accept="image/*"
+          id="backgroundUpload"
+          style={{ display: 'none' }} // 파일 입력 필드를 숨김
+          onChange={handleBackgroundUpload}
+        />
+      </div>
 
       {/* 크루프로필  */}
-      <div className='crewProfile'>
-        <img src="/img/Ellipse2.svg" className="profqile-image" /> 
-      </div>
+    <div className='crewprodv'>
+        <div className='crewProfile'>
+            <img src="/img/Ellipse2.svg" className="profqile-image" /> 
+          </div>
+    </div>
+
+     
 
       {/* 크루이름 */}
       <div className='crewName'>
@@ -83,9 +118,9 @@ function MemberListPage() {
         <span className='memberCountText'>총원: 50명</span>
       </div>
 
-      <div className="notic-member">
-  <button className="noticeButton1" onClick={handleMyCrewClick}>공지</button>
-  <button className="memberButton1">회원</button>
+      <div className="notic-member2">
+  <button className="noticeButton2" onClick={handleMyCrewClick}>공지</button>
+  <button className="memberButton2">회원</button>
 
   <div className="dropdownContainer">
     <button
@@ -119,25 +154,7 @@ function MemberListPage() {
       
 
       {/* 하단네비게이션 바 */}
-      <div className="bottom-nav">
-        <div className="nav-item active">
-          <img src="/img/route.svg" alt="route" />
-          <span>route</span>
-        </div>
-        <div className="nav-item" onClick={handleFullMapClick}>
-          <img src="/img/home.svg" alt="home" />
-          <span>home</span>
-        </div>
-        <div className="nav-item" onClick={() => window.location.href = '/mycrew'}>
-          <img src="/img/mycrew.svg" alt="mycrew" />
-          
-          <span>mycrew</span>
-        </div>
-        <div className="nav-item" onClick={() => window.location.href = '/mypage'}>
-          <img src="/img/my.svg" alt="my" />
-          <span>my</span>
-        </div>
-      </div>
+        <WhiteBottomNav/>
     </div>
   );
 }
