@@ -2,7 +2,7 @@ import React , { useEffect, useState }  from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MyPage.css';
 import WhiteBottomNav from '../../components/WhiteBottomNav'; // 하단 네비게이션 스타일
-// import axios from 'axios';
+import axios from 'axios';
 
 function MyPage() {
   const navigate = useNavigate();
@@ -12,7 +12,7 @@ function MyPage() {
   const [userInfo, setUserInfo] = useState(null); // 사용자 정보
   const [crewInfo, setCrewInfo] = useState(null); // 크루 정보
   const [badgeName, setBadgeName] = useState(''); // 배지 이름 상태
-
+  const [selectedBadge, setSelectedBadge] = useState(''); // 선택된 배지 상태
 
 
   const [selectedFile, setSelectedFile] = useState(null); // 선택된 파일 상태
