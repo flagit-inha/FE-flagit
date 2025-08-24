@@ -26,7 +26,7 @@ import NoticeDetailsPage from '../pages/myCrewPage/NoticeDetailsPage';
 import CreateNoticePage from '../pages/myCrewPage/CreateNoticePage';
 import MyPage from '../pages/myPage/MyPage';
 import LevelListPage from '../pages/myPage/LevelListPage';
-
+import TestMap from '../pages/TestMap';
 function AppRoutes() {
   return (
     <Routes>
@@ -56,6 +56,7 @@ function AppRoutes() {
       <Route path="/create-notice" element={<CreateNoticePage />} />
       <Route path="/mypage" element={<MyPage />} />
       <Route path="/level-list" element={<LevelListPage />} />
+      <Route path="/test-map" element={<TestMap />} />
     </Routes>
   );
 }
