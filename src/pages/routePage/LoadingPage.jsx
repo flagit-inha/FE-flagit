@@ -58,11 +58,12 @@ export default function LoadingPage() {
         console.log("✅ 경로 추천 응답:", data);
 
         // ✅ 성공 시 SuggestedRoutePage로 이동
-        // 👉 백엔드 응답 데이터 + 사용자가 입력한 거리도 함께 전달
+        // 👉 route_path와 route_id, 입력 거리도 같이 넘겨줌
         nav("/suggested-route", {
           state: {
-            ...data.data, 
-            distanceKm: parseFloat(target_distance), // ✅ 여기 추가됨
+            route: data.data.route_path,             // 좌표 배열
+            routeId: data.data.route_id,             // route id
+            distanceKm: parseFloat(target_distance), // 사용자가 입력한 목표 거리
           },
         });
       } catch (err) {
