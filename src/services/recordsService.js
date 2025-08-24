@@ -48,20 +48,41 @@ function rebuildFlagOrdersIfNeeded(records) {
 
 /* ===== CRUD ===== */
 export async function createRecord(data) {
-  // 기존 레코드 개수 = 다음 flagOrder
-  let count = 0;
-  eachStored(() => { count++; });
-  const flagOrder = count + 1;
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+  const token = localStorage.getItem("token");
+  const formData = new FormData();
+  Object.entries(data).forEach(([key, value]) => {
+    if (value !== undefined && value !== null) {
+      // crew-members가 배열이면 각각 추가
+      if (key === "crew-members" && Array.isArray(value)) {
+        value.forEach(v => formData.append("crew-members", v));
+      } else if (key === "group_photo" && value) {
+        formData.append("group_photo", value); // 파일 1장
+      } else {
+        formData.append(key, value);
+      }
+    }
+  });
+  const res = await fetch(`${apiBaseUrl}/users/flag/`, {
+    method: "POST",
+    headers: {
+      "Authorization": `Bearer ${token}`
+      // Content-Type은 FormData일 때 자동 설정됨
+    },
+    body: formData
+  });
+  if (!res.ok) throw new Error("기록 저장 실패");
+  return await res.json();
+}
 
-  const id = genId();
-  const record = {
-    id,
-    createdAt: Date.now(),
-    flagOrder,
-    ...data
-  };
-  localStorage.setItem(PREFIX + id, serialize(record));
-  return record;
+export async function listLocations() {
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${apiBaseUrl}/users/location/`, {
+    headers: { "Authorization": `Bearer ${token}` }
+  });
+  if (!res.ok) throw new Error("장소 목록 조회 실패");
+  return await res.json();
 }
 
 export async function getRecord(id) {
@@ -80,16 +101,12 @@ export async function getRecord(id) {
 }
 
 export async function listRecords() {
-  const arr = [];
-  eachStored(k => {
-    const raw = localStorage.getItem(k);
-    const parsed = deserialize(raw);
-    if (parsed) arr.push(parsed);
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${apiBaseUrl}/users/flag/`, {
+    headers: { "Authorization": `Bearer ${token}` }
   });
-
-  rebuildFlagOrdersIfNeeded(arr);
-  // 최신순 정렬
-  return arr.sort((a, b) => b.createdAt - a.createdAt);
+  return await res.json();
 }
 
 /* 선택적 업데이트 (필요 시 사용) */

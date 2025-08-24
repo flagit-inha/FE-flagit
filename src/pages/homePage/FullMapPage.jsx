@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import './FullMapPage.css';
 import { listRecords } from '../../services/recordsService';
 import BottomNav from '../../components/BottomNav';
@@ -39,8 +39,10 @@ function unproject(leftPercent, topPercent) {
   return { lat, lng };
 }
 
-function FullMapPage({ userName='홍길동' }) {
+function FullMapPage() {
+  const { user_id } = useParams();
   const navigate = useNavigate();
+  const myUserId = localStorage.getItem("user_id");
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -49,6 +51,11 @@ function FullMapPage({ userName='홍길동' }) {
   const [selectedFlag, setSelectedFlag] = useState(null);
 
   useEffect(()=>{
+    if (user_id !== myUserId) {
+      alert("본인 기록만 볼 수 있습니다.");
+      navigate(`/fullmap/${myUserId}`);
+      return;
+    }
     let alive = true;
     (async()=>{
       try {
@@ -60,7 +67,7 @@ function FullMapPage({ userName='홍길동' }) {
       }
     })();
     return ()=>{ alive = false; };
-  },[]);
+  },[user_id, myUserId, navigate]);
 
   const projectedFlags = useMemo(()=> {
     return records
@@ -116,7 +123,8 @@ function FullMapPage({ userName='홍길동' }) {
     setSelectedFlag(null);
   };
 
-  const line1 = `${userName}님의`;
+  const nickname = localStorage.getItem("nickname") || "사용자";
+  const line1 = `${nickname}님의`;
   const line2 = '기록';
   const ariaTitle = `${line1} ${line2}`;
 

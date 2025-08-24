@@ -2,7 +2,6 @@ import React , { useEffect, useState }  from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MyPage.css';
 import WhiteBottomNav from '../../components/WhiteBottomNav'; // 하단 네비게이션 스타일
-import axios from 'axios';
 
 function MyPage() {
   const navigate = useNavigate();

@@ -76,10 +76,65 @@
   font-size:15px;
   box-sizing:border-box;
 }
-.rw-search-icon { width:20px; height:20px; opacity:.65; }
+.rw-search-icon {
+  width: 20px;
+  height: 20px;
+  opacity: .65;
+  position: absolute;
+  left: 28px;
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 2;
+}
 .rw-search-bar input {
   flex:1; border:none; outline:none; background:transparent;
   font-size:15px; font-weight:500;
+}
+
+/* select 드롭다운 스타일 (장소/활동 공통) */
+.rw-location-select {
+  width: calc(100% - 32px);
+  margin: 0 16px;
+  height: var(--rw-large-row-h);
+  border-radius: 16px;
+  border: 1px solid var(--rw-border);
+  background: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  color: #222;
+  padding: 0 22px 0 44px; /* 왼쪽 아이콘 공간 확보 */
+  box-sizing: border-box;
+  appearance: none;
+  outline: none;
+  transition: border-color .25s, box-shadow .25s;
+}
+.rw-activity-select {
+  width: calc(100% - 32px);
+  margin: 0 16px;
+  height: var(--rw-large-row-h);
+  border-radius: 16px;
+  border: 1px solid var(--rw-border);
+  background: #fff;
+  font-size: 15px;
+  font-weight: 600;
+  color: #222;
+  padding: 0 22px 0 18px; /* 날짜/시간 선택창과 동일하게 */
+  box-sizing: border-box;
+  appearance: none;
+  outline: none;
+  transition: border-color .25s, box-shadow .25s;
+}
+.rw-location-select:focus,
+.rw-activity-select:focus {
+  border-color: var(--rw-teal);
+  box-shadow: 0 0 0 3px rgba(0,160,170,.18);
+}
+.rw-location-select option,
+.rw-activity-select option {
+  color: #222;
+  font-size: 15px;
+  font-weight: 500;
+  background: #fff;
 }
 
 .rw-activity-block { position:relative; width:100%; }
@@ -87,7 +142,7 @@
   width:calc(100% - 32px); margin:0 16px;
   height:var(--rw-large-row-h);
   border:1px solid var(--rw-border);
-  border-radius:16px; background:#fff;
+  border-radius:16px; background:#fff; 
   display:flex; align-items:center; justify-content:space-between;
   padding:0 18px 0 16px; cursor:pointer;
   font-size:15px; font-weight:600;
@@ -372,22 +427,6 @@
   background:transparent;
 }
 .rw-record-textarea::placeholder { color:#9aa8a9; }
-
-.rw-hashtag-input {
-  height:var(--rw-field-h);
-  border:1px solid var(--rw-border);
-  border-radius:16px;
-  padding:0 16px;
-  font-size:14px;
-  font-weight:500;
-  outline:none;
-  background:#fff;
-  box-sizing:border-box;
-}
-.rw-hashtag-input:focus {
-  border-color:var(--rw-teal);
-  box-shadow:0 0 0 3px rgba(0,160,170,.18);
-}
 
 .rw-bottom-gap { height:30px; }
 

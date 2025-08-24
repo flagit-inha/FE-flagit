@@ -25,7 +25,6 @@ function RecordWritePage() {
   const [distance, setDistance] = useState('');
   const [crew, setCrew] = useState([]);
 
-  const [hashtags, setHashtags] = useState('');
   const [files, setFiles] = useState([]);
 
   const [mediaMode, setMediaMode] = useState('photo');
@@ -33,11 +32,43 @@ function RecordWritePage() {
 
   const [submitting, setSubmitting] = useState(false);
 
+  // 장소 드롭다운 관련 상태
+  const [locationOptions, setLocationOptions] = useState([]);
+  const [locationOpen, setLocationOpen] = useState(false);
+
   const activities = [
     { key:'running', label:'러닝' },
     { key:'hiking',  label:'하이킹' },
     { key:'riding',  label:'라이딩' },
   ];
+
+  // 장소 API 호출
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+  const token = localStorage.getItem("token");
+
+  const fetchLocations = async () => {
+    try {
+      const res = await fetch(`${apiBaseUrl}/users/location/`, {
+        headers: { "Authorization": `Bearer ${token}` }
+      });
+      if (!res.ok) return;
+      const data = await res.json();
+      setLocationOptions(data);
+    } catch (e) {
+      setLocationOptions([]);
+    }
+  };
+
+  const handlePlaceClick = () => {
+    setLocationOpen(o => !o);
+    if (!locationOptions.length) fetchLocations();
+  };
+
+  const selectLocation = (loc) => {
+    setPlace(loc.location_name);
+    setDistance(loc.location_distance);
+    setLocationOpen(false);
+  };
 
   const activityWrapperRef = useRef(null);
   useEffect(()=>{
@@ -190,53 +221,50 @@ function RecordWritePage() {
       </header>
 
       <div className="rw-scroll">
-        {/* 장소 검색 */}
+        {/* 장소 드롭다운 */}
         <div className="rw-block">
-          <div className="rw-search-bar">
-            <img src="/img/question.svg" alt="검색" className="rw-search-icon" />
-            <input
-              type="text"
-              placeholder="장소를 입력하세요"
+          <div style={{position:'relative', width:'100%'}}>
+            <img src="/img/question.svg" alt="검색" className="rw-search-icon" style={{
+              position: 'absolute', left: 28, top: '50%', transform: 'translateY(-50%)', zIndex: 2
+            }} />
+            <select
+              id="rw-location-select"
+              className="rw-location-select"
+              style={{paddingLeft: 44}} // 아이콘 공간 확보
               value={place}
-              onChange={e=>setPlace(e.target.value)}
-            />
+              onChange={e => {
+                const selected = locationOptions.find(loc => loc.location_name === e.target.value);
+                setPlace(e.target.value);
+                setDistance(selected ? selected.location_distance : '');
+              }}
+              onFocus={() => {
+                if (!locationOptions.length) fetchLocations();
+              }}
+            >
+              <option value="">장소를 선택하세요</option>
+              {locationOptions.map((loc, idx) => (
+                <option key={idx} value={loc.location_name}>
+                  {loc.location_name}
+                </option>
+              ))}
+            </select>
           </div>
         </div>
 
-        {/* 활동 선택 */}
-        <div className="rw-block rw-activity-block" ref={activityWrapperRef}>
-          <div
-            className={`rw-activity-selector ${activityOpen?'open':''} ${!activity?'placeholder':''}`}
-            role="button"
-            tabIndex={0}
-            aria-haspopup="listbox"
-            aria-expanded={activityOpen}
-            onClick={toggleActivityOpen}
-            onKeyDown={e=>{
-              if(e.key==='Enter' || e.key===' ') { e.preventDefault(); toggleActivityOpen(); }
-              if(e.key==='Escape') setActivityOpen(false);
-            }}
+        {/* 활동 종류 선택 */}
+        <div className="rw-block">
+          <select
+            className="rw-activity-select"
+            value={activity}
+            onChange={e => setActivity(e.target.value)}
           >
-            <span className="rw-activity-text">{activityLabel}</span>
-            <span className="rw-activity-arrow">›</span>
-          </div>
-          {activityOpen && (
-            <div className="rw-activity-dropdown" role="listbox">
-              {activities.map(a=>(
-                <button
-                  key={a.key}
-                  type="button"
-                  role="option"
-                  aria-selected={activity===a.key}
-                  className={`rw-activity-option ${activity===a.key?'selected':''}`}
-                  onClick={()=>chooseActivity(a.key)}
-                >
-                  {a.label}
-                  {activity===a.key && <span className="rw-activity-check">✓</span>}
-                </button>
-              ))}
-            </div>
-          )}
+            <option value="">운동 종류를 선택하세요</option>
+            {activities.map(a => (
+              <option key={a.key} value={a.key}>
+                {a.label}
+              </option>
+            ))}
+          </select>
         </div>
 
         {/* 날짜 + 시간 */}
@@ -302,10 +330,10 @@ function RecordWritePage() {
           </button>
         </div>
 
-        {/* 사진 / 태그 / 기록 (토글) */}
+        {/* 사진 / 기록 */}
         <div className="rw-block">
           <div className="rw-media-section">
-            <div className="rw-subtitle">사진 / 태그 / 기록</div>
+            <div className="rw-subtitle">사진 / 기록</div>
 
             <div className="rw-media-toggle" role="tablist" aria-label="사진 또는 기록 선택">
               <button
@@ -365,13 +393,6 @@ function RecordWritePage() {
                 />
               </div>
             )}
-
-            <input
-              className="rw-hashtag-input"
-              placeholder="# 해시태그를 입력해보세요"
-              value={hashtags}
-              onChange={handleHashtagChange}
-            />
           </div>
         </div>
 
