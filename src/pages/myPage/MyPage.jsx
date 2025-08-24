@@ -1,11 +1,14 @@
-import React from 'react';
+import React , { useEffect, useState }  from 'react';
 import { useNavigate } from 'react-router-dom';
 import './MyPage.css';
 import WhiteBottomNav from '../../components/WhiteBottomNav'; // 하단 네비게이션 스타일
-
+import axios from 'axios';
 
 function MyPage() {
   const navigate = useNavigate();
+
+  const [userInfo, setUserInfo] = useState(null); // 사용자 정보
+  const [crewInfo, setCrewInfo] = useState(null); // 크루 정보
 
   const handleCopyCode = () => {
     const inviteCode = "dj32fsx9"; // 복사할 초대 코드
@@ -17,6 +20,36 @@ function MyPage() {
         alert("복사에 실패했습니다. 다시 시도해주세요."); // 복사 실패 시 알림
       });
   };
+
+  useEffect(() => {
+    // 사용자 정보 API 호출
+    axios.get('/users/') // 백엔드 API 엔드포인트
+      .then((response) => {
+        console.log('사용자 정보:', response.data); // 사용자 정보 콘솔 출력
+        setUserInfo(response.data); // 사용자 정보 상태 업데이트
+        setCrewInfo(response.data.crew_info); // 크루 정보 상태 업데이트
+      })
+      .catch((error) => {
+        console.error('사용자 정보를 가져오는 중 오류 발생:', error);
+      });
+  
+    // 크루 정보 API 호출
+    axios.get('/crews/{crew_id}/') // 백엔드 API 엔드포인트
+      .then((response) => {
+        console.log('크루 정보:', response.data); // 크루 정보 콘솔 출력
+        setCrewInfo(response.data); // 크루 정보 상태 업데이트
+      })
+      .catch((error) => {
+        console.error('크루 정보를 가져오는 중 오류 발생:', error);
+      });
+  }, []); // 컴포넌트가 마운트될 때 한 번 실행
+  
+  
+    // 데이터 로딩 중 처리
+    if (!userInfo || !crewInfo) {
+      return <div>데이터를 불러오는 중...</div>;
+    }
+  
 
   return (
     <div className="myPage-container">
@@ -30,7 +63,7 @@ function MyPage() {
       {/* 프로필 */}
       <div className="profile-section">
         <div className="profile-image"></div>
-        <div className="profile-name">홍길동</div>
+        <div className="profile-name">{userInfo.nickname}</div>
         <div className="profile-badge">
           <img src='img/star.svg' onClick={()=>navigate('/level-list')} className='BB'></img> 러닝 마니아🔥</div>
         <div className="profile-message">오늘의 땀방울이 내일의 나를 만든다.</div>
