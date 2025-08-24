@@ -5,14 +5,13 @@ export default function FailurePage() {
   const nav = useNavigate();
   const { state } = useLocation();
 
-  // 넘어오면 교체할 수 있는 문구들
+  // 👉 서버나 이전 페이지에서 전달된 메시지 활용
   const title = state?.title || "조건이 충족되지 않았어요.";
-  const hint  = state?.hint  || "3명 이상 모이면 자동 인증됩니다";
+  const hint = state?.hint || "3명 이상 모이면 자동 인증됩니다.";
+  const retryTo = state?.retryTo || "/store-list"; // 기본 재시도 경로
 
   const onRetry = () => {
-    // 이전 화면으로 (필요시 특정 경로로 바꿔도 됨)
-    if (state?.retryTo) nav(state.retryTo);
-    else nav(-1);
+    nav(retryTo, { state: state?.store }); // 이전 가게 정보 유지 가능
   };
 
   return (
@@ -28,21 +27,21 @@ export default function FailurePage() {
         </button>
 
         <div className="fail-content">
-          {/* 실패 아이콘 (이미지) */}
+          {/* 실패 아이콘 */}
           <img
             className="fail-icon"
-            src="/img/check_outline.svg"
+            src="/img/check_outline.svg" // 👉 실패 전용 아이콘으로 교체 추천
             alt="실패 표시"
           />
 
-          {/* 문구 */}
+          {/* 메시지 */}
           <p className="fail-title">{title}</p>
           <p className="fail-hint">{hint}</p>
 
-          {/* CTA
+          {/* CTA */}
           <button className="fail-cta" onClick={onRetry}>
             다시 시도
-          </button> */}
+          </button>
         </div>
       </div>
     </div>
