@@ -54,7 +54,7 @@ function AppRoutes() {
       <Route path="/memberlist" element={<MemberListPage />} />
       <Route path="/notice-details" element={<NoticeDetailsPage />} />
       <Route path="/create-notice" element={<CreateNoticePage />} />
-      <Route path="/mypage" element={<MyPage />} />
+      <Route path="/mypage/:user_id" element={<MyPage />} />
       <Route path="/level-list" element={<LevelListPage />} />
       <Route path="/test-map" element={<TestMap />} />
     </Routes>
