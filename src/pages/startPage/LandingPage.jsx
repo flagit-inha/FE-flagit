@@ -5,7 +5,7 @@ import { useNavigate } from 'react-router-dom';
 function LandingPage() {
     const navigate = useNavigate();
     const handleStartClick = () => {
-        navigate('/signup');
+        navigate('/users/signup');
     };
     return (
         <div className='phone'>
@@ -17,7 +17,9 @@ function LandingPage() {
 
             </button>
             <div className='description'> 
-                <h6 className='imi'>이미 계정이 있나요? <a href="/login" className="loginLink">로그인하기</a>  </h6>
+
+                <h6 className='imi'>이미 계정이 있나요? <a href="/users/login" className="loginLink">로그인하기</a>  </h6>
+
             </div>
           
         </div>

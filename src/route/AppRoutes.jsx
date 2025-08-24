@@ -26,17 +26,17 @@ import NoticeDetailsPage from '../pages/myCrewPage/NoticeDetailsPage';
 import CreateNoticePage from '../pages/myCrewPage/CreateNoticePage';
 import MyPage from '../pages/myPage/MyPage';
 import LevelListPage from '../pages/myPage/LevelListPage';
-
+import TestMap from '../pages/TestMap';
 function AppRoutes() {
   return (
     <Routes>
       <Route path="/" element={<Opening />} />
       <Route path="/landing" element={<LandingPage />} />
-      <Route path="/signup" element={<SignUpPage />} />
-      <Route path="/login" element={<LoginPage />} />
+      <Route path="/users/signup" element={<SignUpPage />} />
+      <Route path="/users/login" element={<LoginPage />} />
       <Route path="/crew-select" element={<CrewSelectPage />} />
-      <Route path="/create-crew" element={<CreateCrewPage />} />
-      <Route path="/join-crew" element={<JoinCrewPage />} />
+      <Route path="/crews" element={<CreateCrewPage />} />
+      <Route path="/crews/join" element={<JoinCrewPage />} />
       <Route path="/find-route" element={<FindRoutePage />} />
       <Route path="/loading" element={<LoadingPage />} />
       <Route path="/suggested-route" element={<SuggestedRoutePage />} />
@@ -50,12 +50,13 @@ function AppRoutes() {
       <Route path="/fullmap" element={<FullMapPage />} />
       <Route path="/location/:id" element={<DetailedLocationPage />} />
       <Route path="/record-write" element={<RecordWritePage />} />
-      <Route path="/mycrew" element={<MyCrewPage />} />
+      <Route path="/mycrew/:crew_id" element={<MyCrewPage />} />
       <Route path="/memberlist" element={<MemberListPage />} />
       <Route path="/notice-details" element={<NoticeDetailsPage />} />
       <Route path="/create-notice" element={<CreateNoticePage />} />
       <Route path="/mypage" element={<MyPage />} />
       <Route path="/level-list" element={<LevelListPage />} />
+      <Route path="/test-map" element={<TestMap />} />
     </Routes>
   );
 }

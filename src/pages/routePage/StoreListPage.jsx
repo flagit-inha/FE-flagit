@@ -1,26 +1,49 @@
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./StoreListPage.css";
-
-const MOCK_STORES = [
-  { id: 1, name: "왕초보나용이" },
-  { id: 2, name: "러너스 카페" },
-  { id: 3, name: "마라톤 샵" },
-  { id: 4, name: "비타민 스토어" },
-  { id: 5, name: "러닝화 아울렛" },
-  { id: 6, name: "피트니스 스낵바" },
-  { id: 7, name: "마라톤 샵" },
-  { id: 8, name: "비타민 스토어" },
-  { id: 9, name: "러닝화 아울렛" },
-  { id: 10, name: "피트니스 스낵바" },
-];
 
 export default function StoreListPage() {
   const nav = useNavigate();
   const goBack = () => nav(-1);
 
+  const [stores, setStores] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    // 사용자 현재 위치 받아오기
+    navigator.geolocation.getCurrentPosition(
+      async (pos) => {
+        const { latitude, longitude } = pos.coords;
+
+        try {
+          // ✅ 쿼리 파라미터 방식으로 변경
+          const res = await fetch(
+            `${import.meta.env.VITE_API_BASE_URL}/stores/nearby?lat=${latitude}&lng=${longitude}`
+          );
+
+          if (!res.ok) throw new Error("가게 조회 실패");
+          const data = await res.json();
+
+          console.log("✅ 근처 가게 목록:", data);
+
+          setStores(data.stores || []);
+        } catch (err) {
+          console.error(err);
+          alert("가게 목록을 불러오는 중 오류가 발생했습니다!");
+        } finally {
+          setLoading(false);
+        }
+      },
+      (err) => {
+        console.error("위치 접근 실패:", err);
+        alert("위치를 가져올 수 없습니다. 위치 권한을 허용해주세요!");
+        setLoading(false);
+      }
+    );
+  }, []);
+
   const goStore = (store) => {
-    // TODO: 상세 페이지 준비되면 여기로 연결
-    // nav(`/store/${store.id}`);
+    // TODO: 상세 페이지 연결
     alert(`${store.name} 상세로 이동 예정!`);
   };
 
@@ -41,26 +64,29 @@ export default function StoreListPage() {
             <br />
             할인받아보세요
           </h1>
-          <img
-            className="store-illu"
-            src="/img/map1.svg" /* public/img/spot_illu.png */
-            alt=""
-          />
+          <img className="store-illu" src="/img/map1.svg" alt="지도 일러스트" />
         </header>
 
         {/* 리스트 */}
         <div className="store-list">
-          {MOCK_STORES.map((s) => (
-            <button
-              key={s.id}
-              className="store-item"
-              onClick={() => goStore(s)}
-              aria-label={`${s.name} 보기`}
-            >
-              <span className="store-name">{s.name}</span>
-              <span className="store-chevron">›</span>
-            </button>
-          ))}
+          {loading ? (
+            <p>가게 정보를 불러오는 중...</p>
+          ) : stores.length > 0 ? (
+            stores.map((s) => (
+              <button
+                key={s.store_id}
+                className="store-item"
+                onClick={() => goStore(s)}
+                aria-label={`${s.name} 보기`}
+              >
+                <span className="store-name">{s.name}</span>
+                <span className="store-distance">{s.distance.toFixed(1)} m</span>
+                <span className="store-chevron">›</span>
+              </button>
+            ))
+          ) : (
+            <p>근처에 등록된 가게가 없습니다.</p>
+          )}
         </div>
       </div>
     </div>

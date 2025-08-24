@@ -17,7 +17,22 @@
     align-items: center;
     justify-content: center;
   }
-
+/* 뒤로가기 버튼
+  
+  .loading-back {
+    position: absolute;
+  top: -5rem;
+  left: 1rem;
+  background: transparent;
+  border: 0;
+  font-size: 2rem;
+  font-weight: 600;
+  color:#3b82f6;
+  line-height: 1;
+  cursor: pointer;
+  }
+   */
+  
   /* 점 컨테이너 */
   .loading-dots {
     width: 200px;

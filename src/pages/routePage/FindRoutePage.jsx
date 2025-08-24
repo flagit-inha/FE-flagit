@@ -4,20 +4,27 @@ import "./FindRoutePage.css";
 
 export default function FindRoutePage() {
   const nav = useNavigate();
-  const [start, setStart] = useState("");
-  const [distance, setDistance] = useState("");
+  const [start, setStart] = useState(""); // 시작 장소
+  const [distance, setDistance] = useState(""); // 목표 거리 (km)
 
   const onSubmit = (e) => {
     e.preventDefault();
-    if (!start || !distance) return alert("시작 장소와 목표 거리를 입력하세요!");
-    // 여기서 실제 경로 계산 API 호출 가능
-    console.log("출발지:", start, "목표거리:", distance);
+    if (!start || !distance) {
+      return alert("시작 장소와 목표 거리를 입력하세요!");
+    }
+
+    // 👉 로딩 페이지로 이동하면서 입력값 전달
+    nav("/loading", {
+      state: {
+        start_location: start,
+        target_distance: parseFloat(distance),
+      },
+    });
   };
 
   return (
     <div className="find-screen">
       <div className="find-card">
-        {/* 뒤로가기 */}
         <button
           className="find-back"
           onClick={() => nav(-1)}
@@ -43,12 +50,12 @@ export default function FindRoutePage() {
           </label>
 
           <label className="find-field">
-            <span className="find-label">목표 거리</span>
+            <span className="find-label">목표 거리 (km)</span>
             <input
               type="number"
               value={distance}
               onChange={(e) => setDistance(e.target.value)}
-              placeholder="예: 5 (km)"
+              placeholder="예: 5"
               className="find-input"
               min="0"
             />
