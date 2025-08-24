@@ -12,6 +12,13 @@ export default function SignUpPage() {
   const [loading, setLoading] = useState(false);
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
+  const clearUserStorage = () => {
+    localStorage.removeItem("token");
+    localStorage.removeItem("refresh_token");
+    localStorage.removeItem("mycrew");
+    localStorage.removeItem("user_id");
+  };
+
   const onSubmit = async (e) => {
     e.preventDefault();
     setErr(null);
@@ -22,6 +29,8 @@ export default function SignUpPage() {
 
     setLoading(true);
     try {
+      clearUserStorage(); // 회원가입 시 이전 사용자 정보 모두 삭제
+
       const res = await fetch(`${apiBaseUrl}/users/signup/`, {
         method: "POST",
         headers: { "Content-Type": "application/json" },
@@ -31,7 +40,26 @@ export default function SignUpPage() {
       setLoading(false);
 
       if (!res.ok) return setErr(data.message || "가입에 실패했습니다.");
-      nav("/users/login"); // 가입 성공 시 모임 찾기 페이지으로 이동
+
+      // 회원가입 성공 시 자동 로그인
+      setLoading(true);
+      clearUserStorage(); // 로그인 전에도 초기화
+      const loginRes = await fetch(`${apiBaseUrl}/users/login/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password })
+      });
+      const loginData = await loginRes.json();
+      setLoading(false);
+
+      clearUserStorage(); // 로그인 성공 시에도 초기화
+      if (loginRes.ok && loginData.access_token) {
+        localStorage.setItem("token", loginData.access_token);
+        if (loginData.refresh) localStorage.setItem("refresh_token", loginData.refresh);
+        nav("/crew-select"); // CrewSelectPage로 이동
+      } else {
+        nav("/users/login"); // 로그인 실패 시 로그인 페이지로 이동
+      }
     } catch (e2) {
       setLoading(false);
       setErr("서버 연결 오류");
