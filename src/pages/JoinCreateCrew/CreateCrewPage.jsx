@@ -67,7 +67,7 @@ export default function CreateCrewPage() {
         }
         return;
       }
-      nav("/mycrew");
+      nav(`/mycrew/${data.crew_id}`);
     } catch (err) {
       alert("서버 연결 오류");
     }

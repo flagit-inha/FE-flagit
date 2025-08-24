@@ -32,8 +32,9 @@ export default function JoinCrewPage() {
       console.log(data); // 응답 확인
       setLoading(false);
 
-      if (res.ok) {
-        nav("/mycrew");
+      if (res.ok && data.crew_id) {
+        localStorage.setItem("mycrew", JSON.stringify(data));
+        nav(`/mycrew/${data.crew_id}`); // crew_id 기반 페이지로 이동
       } else {
         alert(data.message || "단체명과 초대코드가 일치하지 않습니다.");
       }

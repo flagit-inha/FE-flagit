@@ -50,7 +50,7 @@ function AppRoutes() {
       <Route path="/fullmap" element={<FullMapPage />} />
       <Route path="/location/:id" element={<DetailedLocationPage />} />
       <Route path="/record-write" element={<RecordWritePage />} />
-      <Route path="/mycrew" element={<MyCrewPage />} />
+      <Route path="/mycrew/:crew_id" element={<MyCrewPage />} />
       <Route path="/memberlist" element={<MemberListPage />} />
       <Route path="/notice-details" element={<NoticeDetailsPage />} />
       <Route path="/create-notice" element={<CreateNoticePage />} />
