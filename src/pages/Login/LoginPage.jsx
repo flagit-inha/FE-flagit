@@ -30,8 +30,13 @@ export default function LoginPage() {
 
       // 토큰 저장 (백엔드에서 token 필드로 응답해야 함)
       localStorage.removeItem("token");
+      localStorage.removeItem("refresh_token");
+      localStorage.removeItem("mycrew");
+      localStorage.removeItem("user_id");
+      
       if (data.access_token) {
         localStorage.setItem("token", data.access_token);
+        if (data.refresh) localStorage.setItem("refresh_token", data.refresh);
       } else {
         return setErr("로그인 응답에 토큰이 없습니다.");
       }

@@ -31,7 +31,7 @@ export default function SignUpPage() {
       setLoading(false);
 
       if (!res.ok) return setErr(data.message || "가입에 실패했습니다.");
-      nav("/crew-select"); // 가입 성공 시 모임 찾기 페이지으로 이동
+      nav("/users/login"); // 가입 성공 시 모임 찾기 페이지으로 이동
     } catch (e2) {
       setLoading(false);
       setErr("서버 연결 오류");
