@@ -44,7 +44,6 @@ function MyPage() {
       });
   }, []); // 컴포넌트가 마운트될 때 한 번 실행
   
-
   
     // 데이터 로딩 중 처리
     if (!userInfo || !crewInfo) {
