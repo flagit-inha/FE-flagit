@@ -1,52 +1,56 @@
+/* 카드 레이아웃 - 기존 페이지들과 톤 맞춤 */
 .loading-screen {
+    min-height: 100svh;
     display: flex;
     align-items: center;
     justify-content: center;
-    height: 100vh;
     background: #fff;
+    padding: 3.5rem;
   }
   
   .loading-card {
+    width: min(92vw, 26rem);
+    min-height: 70svh;
+    background: #fff;
+    position: relative;
     display: flex;
-    flex-direction: column;
     align-items: center;
+    justify-content: center;
   }
+/* 뒤로가기 버튼
   
+  .loading-back {
+    position: absolute;
+  top: -5rem;
+  left: 1rem;
+  background: transparent;
+  border: 0;
+  font-size: 2rem;
+  font-weight: 600;
+  color:#3b82f6;
+  line-height: 1;
+  cursor: pointer;
+  }
+   */
+  
+  /* 점 컨테이너 */
   .loading-dots {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 16px;
+    width: 200px;
+    height: 60px;
+    position: relative;
   }
   
+  /* 점 자체 */
   .loading-dot {
-    width: 14px;
-    height: 14px;
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 15px;
+    height: 15px;
+    margin-left: -7px;  /* 가운데 기준 정렬 */
+    margin-top: -7px;
+    background: #3b82f6; /* 파랑 */
     border-radius: 50%;
-    background-color: #3b82f6; /* 파란색 점 */
-    animation: bounce 1.2s infinite;
-  }
-  
-  .loading-dot:nth-child(2) {
-    animation-delay: 0.2s;
-  }
-  
-  .loading-dot:nth-child(3) {
-    animation-delay: 0.4s;
-  }
-  
-  @keyframes bounce {
-    0%, 80%, 100% {
-      transform: translateY(0);
-      opacity: 0.6;
-    }
-    40% {
-      transform: translateY(-12px);
-      opacity: 1;
-    }
-  }
-  
-  .loading-text {
-    font-size: 14px;
-    color: #555;
+    filter: drop-shadow(0 2px 4px rgba(59,130,246,.35));
   }
   
