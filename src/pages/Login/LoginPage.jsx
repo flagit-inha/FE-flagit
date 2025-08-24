@@ -29,6 +29,7 @@ export default function LoginPage() {
       if (!res.ok) return setErr(data.message || "이메일 또는 비밀번호가 올바르지 않습니다.");
 
       // 토큰 저장 (백엔드에서 token 필드로 응답해야 함)
+      localStorage.removeItem("token");
       if (data.access_token) {
         localStorage.setItem("token", data.access_token);
       } else {
