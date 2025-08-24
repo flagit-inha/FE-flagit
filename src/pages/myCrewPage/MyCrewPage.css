@@ -1,15 +1,30 @@
 .mycrew-icon {
     width: 100%;
     height: 25vh;
-    /* position: relative;  ✅ 제거 */
-}
+    position: relative;   /* ✅ 자식 absolute 기준 */
+  }
 
-.crewProfile {
-    transform: translate(165%, -40%);
+  .crewprodv{
+    display: flex;
+    justify-content: center;
+  }
+
+.crewProfile1 {
+    transform: translateY(-40%);
     width: 100px;
     height: 100px;
     border-radius: 50%;
     overflow: hidden;
+    background-color: #f0f0f0; /* 배경색 추가 */
+    background-size: cover; /* 배경 이미지 크기 조정 */
+    background-position: center; /* 배경 이미지 위치 */
+}
+
+.crew-profile-icon {
+    width: 80%; /* 이미지 크기를 줄임 */
+    height: 80%; /* 이미지 크기를 줄임 */
+    object-fit: cover; /* 이미지가 배경 안에 맞게 조정 */
+    border-radius: 50%; /* 이미지도 원형으로 */
 }
 
 .profile-image {
@@ -35,11 +50,9 @@
     color: rgba(0, 0, 0, 0.6);
 }
 
-.notic-member {
+.notic-member1 {
     display: flex;
-    justify-content: space-between;
     align-items: center;
-    width: 430px;
     height: 50px;
     padding: 0 40px;
     box-sizing: border-box;
@@ -47,7 +60,7 @@
 
 }
 
-.noticeButton {
+.noticeButton1 {
     flex: 1;
     color: #ffffff;
     background-color: #23AFB4;
@@ -55,19 +68,20 @@
     border-color: #b5b5b5;
     border-radius: 15px;
     height: 34px;
-    width: 40px;
-    margin-right: 10px;
+    min-width: 50px;
+    max-width: 50px;
     text-align: center;
     line-height: 34px; 
+    margin-right: 10px;
 }
-.noticeButton:hover {
+.noticeButton1:hover {
     background-color: #1e9f9f;
 }
 
 
 
 
-.memberButton {
+.memberButton1 {
     text-align: center;
     line-height: 34px; 
     flex: 1;
@@ -76,18 +90,21 @@
     border-color: #b5b5b5;
     border-radius: 15px;
     height: 34px;
-    width: 49px;
-    margin-right: 55%;
+    min-width: 50px;
+    max-width: 50px;
+    margin-right: 50%;
+
 }
-.memberButton:hover {
+.memberButton1:hover {
     background-color: #f0f0f0;
 }
 
 
-.write{
+.write1{
     color: #7b7b7b;
     font-size: small;
     cursor: pointer;
+    margin-left: auto;
 }
 
 .write:hover{
@@ -133,3 +150,76 @@
 .noticeContentText:hover {
     color: #1e9f9f;
 }
+
+
+  .placeholder{
+    width: 100%;
+    height: 200px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 1.2rem;
+    background-color: #DADADA;
+    color: #9ca3af;
+    text-align: center;
+  }
+
+  .upploadButton{
+    display: inline-block;
+    margin-top: 10px;
+    padding: 8px 12px;
+    background-color: #dcdcdc;
+    color: rgb(94, 94, 94);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 30px;
+  }
+
+  .upploadButton:hover {
+    color: #656565;
+  }
+
+
+
+.crew-profile-icon {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 50%;
+
+  }
+  
+  .profile-placeholder {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    background-color: #F5F5F5;
+  }
+
+
+
+  .small-circle-button {
+    bottom: 5px; /* 아래쪽에서 5px 떨어짐 */
+    right: 5px; /* 오른쪽에서 5px 떨어짐 */
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    background-color: #23AFB4;
+    border: 2px solid #fff;
+    cursor: pointer;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    }
+  
+  .small-circle-button:hover {
+    background-color: #1e9f9f;
+  }
+  
+  .edit-icon {
+    width: 16px;
+    height: 16px;
+  }

@@ -1,6 +1,8 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import './LevelListPage.css';
+import WhiteBottomNav from '../../components/WhiteBottomNav'; // 하단 네비게이션 스타일
+
 
 function LevelListPage() {
   const navigate = useNavigate();
@@ -42,25 +44,7 @@ function LevelListPage() {
       </div>
 
       {/* 하단네비게이션 바 */}
-      <div className="bottom-nav">
-        <div className="nav-item active" >
-          <img src="/img/route.svg" alt="route" />
-          <span>route</span>
-        </div>
-        <div className="nav-item" onClick={() => navigate('/fullmap')} >
-          <img src="/img/home.svg" alt="home" />
-          <span>home</span>
-        </div>
-        <div className="nav-item" onClick={() => window.location.href = '/mycrew'}>
-          <img src="/img/mycrew.svg" alt="mycrew" />
-          
-          <span>mycrew</span>
-        </div>
-        <div className="nav-item" onClick={() => navigate('/mypage')}>
-          <img src="/img/my.svg" alt="my" />
-          <span>my</span>
-        </div>
-      </div>
+      <WhiteBottomNav />
 
     </div>
 );

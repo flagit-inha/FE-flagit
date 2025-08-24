@@ -1,33 +1,39 @@
-import React, { useEffect, useState } from 'react';
+
+import React , { useState }from 'react';
 import './MyCrewPage.css'; 
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import WhiteBottomNav from '../../components/WhiteBottomNav'; // 하단 네비게이션 스타일
+
 
 function MyCrewPage() {
   const navigate = useNavigate();
-  const { crew_id } = useParams();
-  const [crew, setCrew] = useState(null);
 
-  useEffect(() => {
-    // localStorage에 crew 정보가 있고 crew_id가 일치하면 사용
-    const saved = JSON.parse(localStorage.getItem("mycrew") || "{}");
-    if (saved.crew_id === crew_id) {
-      setCrew(saved);
-    } else {
-      // 백엔드에서 crew_id로 크루 정보 조회 (예시)
-      fetch(`${import.meta.env.VITE_API_BASE_URL}/crews/${crew_id}`, {
-        headers: {
-          "Authorization": `Bearer ${localStorage.getItem("token")}`
-        }
-      })
-        .then(res => res.json())
-        .then(data => setCrew(data))
-        .catch(() => setCrew(null));
+  const [backgroundImage, setBackgroundImage] = useState(null); // 기본 이미지 경로
+  const [profileImage, setProfileImage] = useState('/img/person1.svg'); // 기본 프로필 이미지 경로
+
+
+  // 이미지 업로드 핸들러
+  const handleBackgroundUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file); // 업로드된 파일의 URL 생성
+      setBackgroundImage(imageUrl); // 상태 업데이트
     }
-  }, [crew_id]);
-
-  const handleFullMapClick = () => {
-    navigate('/fullmap');
   };
+  
+
+  // 프로필 이미지 업로드 핸들러
+  const handleProfileUpload = (event) => {
+    const file = event.target.files[0];
+    if (file) {
+      const imageUrl = URL.createObjectURL(file); // 업로드된 파일의 URL 생성
+      setProfileImage(imageUrl); // 상태 업데이트
+    }
+  };
+
+  
+ 
+
   const handleMemberClick = () => {
     navigate('/memberlist');
   };
@@ -54,13 +60,50 @@ function MyCrewPage() {
 
   return (
     <div>
-      {/* 크루이미지 */}
-      <img src={crew.profile_image || "/img/crep.png"} alt="mycrew" className="mycrew-icon" />
-
-      {/* 크루프로필 */}
-      <div className='crewProfile'>
-        <img src={crew.profile_image || "/img/Ellipse2.svg"} className="profile-image" alt="프로필" /> 
+        {/* 크루 배경 이미지 */}
+        <div className="backgroundImageContainer">
+        {backgroundImage ? (
+          <img src={backgroundImage} alt="mycrew" className="mycrew-icon" />
+        ) : (
+          <div className="placeholder">
+            <label htmlFor="backgroundUpload" className="upploadButton">
+              +
+            </label>
+          </div>
+        )}
+        <input
+          type="file"
+          accept="image/*"
+          id="backgroundUpload"
+          style={{ display: 'none' }} // 파일 입력 필드를 숨김
+          onChange={handleBackgroundUpload}
+        />
       </div>
+
+
+      {/* 크루 프로필 */}
+      <div className="crewprodv">
+        <div className="crewProfile1">
+          <img src={profileImage} alt="crew profile" className="crew-profile-icon" />
+          <input
+            type="file"
+            accept="image/*"
+            id="profileUpload"
+            style={{ display: 'none' }} // 파일 입력 필드를 숨김
+            onChange={handleProfileUpload}
+          />
+        </div>
+        <div className='penButton'>
+          {/* 작은 수정 버튼 */} 
+          <label htmlFor="profileUpload" className="small-circle-button">
+            <img src="/img/pen.svg" alt="edit" className="edit-icon" />
+          </label>
+      </div>
+        
+      </div>
+
+
+
 
       {/* 크루이름 */}
       <div className='crewName'>
@@ -76,10 +119,10 @@ function MyCrewPage() {
       </div>
 
       {/* 공지 회원 선택 바 */}
-      <div className='notic-member'> 
-        <button className='noticeButton'>공지</button>
-        <button className='memberButton' onClick={handleMemberClick}>회원</button>
-        <span className='write'  onClick={handleWriteClick}>+글추가</span>
+      <div className='notic-member1'> 
+        <button className='noticeButton1'>공지</button>
+        <button className='memberButton1' onClick={handleMemberClick}>회원</button>
+        <span className='write1'  onClick={handleWriteClick}>+글추가</span>
       </div>
 
       {/* 크루 공지사항 */}
@@ -91,25 +134,12 @@ function MyCrewPage() {
         ))}
       </div>
 
+      
       {/* 하단네비게이션 바 */}
-      <div className="bottom-nav">
-        <div className="nav-item active" >
-          <img src="/img/route.svg" alt="route" />
-          <span>route</span>
-        </div>
-        <div className="nav-item" onClick={handleFullMapClick} >
-          <img src="/img/home.svg" alt="home" />
-          <span>home</span>
-        </div>
-        <div className="nav-item" onClick={() => window.location.href = `/mycrew/${crew_id}`}>
-          <img src="/img/mycrew.svg" alt="mycrew" />
-          <span>mycrew</span>
-        </div>
-        <div className="nav-item" onClick={() => navigate('/mypage')}>
-          <img src="/img/my.svg" alt="my" />
-          <span>my</span>
-        </div>
-      </div>
+      <WhiteBottomNav/>
+      
+      
+
     </div>
   );
 }

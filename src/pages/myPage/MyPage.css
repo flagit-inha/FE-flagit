@@ -108,6 +108,8 @@
   }
   
   .stat-card {
+    min-width: 40px;
+    max-width: 200px;
     background: #fff;
     border: #dadada 1px solid;
     border-radius: 12px;
