@@ -57,14 +57,14 @@ html, body {
   z-index:60; pointer-events:none; box-sizing:border-box;
 }
 .app-logo {
-  width:clamp(90px,32vw,140px); height:auto;
+  width:clamp(110px,32vw,150px); height:auto;
   filter:drop-shadow(0 1px 2px rgba(0,0,0,.25)) drop-shadow(0 4px 8px rgba(0,0,0,.18));
   transform:translate(var(--logo-shift-x), var(--logo-shift-y)) scale(var(--logo-scale));
   transform-origin:left top; display:block; pointer-events:auto;
   user-select:none; -webkit-user-drag:none;
 }
 .top-title {
-  font-family:'Inter',system-ui,sans-serif; font-weight:600;
+  font-family:'Inter',system-ui,sans-serif; font-weight:650;
   font-size:var(--title-fs-base); line-height:1.06;
   letter-spacing:var(--title-letter-spacing);
   display:flex; flex-direction:column; align-items:flex-end;
@@ -73,6 +73,7 @@ html, body {
   word-break:keep-all;
   transform:translate(var(--title-shift-x), var(--title-shift-y));
   transform-origin:right top;
+  margin-top: 10px;
 }
 .top-title .title-line1,
 .top-title .title-line2 { display:block; }
@@ -86,7 +87,7 @@ html, body {
 }
 .geo-wrapper, .geo-canvas { position:relative; width:100%; height:100%; }
 .geo-main {
-  position:absolute; top:0; left:-5%; width:100%; height:100%;
+  position:absolute; top:0; left:0%; width:100%; height:100%;
   object-fit:contain; pointer-events:none; user-select:none;
 }
 .geo-dokdo {
@@ -206,6 +207,7 @@ html, body {
 .footer-flag {
   display:flex; flex-direction:column; align-items:center;
   justify-content:center; gap:6px; pointer-events:auto;
+  margin-bottom: 20px;  
 }
 .footer-flag-icon {
   width:40px; height:40px; object-fit:contain;
@@ -230,6 +232,7 @@ html, body {
 .add-button:active { transform:scale(.9); }
 .add-button-icon {
   width:50px; height:50px;
+  margin-bottom: 20px; 
   object-fit:contain; user-select:none; -webkit-user-drag:none;
 }
 
