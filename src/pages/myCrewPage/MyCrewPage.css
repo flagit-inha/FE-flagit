@@ -223,3 +223,10 @@
     width: 16px;
     height: 16px;
   }
+
+  .no-notices {
+    text-align: center;
+    color: gray;
+    font-size: 16px;
+    margin-top: 20px;
+  }

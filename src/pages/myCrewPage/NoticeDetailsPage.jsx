@@ -1,11 +1,22 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useNavigate, useParams } from 'react-router-dom';
 import './NoticeDetailsPage.css';
 import WhiteBottomNav from '../../components/WhiteBottomNav'; // 하단 네비게이션 스타일
+import axios from 'axios';
 
+const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
 function NoticeDetailsPage() {
   const navigate = useNavigate();
+  const {  crew_id, notice_id } = useParams();
+  console.log("crew_id:", crew_id, "notice_id:", notice_id);
+
+
+  const [notice, setNotice] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+
   const handleBackClick = () => {
     navigate(-1); // 이전 페이지로 이동
   };
@@ -33,6 +44,41 @@ function NoticeDetailsPage() {
     setVoted("불참");
   };
 
+  useEffect(() => {
+    const fetchNoticeDetail = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(
+          `${apiBaseUrl}/notices/${crew_id}/${notice_id}/`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+
+        if (response.data.status === 'success') {
+          setNotice(response.data.notice);
+          setParticipants(response.data.notice.reaction_summary.present); // 현재 참석 인원
+        }
+      } catch (err) {
+        console.error('공지 상세 조회 오류:', err);
+        setError('공지 상세를 불러올 수 없습니다.');
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (crew_id && notice_id) {
+      fetchNoticeDetail();
+      }
+    }, [crew_id, notice_id]);  
+
+    if (loading) return <div>불러오는 중...</div>;
+    if (error) return <div>{error}</div>;
+    if (!notice) return <div>공지 데이터를 찾을 수 없습니다.</div>;
+
+
   return (
     <div>
 
@@ -48,36 +94,24 @@ function NoticeDetailsPage() {
       </div>
 
       {/* 공지사항 제목 */}
-      <div className='titleNaame'>8월 정기모임</div>
+      <div className='titleNaame'>{notice.title}</div>
 
       {/* 글쓴이 + 글쓴시간 */}
       <div className='userr'>
         <img src="/img/Ellipse2.svg" className="profile-imae" alt="user profile" />
-        <span className='userName'>왕초보나용이</span>
-        <span className='date'>2025.07.23 13:44</span>
+        <span className='userName'>{notice.crew || "작성자"}</span>
+        <span className='date'>{notice.created_at}</span>
       </div>
 
       {/* 공지 내용 */}
       <div className='notice2Content'>
-        <p>안녕하세요~ 빌려온 깃냥이 회장 홍길동입니다! 🐾</p>
-        <p>무더운 여름이 조금씩 물러가는 8월, 함께 시원한 바람 맞으며 북한산을 걸어볼까요? 🌿</p>
-        <br />
-        <p>📅 날짜: 8월 17일(토)</p>
-        <p>📍 장소: 북한산 둘레길</p>
-        <p>⏰ 시간: 오전 9시 집합</p>
-        <p>🎒 준비물: 편한 복장, 물, 간식</p>
-        <br />
-        <p>등산 후에는 뒷풀이도 준비되어 있으니, 마음 편히 오셔서 즐기다 가세요!</p>
-        <p>참여를 원하시면 ‘참가’ 버튼을 눌러주세요 🙌</p>
-        <p>불참하실 경우 ‘불참’ 버튼을 눌러주세요 🙅‍♂️</p>
-        
-        <p>많은 참여 부탁드려요! 🐱</p>
+        <p>{notice.content}</p>
 
 
 
         {/* 투표 (참가 / 불참) */}
       <div className='voteSection'>
-        <div className='voteTitle'>8월 정기 모임 투표</div>
+        <div className='voteTitle'>{notice.title} 투표</div>
         <div className='voteOptions'>
           <button 
             className={`voteOptionBtn participate ${voted === "참가" ? "active" : ""}`} 

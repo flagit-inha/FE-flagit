@@ -12,6 +12,7 @@ function MyCrewPage() {
   const { crew_id } = useParams();
   const navigate = useNavigate();
 
+
   const [crew, setCrew] = useState(null); // crew 데이터 상태
   const [loading, setLoading] = useState(true); // 로딩 상태
   const [error, setError] = useState(null); // 에러 상태
@@ -20,6 +21,7 @@ function MyCrewPage() {
 
 
   const [crewCount, setCrewCount] = useState(1);
+  const [notices, setNotices] = useState([]); // 공지 상태
 
 
   useEffect(() => {
@@ -61,12 +63,35 @@ function MyCrewPage() {
       }
     };
 
+    const fetchNotices = async () => {
+      try {
+        const token = localStorage.getItem('token');
+        const response = await axios.get(`${apiBaseUrl}/notices/${crew_id}/`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+    
+        if (response.data.status === "success") {
+          setNotices(response.data.notices); // 배열 그대로 저장
+          if (response.data.crew_logo) {
+            setBackgroundImage(response.data.crew_logo);
+          }
+        }
+      } catch (err) {
+        console.error('공지 데이터를 가져오는 중 오류 발생:', err);
+        setError('공지 데이터를 불러올 수 없습니다.');
+      }
+    };
+
     
     if (crew_id) {
       fetchCrew();
+      fetchCrewCount();
+      fetchNotices(); 
+
     } else {
       setError('유효하지 않은 크루 ID입니다.');
       setLoading(false);
+
     }
   }, [crew_id]);
 
@@ -113,21 +138,11 @@ function MyCrewPage() {
   const handleWriteClick = () => {
     navigate('/create-notice');
   };
-  const handleNoticeClick = () => {
-    navigate('/notice-details');
+  const handleNoticeClick = (notice_id) => {
+    console.log("handleNoticeClick:", notice_id, crew_id);
+    navigate(`/notice-details/${crew_id}/${notice_id}`);
   };
 
-  // 공지사항 예시 (실제 공지는 crew.noticeList 등으로 받아올 수 있음)
-  const noticeList = crew.noticeList || [
-    '크루 가입을 환영합니다! 크루 활동을 즐겨주세요.',
-    '다음 주 모임은 오후 3시에 시작합니다.',
-    '새로운 크루원을 모집합니다!',
-    '이번 주말 등산 계획이 있습니다.',
-    '크루 활동 사진을 공유해주세요!',
-    '크루 활동에 대한 피드백을 주세요.',
-    '크루 활동에 필요한 물품을 준비해주세요.',
-    '다음 모임 장소는 중앙공원입니다.'
-  ];
 
   
 
@@ -196,13 +211,21 @@ function MyCrewPage() {
 
       {/* 크루 공지사항 */}
       <div className='noticelist'>
-        {noticeList.map((notice, index) => (
-          <div key={index} className='noticeContent'>
-            <div className='noticeContentText' onClick={handleNoticeClick}>{notice}</div>
-          </div>
-        ))}
+        {notices.length > 0 ? (
+          notices.map((notice) => (
+            <div key={notice.id} className='noticeContent'>
+              <div 
+                className='noticeContentText' 
+                onClick={() => handleNoticeClick(notice.id)} // notice.id가 반드시 존재해야 함
+              >
+                {notice.title}
+              </div>
+            </div>
+          ))
+        ) : (
+          <div className='no-notices'>아무 글이 없습니다.</div>
+        )}
       </div>
-
       
       {/* 하단네비게이션 바 */}
       <WhiteBottomNav/>

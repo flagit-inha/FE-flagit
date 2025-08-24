@@ -52,12 +52,14 @@ function AppRoutes() {
       <Route path="/record-write" element={<RecordWritePage />} />
       <Route path="/mycrew/:crew_id" element={<MyCrewPage />} />
       <Route path="/memberlist" element={<MemberListPage />} />
-      <Route path="/notice-details" element={<NoticeDetailsPage />} />
+      <Route path="/notice-details/:crew_id/:notice_id" element={<NoticeDetailsPage />} />
       <Route path="/create-notice" element={<CreateNoticePage />} />
       <Route path="/mypage/:user_id" element={<MyPage />} />
       <Route path="/level-list" element={<LevelListPage />} />
       <Route path="/test-map" element={<TestMap />} />
     </Routes>
+
+    // navigate(`/notice-details/${notice.id}`);
   );
 }
 
