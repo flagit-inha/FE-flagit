@@ -1,6 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { loginLocal } from "./authLocal";
 import "./LoginPage.css";
 
 export default function LoginPage() {
@@ -10,6 +9,7 @@ export default function LoginPage() {
   const [showPw, setShowPw] = useState(false);
   const [err, setErr] = useState(null);
   const [loading, setLoading] = useState(false);
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
 
   const onSubmit = async (e) => {
     e.preventDefault();
@@ -17,12 +17,29 @@ export default function LoginPage() {
     if (!email || !pw) return setErr("이메일/비밀번호를 입력하세요.");
 
     setLoading(true);
-    await new Promise((r) => setTimeout(r, 250)); // 모킹 딜레이
-    const me = loginLocal(email, pw);
-    setLoading(false);
+    try {
+      const res = await fetch(`${apiBaseUrl}/users/login/`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, password: pw })
+      });
+      const data = await res.json();
+      setLoading(false);
 
-    if (!me) return setErr("이메일 또는 비밀번호가 올바르지 않습니다.");
-    nav("/"); // 성공 후 이동 경로
+      if (!res.ok) return setErr(data.message || "이메일 또는 비밀번호가 올바르지 않습니다.");
+
+      // 토큰 저장 (백엔드에서 token 필드로 응답해야 함)
+      if (data.access_token) {
+        localStorage.setItem("token", data.access_token);
+      } else {
+        return setErr("로그인 응답에 토큰이 없습니다.");
+      }
+
+      nav("/crew-select");
+    } catch (e) {
+      setLoading(false);
+      setErr("서버 연결 오류");
+    }
   };
 
   return (
