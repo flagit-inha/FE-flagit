@@ -25,6 +25,7 @@ export default function SearchingCrewsPage() {
   return (
     <div className="search-screen">
       <div className="search-card">
+        {/* ✅ 뒤로가기 버튼 */}
         <button
           className="search-back"
           aria-label="뒤로가기"
@@ -33,7 +34,7 @@ export default function SearchingCrewsPage() {
           ‹
         </button>
 
-        {/* 돋보기 아이콘 (이미지 경로 확인해서 public/img에 넣어두면 됨) */}
+        {/* 돋보기 아이콘 */}
         <img
           src="/img/question.svg"
           alt="검색 돋보기"

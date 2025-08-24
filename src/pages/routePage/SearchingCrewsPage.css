@@ -44,7 +44,20 @@
     /* 살짝 더 또렷하게 보이도록 */
     filter: drop-shadow(0 2px 8px rgba(0,0,0,.08));
   }
-  
+
+.search-back {
+  position: absolute;
+    top: -5rem;
+    left: 1rem;
+    background: transparent;
+    border: 0;
+    font-size: 2rem;
+    font-weight: 600;
+    color:#3b82f6;
+    line-height: 1;
+    cursor: pointer;
+
+}
   /* 상태 텍스트 */
   .search-text{
     margin-top: 1rem;

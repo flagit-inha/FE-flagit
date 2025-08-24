@@ -36,4 +36,15 @@
     color:#6b7280;   /* gray-500 */
     text-align:center;
   }
-  
+  .qrgen-back {
+    position: absolute;
+    top: 3rem;
+    left: 3rem;
+    background: transparent;
+    border: 0;
+    font-size: 2rem;
+    font-weight: 600;
+    color:#3b82f6;
+    line-height: 1;
+    cursor: pointer;
+  }
