@@ -24,6 +24,7 @@ export default function LoginPage() {
         body: JSON.stringify({ email, password: pw })
       });
       const data = await res.json();
+      console.log(data);
       setLoading(false);
 
       if (!res.ok) return setErr(data.message || "이메일 또는 비밀번호가 올바르지 않습니다.");
@@ -36,12 +37,14 @@ export default function LoginPage() {
       
       if (data.access_token) {
         localStorage.setItem("token", data.access_token);
-        if (data.refresh) localStorage.setItem("refresh_token", data.refresh);
+        if (data.refresh_token) localStorage.setItem("refresh_token", data.refresh_token);
+        if (data.user && data.user.id) localStorage.setItem("user_id", data.user.id);
+        if (data.user && data.user.nickname) localStorage.setItem("nickname", data.user.nickname);
       } else {
         return setErr("로그인 응답에 토큰이 없습니다.");
       }
 
-      nav("/fullmap");// 로그인 성공 시 전체 지도 페이지로 이동
+      nav(`/fullmap/${data.user.id}`);// 로그인 성공 시 전체 지도 페이지로 이동
     } catch (e) {
       setLoading(false);
       setErr("서버 연결 오류");
