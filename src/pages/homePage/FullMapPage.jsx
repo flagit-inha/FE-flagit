@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import './FullMapPage.css';
 import { listRecords } from '../../services/recordsService';
 import BottomNav from '../../components/BottomNav';
@@ -24,7 +24,7 @@ const ACTIVITY_LABEL = {
 
 function project(lat, lng) {
   const { latMin, latMax, lngMin, lngMax } = GEO_BOUNDS;
-  if (typeof lat !== 'number' || typeof lng !== 'number' || !isFinite(lat) || !isFinite(lng)) return null;
+  if (typeof lat!=='number' || typeof lng!=='number' || !isFinite(lat) || !isFinite(lng)) return null;
   const clampedLat = Math.min(Math.max(lat, latMin), latMax);
   const clampedLng = Math.min(Math.max(lng, lngMin), lngMax);
   const xRatio = (clampedLng - lngMin) / (lngMax - lngMin);
@@ -40,53 +40,25 @@ function unproject(leftPercent, topPercent) {
 }
 
 function FullMapPage() {
+  const { user_id } = useParams();
   const navigate = useNavigate();
+  const myUserId = localStorage.getItem("user_id");
   const [records, setRecords] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  // ✅ 사용자 정보
-  const [user, setUser] = useState(null);
-
   // 깃발 선택 모드
+  const [flags, setFlags ] = useState([]);
   const [selectingFlag, setSelectingFlag] = useState(false);
   const [selectedFlag, setSelectedFlag] = useState(null);
 
-  // ✅ 사용자 정보 불러오기
-  useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-        const token = localStorage.getItem("token"); // 로그인 시 저장한 토큰
-
-        if (!token) {
-          console.warn("❌ 토큰 없음, 로그인 필요");
-          return;
-        }
-
-        const res = await fetch(`${apiBaseUrl}/users/`, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`, // ✅ 토큰 붙이기
-          },
-        });
-
-        if (!res.ok) throw new Error("사용자 정보 불러오기 실패");
-        const data = await res.json();
-        console.log("✅ 사용자 정보:", data);
-
-        // 백엔드 응답 구조에 맞춰서 수정
-        setUser(data.user || data); 
-      } catch (err) {
-        console.error(err);
-      }
-    };
-    fetchUser();
-  }, []);
-
-  // 기록 데이터 불러오기
-  useEffect(() => {
+  useEffect(()=>{
+    if (user_id !== myUserId) {
+      alert("본인 기록만 볼 수 있습니다.");
+      navigate(`/fullmap/${myUserId}`);
+      return;
+    }
     let alive = true;
-    (async () => {
+    (async()=>{
       try {
         setLoading(true);
         const list = await listRecords();
@@ -95,35 +67,44 @@ function FullMapPage() {
         if (alive) setLoading(false);
       }
     })();
-    return () => { alive = false; };
-  }, []);
+    return ()=>{ alive = false; };
+  },[user_id, myUserId, navigate]);
 
-  const projectedFlags = useMemo(() => {
+  // 기록의 flag_lat, flag_lng를 사용해서 지도에 깃발 표시
+  const projectedFlags = useMemo(()=> {
     return records
-      .filter(r => typeof r.latitude === 'number' && typeof r.longitude === 'number')
-      .map(r => {
-        const p = project(r.latitude, r.longitude);
-        if (!p) return null;
-        const placeName = (r.place && r.place.trim()) ? r.place.trim() : '장소 미지정';
+      .filter(r=> typeof r.flag_lat==='number' && typeof r.flag_lng==='number')
+      .map(r=>{
+        const p = project(r.flag_lat, r.flag_lng);
+        if(!p) return null;
+        // 장소명 추출 로직 수정
+        const placeName =
+          r.activity_location?.location_name ||
+          r.activity_location?.name ||
+          r.location_name ||
+          r.location?.name ||
+          '장소 미지정';
         return {
           id: r.id,
           place: placeName,
-          activity: r.activity || 'running',
+          activity: r.activity_type || 'running',
           date: r.date || '',
           ...p
         };
       })
       .filter(Boolean);
-  }, [records]);
+  },[records]);
 
   const coordCount = projectedFlags.length;
   const openRecord = id => navigate(`/location/${id}`);
 
+  // +버튼 클릭 시 지도에서 위치 선택 모드 진입
   const startFlagSelect = () => {
     setSelectingFlag(true);
     setSelectedFlag(null);
   };
 
+  // 지도 클릭 시 좌표 계산
   const handleMapClick = (e) => {
     if (!selectingFlag) return;
     const mapArea = e.currentTarget;
@@ -135,21 +116,38 @@ function FullMapPage() {
     setSelectedFlag({ left: leftPercent, top: topPercent });
   };
 
+  // 깃발 위치 확정 후 기록 작성 페이지로 이동
   const confirmFlag = () => {
     if (!selectedFlag) return;
     const { lat, lng } = unproject(selectedFlag.left, selectedFlag.top);
-    navigate(`/record-write?lat=${lat}&lng=${lng}`);
+    navigate(`/record-write?flag_lat=${lat}&flag_lng=${lng}`);
     setSelectingFlag(false);
     setSelectedFlag(null);
   };
 
+  // 선택 취소
   const cancelFlag = () => {
     setSelectingFlag(false);
     setSelectedFlag(null);
   };
 
-  // ✅ 사용자 이름 있으면 보여주고, 없으면 '사용자'
-  const line1 = `${user?.nickname || "사용자"}님의`;
+  useEffect(() => {
+    const fetchFlags = async () => {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${apiBaseUrl}/users/flag/`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setFlags(data);
+      }
+    };
+    fetchFlags();
+  }, []);
+
+  const nickname = localStorage.getItem("nickname") || "사용자";
+  const line1 = `${nickname}님의`;
   const line2 = '기록';
   const ariaTitle = `${line1} ${line2}`;
 
@@ -163,9 +161,8 @@ function FullMapPage() {
         </h1>
       </div>
 
-      {/* 지도 영역 */}
       <div className="fullmap-content">
-        <div className="map-area" onClick={handleMapClick} style={{ cursor: selectingFlag ? 'crosshair' : 'default' }}>
+        <div className="map-area" onClick={handleMapClick} style={{cursor: selectingFlag ? 'crosshair' : 'default'}}>
           <div className="geo-wrapper">
             <div className="geo-canvas">
               <img src="/img/main_map.svg" alt="대한민국 지도" className="geo-main" draggable="false" />
@@ -176,12 +173,12 @@ function FullMapPage() {
               <img src="/img/cloud.svg" alt="" className="cloud cloud-bottom" />
 
               <div className="map-flags" aria-hidden={loading}>
-                {projectedFlags.map(f => {
+                {projectedFlags.map(f=>{
                   const icon = ACTIVITY_ICON[f.activity] || ACTIVITY_ICON.running;
                   const actLabel = ACTIVITY_LABEL[f.activity] || '러닝';
-                  const dateText = f.date ? f.date.replace(/-/g, '.') : '';
+                  const dateText = f.date ? f.date.replace(/-/g,'.') : '';
                   return (
-                    <div key={f.id} className="map-flag" style={{ left: `${f.left}%`, top: `${f.top}%` }}>
+                    <div key={f.id} className="map-flag" style={{left:`${f.left}%`, top:`${f.top}%`}}>
                       <img src={icon} alt="" className="flag-icon" draggable="false" />
                       <div className="flag-card">
                         <div className="flag-place" title={f.place}>{f.place}</div>
@@ -192,15 +189,16 @@ function FullMapPage() {
                         <button
                           type="button"
                           className="flag-view-btn"
-                          onClick={() => openRecord(f.id)}
+                          onClick={()=>openRecord(f.id)}
                           aria-label={`${actLabel} 기록 상세 보기`}
                         >사진보기</button>
                       </div>
                     </div>
                   );
                 })}
+                {/* 선택 중인 깃발 미리보기 */}
                 {selectingFlag && selectedFlag && (
-                  <div className="map-flag new-flag" style={{ left: `${selectedFlag.left}%`, top: `${selectedFlag.top}%` }}>
+                  <div className="map-flag new-flag" style={{left:`${selectedFlag.left}%`, top:`${selectedFlag.top}%`}}>
                     <img src="/img/flag_running.svg" alt="새 깃발" className="flag-icon" draggable="false" />
                   </div>
                 )}
@@ -208,6 +206,7 @@ function FullMapPage() {
             </div>
           </div>
         </div>
+        {/* 깃발 선택 안내 및 확인/취소 버튼 */}
         {selectingFlag && (
           <div className="flag-select-bar">
             <span>

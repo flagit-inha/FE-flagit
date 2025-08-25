@@ -8,17 +8,20 @@ export default function StoreListPage() {
 
   const [stores, setStores] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [errorMsg, setErrorMsg] = useState("");
 
   useEffect(() => {
-    // 사용자 현재 위치 받아오기
     navigator.geolocation.getCurrentPosition(
       async (pos) => {
         const { latitude, longitude } = pos.coords;
+        const token = localStorage.getItem("token");
 
         try {
-          // ✅ 쿼리 파라미터 방식으로 변경
           const res = await fetch(
-            `${import.meta.env.VITE_API_BASE_URL}/stores/nearby?lat=${latitude}&lng=${longitude}`
+            `${import.meta.env.VITE_API_BASE_URL}/stores/nearby?lat=${latitude}&lng=${longitude}`,
+            {
+              headers: token ? { Authorization: `Bearer ${token}` } : {},
+            }
           );
 
           if (!res.ok) throw new Error("가게 조회 실패");
@@ -26,25 +29,29 @@ export default function StoreListPage() {
 
           console.log("✅ 근처 가게 목록:", data);
 
-          setStores(data.stores || []);
+          if (data.stores && data.stores.length > 0) {
+            setStores(data.stores);
+          } else {
+            setErrorMsg("근처에 등록된 가게가 없습니다.");
+          }
         } catch (err) {
           console.error(err);
-          alert("가게 목록을 불러오는 중 오류가 발생했습니다!");
+          setErrorMsg("가게 목록을 불러오는 중 오류가 발생했습니다.");
         } finally {
           setLoading(false);
         }
       },
       (err) => {
         console.error("위치 접근 실패:", err);
-        alert("위치를 가져올 수 없습니다. 위치 권한을 허용해주세요!");
+        setErrorMsg("위치를 가져올 수 없습니다. 위치 권한을 허용해주세요!");
         setLoading(false);
       }
     );
   }, []);
 
   const goStore = (store) => {
-    // TODO: 상세 페이지 연결
-    alert(`${store.name} 상세로 이동 예정!`);
+    // ✅ GroupVerificationPage로 store 정보(state) 전달
+    nav("/group-verification", { state: { store_id: store.store_id, name: store.name } });
   };
 
   return (
@@ -71,7 +78,9 @@ export default function StoreListPage() {
         <div className="store-list">
           {loading ? (
             <p>가게 정보를 불러오는 중...</p>
-          ) : stores.length > 0 ? (
+          ) : errorMsg ? (
+            <p>{errorMsg}</p>
+          ) : (
             stores.map((s) => (
               <button
                 key={s.store_id}
@@ -79,13 +88,15 @@ export default function StoreListPage() {
                 onClick={() => goStore(s)}
                 aria-label={`${s.name} 보기`}
               >
-                <span className="store-name">{s.name}</span>
-                <span className="store-distance">{s.distance.toFixed(1)} m</span>
+                <span className="store-name">{s.name || "이름 없음"}</span>
+                <span className="store-distance">
+                  {s.distance >= 1000
+                    ? `${(s.distance / 1000).toFixed(1)} km`
+                    : `${s.distance.toFixed(0)} m`}
+                </span>
                 <span className="store-chevron">›</span>
               </button>
             ))
-          ) : (
-            <p>근처에 등록된 가게가 없습니다.</p>
           )}
         </div>
       </div>

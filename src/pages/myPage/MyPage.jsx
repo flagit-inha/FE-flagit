@@ -4,6 +4,7 @@ import './MyPage.css';
 import WhiteBottomNav from '../../components/WhiteBottomNav'; // 하단 네비게이션 스타일
 import axios from 'axios';
 
+
 function MyPage() {
   const navigate = useNavigate();
   const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
