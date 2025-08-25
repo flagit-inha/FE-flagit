@@ -51,7 +51,7 @@ export default function RouteViewPage() {
   };
 
   const onEndClick = () => {
-    nav("/fullmap"); // 종료 버튼 누르면 전체 지도 페이지로 이동
+    nav("/mypage"); // 종료 버튼 누르면 전체 지도 페이지로 이동
   };
 
   return (
