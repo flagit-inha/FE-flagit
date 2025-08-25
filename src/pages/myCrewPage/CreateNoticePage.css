@@ -1,0 +1,176 @@
+.to2p-bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 20px 40px;
+
+    background-color: #ffffff;
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.writeBstn {
+    border: none;
+    color:  #23AFB4;
+    background-color: none;
+    font-size: 18px;
+    cursor: pointer;
+    font-weight: bold;
+    padding: 20px 24px;
+    border-radius: 10px;
+    transition: all 0.25s ease;
+}
+.writeBstn:hover {
+    color: #238a8e;
+    transform: translateY(-2px);
+
+}
+
+.t1itle {
+    font-size: 30px;
+    font-weight: bold;
+    padding: 30px 50px;
+    color: #222;
+    border-left: 5px solid #23AFB4;
+    margin: 20px 0;
+}
+
+.noticeName,
+.noticeIN {
+    width: 100%;
+    font-weight: bold;
+    font-size: 15px;
+    padding: 20px 50px 5px 50px;
+    color: #333;
+    letter-spacing: 0.5px;
+}
+
+.titleInput,
+.contentInput {
+    margin: 10px 50px;
+    width: 75%;
+    border-radius: 12px;
+    border: 1.5px solid #dcdcdc;
+    font-size: 15px;
+    padding: 14px 20px;
+    transition: border-color 0.25s ease-in-out, box-shadow 0.25s ease-in-out;
+    background-color: #fafafa;
+}
+
+.titleInput:focus,
+.contentInput:focus {
+    outline: none;
+    border-color: #23AFB4;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(35, 175, 180, 0.35);
+}
+
+.titleInput::placeholder,
+.contentInput::placeholder {
+    color: #bdbdbd;
+    font-size: 13px;
+}
+
+.contentInput {
+    height: 260px;
+    resize: none;
+    line-height: 1.5;
+}
+
+
+.myc1rew-icon{
+   
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.myc1rew-icon:hover {
+    transform: scale(1.1);
+}
+
+.voteToggleWrapper {
+    display: flex;
+    align-items: center;
+    margin: 20px 50px;
+    gap: 12px;
+    font-size: 15px;
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .voteLabel {
+    min-width: 80px;
+  }
+  
+  .voteState {
+    font-size: 14px;
+    font-weight: normal;
+    color: #666;
+  }
+  
+  /* 토글 스위치 스타일 */
+  .switch {
+    position: relative;
+    display: inline-block;
+    width: 48px;
+    height: 24px;
+  }
+  
+  .switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+  }
+  
+  .slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background-color: #ccc;
+    transition: 0.4s;
+    border-radius: 24px;
+  }
+  
+  .slider:before {
+    position: absolute;
+    content: "";
+    height: 18px;
+    width: 18px;
+    left: 3px;
+    bottom: 3px;
+    background-color: white;
+    transition: 0.4s;
+    border-radius: 50%;
+  }
+  
+  input:checked + .slider {
+    background-color: #23AFB4;
+  }
+  
+  input:checked + .slider:before {
+    transform: translateX(24px);
+  }
+  
+
+  .errorMessage1{
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    background-color: #fff0f0;
+    color: #b00020;
+    border-left: 4px solid #b00020;
+    padding: 12px 16px;
+    border-radius: 6px;
+    font-weight: 500;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.08);
+    animation: shake 0.25s;
+  }
+
+  @keyframes shake {
+    0% { transform: translateX(0); }
+    25% { transform: translateX(-4px); }
+    50% { transform: translateX(4px); }
+    75% { transform: translateX(-4px); }
+    100% { transform: translateX(0); }
+  }

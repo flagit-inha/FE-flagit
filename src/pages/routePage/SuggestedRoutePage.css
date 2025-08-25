@@ -1,0 +1,108 @@
+/* 화면 중앙 카드 */
+.sugroute-screen {
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    padding: 2rem;
+  }
+  
+  .sugroute-card {
+    width: min(92vw, 26rem);
+    min-height: 70svh;
+    background: #fff;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    padding: 1rem 1.5rem 1.25rem;
+  }
+  
+  /* 뒤로가기 */
+  .sugroute-back {
+    position: absolute;
+    top: -5rem;
+    left: 1rem;
+    background: transparent;
+    border: 0;
+    font-size: 2rem;
+    font-weight: 600;
+    color:#3b82f6;
+    line-height: 1;
+    cursor: pointer;
+  }
+  
+  /* 타이틀 */
+  .sugroute-head { margin-top: .75rem; }
+  .sugroute-title {
+    font-size: 1.7rem;
+    font-weight: 700;
+    line-height: 1.35;
+    margin: 0 0 .5rem .25rem;
+  }
+  .sugroute-sub {
+    font-size: 1rem;
+    color: #6b7280;
+    margin: 0 0 3rem .25rem;
+  }
+  
+  /* 지도 미리보기 */
+  .sugroute-map {
+    width: 100%;
+    aspect-ratio: 16 / 11;      /* 비율 고정 */
+    border-radius: 1rem;
+    overflow: hidden;
+    background: #f3f4f6;
+    margin-bottom: 1.25rem;
+    position: relative;
+  }
+  .sugroute-map img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    display: block;
+  }
+  
+  /* 거리/시간 요약 */
+  .sugroute-meta {
+    display: flex;
+    align-items: center;  /* 아이콘과 텍스트를 세로 가운데 정렬 */
+    gap: 3rem;   
+   
+  }
+  .sugroute-icon 
+  { 
+    width: 2rem;   /* 원하는 크기로 */
+    height: auto; 
+}
+  .sugroute-stats { display: grid; gap: .25rem; }
+  
+  .sugroute-distance {
+    font-size: 1.75rem;
+    font-weight: 550;
+    line-height: 1;
+  }
+  .sugroute-distance .unit {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: #111827;
+  }
+  .sugroute-time {
+    font-size: 1rem;
+    color: #374151;
+  }
+  
+  /* CTA */
+  .sugroute-cta {
+    margin-top: auto;
+    width: 100%;
+    padding: .8rem 0;
+    border: none;
+    border-radius: .7rem;
+    background: #3cbea5; /* 민트 */
+    color: #fff;
+    font-weight: 550;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  

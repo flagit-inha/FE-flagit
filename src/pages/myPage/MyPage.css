@@ -1,0 +1,195 @@
+.myPage-container {
+    background: #fff;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+  
+  /* 상단바 */
+  .myPage-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px;
+  }
+  
+ 
+  .logout {
+    padding: 20px 20px;
+    font-size: 12px;
+    font-weight: 400;
+    color: #333;
+    cursor: pointer;
+  }
+  
+  /* 프로필 */
+  .profile-section {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: 50px;
+    margin-bottom: 30px;
+  }
+  
+  .profile-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    background: #ddd;
+    overflow: hidden; /* 이미지가 영역을 벗어나지 않도록 설정 */
+    margin-bottom: 12px;
+  }
+
+  .profile-preview {
+    width: 100%; /* 부모 요소의 너비에 맞게 */
+    height: 100%; /* 부모 요소의 높이에 맞게 */
+    object-fit: cover; /* 이미지 비율을 유지하며 영역에 맞게 채우기 */
+  }
+  
+  
+  .profile-name {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 6px;
+  }
+  
+  .profile-badge {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 14px;
+    font-weight: 600;
+    margin-top: 30px;
+    margin-bottom: 5px;
+
+    margin-right: 40%;
+  }
+
+  
+  .profile-message {
+    font-size: 13px;
+    color: #555;
+    margin-right: 24%;
+  }
+  
+  /* 크루 */
+  .crew-section {
+    display: flex;
+    justify-content: center;
+    margin: 0 20px 20px;
+  }
+  
+  .crew-box {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    min-width: 300px;
+    background: #e9f7f8;
+    padding: 12px 20px;
+    border-radius: 12px;
+    font-weight: bold;
+    color: #23AFB4;
+  }
+
+  .crew-box:hover {
+    background: #e6fafa;
+    transition: 0.3s ease-in-out;
+    transform: scale(1.02);
+  }
+
+
+  .crew-name{
+    text-align: center; 
+    flex: 1;
+    font-size: 16px;
+    font-weight: bold;
+    color: #000000;
+
+  }
+  
+  /* 통계 */
+  .stats-section {
+    display: flex;
+    justify-content: space-around;
+    margin: 10px  60px;
+  }
+  
+  .stat-card {
+    min-width: 40px;
+    max-width: 200px;
+    background: #fff;
+    border: #dadada 1px solid;
+    border-radius: 12px;
+    box-shadow: 0px 2px 6px rgba(0,0,0,0.05);
+    padding: 16px;
+    text-align: center;
+    flex: 1;
+    margin: 0 6px;
+  }
+  
+  .stat-card:hover {
+    transform: scale(1.03);
+    transition: transform 0.2s ease-in-out;
+  }
+  .stat-icon {
+    font-size: 20px;
+  }
+  
+  .stat-number {
+    font-size: 18px;
+    font-weight: bold;
+    margin: 8px 0;
+  }
+  
+  .stat-label {
+    font-size: 12px;
+    color: #555;
+  }
+  
+  /* 초대코드 */
+  .invite-section {
+    margin: 30px 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 70px;
+    border-radius: 12px;
+
+  }
+  
+  .invite-label {
+    font-weight: bold;
+    font-size: small;
+  }
+  
+  .invite-code {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-weight: 600;
+    font-size: 14px;
+  }
+  
+  .copy-icon {
+    width: 23px;
+    cursor: pointer;
+  }
+
+  .copy-icon:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s ease-in-out;
+  }
+  
+
+  .BB{
+    cursor: pointer;
+  }
+
+  .BB:hover {
+    transform: scale(1.1);
+    transition: transform 0.2s ease-in-out;
+  }

@@ -1,0 +1,55 @@
+/* 카드 레이아웃 - 기존 페이지들과 톤 맞춤 */
+.loading-screen {
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    padding: 3.5rem;
+  }
+  
+  .loading-card {
+    width: min(92vw, 26rem);
+    min-height: 70svh;
+    background: #fff;
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+/* 뒤로가기 버튼
+  
+  .loading-back {
+    position: absolute;
+  top: -5rem;
+  left: 1rem;
+  background: transparent;
+  border: 0;
+  font-size: 2rem;
+  font-weight: 600;
+  color:#3b82f6;
+  line-height: 1;
+  cursor: pointer;
+  }
+   */
+  
+  /* 점 컨테이너 */
+  .loading-dots {
+    width: 200px;
+    height: 60px;
+    position: relative;
+  }
+  
+  /* 점 자체 */
+  .loading-dot {
+    position: absolute;
+    left: 50%;
+    top: 50%;
+    width: 15px;
+    height: 15px;
+    margin-left: -7px;  /* 가운데 기준 정렬 */
+    margin-top: -7px;
+    background: #3b82f6; /* 파랑 */
+    border-radius: 50%;
+    filter: drop-shadow(0 2px 4px rgba(59,130,246,.35));
+  }

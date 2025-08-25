@@ -1,0 +1,82 @@
+/* SignUp 전용 스타일 */
+.signup-screen {
+  min-height: 100svh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #ffffff;
+  padding: 3.5rem;
+}
+
+.signup-card {
+  width: min(92vw, 26rem);
+  min-height: 80svh;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+}
+
+.signup-logo {
+  display: block;
+  width: 8rem;
+  height: auto;
+  margin: 0 0 1.5rem -1rem;
+}
+
+.signup-title {
+  font-size: 2rem;
+  margin: 0 0 3rem;
+  line-height: 1.2;
+}
+
+.signup-form {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  flex: 1;
+}
+
+.signup-field {
+  display: grid;
+  gap: 0.5rem;
+}
+
+.signup-label {
+  font-size: 0.8rem;
+  color: #6b7280;
+}
+
+.signup-input {
+  border: none;
+  border-bottom: 2px solid #d1d5db;
+  padding: 0.75rem 0;
+  outline: none;
+  background: transparent;
+  font-size: 1rem;
+}
+.signup-input:focus {
+  border-bottom-color: #3b82f6;
+}
+
+.signup-error {
+  color: #ef4444;
+  font-size: 0.8rem;
+}
+
+.signup-cta {
+  margin-top: auto;
+  width: 100%;
+  padding: 0.75rem 0;
+  border: none;
+  border-radius: 0.75rem;
+  background: #3CBEA5;
+  color: #fff;
+  font-weight: 500;
+  font-size: 1rem;
+  cursor: pointer;
+}
+.signup-cta:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
