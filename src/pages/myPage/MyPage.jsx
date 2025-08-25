@@ -36,17 +36,8 @@ function MyPage() {
 
 
 
-         // 배지 정보 가져오기
-         const badgeResponse = await axios.get(`${apiBaseUrl}/users/badge/`, {
-          headers: {
-            Authorization: `Bearer ${token}`, // JWT 토큰 사용
-          },
-        });
-
-        console.log('배지 정보:', badgeResponse.data);
-        setBadgeName(badgeResponse.data.badge_name); // 배지 이름 상태 업데이트
-
-
+    
+    
 
 
       } catch (error) {
@@ -57,17 +48,67 @@ function MyPage() {
     };
   
     fetchUserInfo();
-  }, []);
+    const fetchCrewAndBadgeInfo = async () => {
+      try {
+        const token = localStorage.getItem("token");
+  
+        // 크루 정보 및 멤버 데이터 가져오기
+        const crewResponse = await axios.get(`${apiBaseUrl}/crews/${crewInfo.crew_id}/members/`, {
+          headers: {
+            Authorization: `Bearer ${token}`, // JWT 토큰 사용
+          },
+        });
+  
+        console.log('크루 데이터:', crewResponse.data);
+  
+        // 첫 번째 멤버의 뱃지 이름 가져오기
+        const firstMemberBadge = crewResponse.data.members[0]?.badge?.badge_name || '배지 없음';
+        setBadgeName(firstMemberBadge); // 뱃지 이름 상태 업데이트
+  
+      } catch (error) {
+        console.error('크루 및 뱃지 데이터를 가져오는 중 오류 발생:', error);
+      }
+    };
+  
+    if (crewInfo?.crew_id) {
+      fetchCrewAndBadgeInfo();
+    }
+
+  }, [crewInfo]);
 
   // 파일 선택 핸들러
-  const handleFileChange = (event) => {
+  const handleFileChange = async (event) => {
     const file = event.target.files[0];
     setSelectedFile(file);
     console.log('선택된 파일:', file);
-
+  
     if (file) {
       const preview = URL.createObjectURL(file);
       setPreviewUrl(preview);
+  
+      // 서버로 파일 업로드
+      const formData = new FormData();
+      formData.append("profile_image", file); // 서버에서 기대하는 필드 이름
+  
+      try {
+        const token = localStorage.getItem("token");
+        const response = await axios.patch(`${apiBaseUrl}/users/`, formData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            "Content-Type": "multipart/form-data", // 파일 업로드를 위한 헤더
+          },
+        });
+  
+        console.log("프로필 이미지 업로드 성공:", response.data);
+        setUserInfo((prev) => ({
+          ...prev,
+          profile_image: response.data.user.profile_image, // 서버에서 반환된 프로필 이미지 URL로 업데이트
+        }));
+        alert("프로필 이미지가 성공적으로 업데이트되었습니다!");
+      } catch (error) {
+        console.error("프로필 이미지 업로드 중 오류 발생:", error);
+        alert("프로필 이미지 업로드에 실패했습니다.");
+      }
     }
   };
 
@@ -99,10 +140,12 @@ function MyPage() {
           onClick={() => document.getElementById('fileInput').click()} // 클릭 시 파일 선택 창 열기
         >
           {previewUrl ? (
-            <img src={previewUrl} alt="미리보기" className="profile-preview" />
-          ) : (
-            '+'
-          )}
+        <img src={previewUrl} alt="미리보기" className="profile-preview" />
+      ) : userInfo.profile_image ? (
+        <img src={userInfo.profile_image} alt="프로필" className="profile-preview" />
+      ) : (
+        '+'
+      )}
         </div>
         <input
           id="fileInput"
@@ -115,7 +158,8 @@ function MyPage() {
 
         <div className="profile-name">{userInfo.nickname}</div>
         <div className="profile-badge">
-          <img src='../img/star.svg' onClick={() => navigate('/level-list')} className='BB'></img> {badgeName || '배지 없음'}
+          <img src='../img/star.svg' onClick={() => navigate('/level-list')} className='BB' alt="뱃지 아이콘" />
+          {badgeName || '배지 없음'}
         </div>
       </div>
       {/* 그룹 */}

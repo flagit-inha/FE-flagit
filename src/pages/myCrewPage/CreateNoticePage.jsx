@@ -66,6 +66,7 @@ function CreateNoticePage() {
         {
           title,
           content,
+          allow_votes: voteEnabled,
         },
         {
           headers: {
