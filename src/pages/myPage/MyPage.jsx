@@ -31,7 +31,7 @@ function MyPage() {
           },
         });
   
-        console.log('사용자 정보:', userResponse.data);
+     
         setUserInfo(userResponse.data.user);
         setCrewInfo(userResponse.data.crew_info);
 
@@ -60,7 +60,7 @@ function MyPage() {
           },
         });
   
-        console.log('크루 데이터:', crewResponse.data);
+      
   
         // 첫 번째 멤버의 뱃지 이름 가져오기
         const firstMemberBadge = crewResponse.data.members[0]?.badge?.badge_name || '배지 없음';

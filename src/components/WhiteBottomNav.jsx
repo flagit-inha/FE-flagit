@@ -26,6 +26,7 @@ const WhiteBottomNav = ({ active }) => {
   const activeKey = active || guessActive(pathname);
 
   const [currentCrewId, setCurrentCrewId] = useState(null); // 현재 크루 ID 상태
+  const [currentUserId, setCurrentUserId] = useState(null); // 현재 사용자 ID 상태
 
   useEffect(() => {
     const fetchCurrentCrewId = async () => {
@@ -39,10 +40,15 @@ const WhiteBottomNav = ({ active }) => {
         });
 
         console.log('현재 크루 ID:', response.data.crew_id);
+        console.log('현재 사용자 ID:', response.data.user_id);
+
         setCurrentCrewId(response.data.crew_id); // 현재 크루 ID 상태 업데이트
+        setCurrentUserId(response.data.user_id); // 현재 사용자 ID 상태 업데이트
+
       } catch (error) {
         console.error('현재 크루 ID를 가져오는 중 오류 발생:', error);
       }
+    
     };
 
     fetchCurrentCrewId();
@@ -63,6 +69,12 @@ const WhiteBottomNav = ({ active }) => {
                 navigate(`/mycrew/${currentCrewId}`);
               } else {
                 alert('현재 크루 정보를 불러오는 중입니다.');
+              }
+            } else if (item.key === 'home') {
+              if (currentUserId) {
+                navigate(`/fullmap/${currentUserId}`);
+              } else {
+                alert('현재 사용자 정보를 불러오는 중입니다.');
               }
             } else {
               navigate(item.path);
