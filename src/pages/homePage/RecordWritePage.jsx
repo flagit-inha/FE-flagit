@@ -166,54 +166,56 @@ function RecordWritePage() {
 
   // 기록 저장
   const submit = async () => {
-  if (submitting) return;
-  setSubmitting(true);
-  try {
-    const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
-    const token = localStorage.getItem("token");
-    const formData = new FormData();
+    if (submitting) return;
+    setSubmitting(true);
+    try {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+      const token = localStorage.getItem("token");
 
-    formData.append('location_id', Number(placeId));
-    formData.append('location_name', place);
-    formData.append('activity_type', activity);
-    formData.append('date', date);
-    formData.append('distance_km', Number(distance));
-    formData.append('time_record', getDurationString(timeStart, timeEnd));
-    formData.append('description', recordText);
+      // crew_members만 JSON 배열로 보내고, 나머지는 FormData로 유지
+      const formData = new FormData();
+      formData.append('location_id', Number(placeId));
+      formData.append('location_name', place);
+      formData.append('activity_type', activity);
+      formData.append('date', date);
+      formData.append('distance_km', Number(distance));
+      formData.append('time_record', getDurationString(timeStart, timeEnd));
+      formData.append('description', recordText);
 
-    // crew_members를 각각 append (배열로 전송)
-    selectedCrew.map(Number).forEach(id => formData.append('crew_members', id));
+      // crew_members를 JSON 배열 문자열로 전송
+      selectedCrew.map(Number).forEach(id => formData.append('crew_members', id));
 
-    if (files.length > 0) {
-      formData.append('group_photo', files[0]);
+      if (files.length > 0) {
+        formData.append('group_photo', files[0]);
+      }
+
+      const res = await fetch(`${apiBaseUrl}/users/flag/`, {
+        method: 'POST',
+        headers: {
+          "Authorization": `Bearer ${token}`
+          // Content-Type은 FormData 사용 시 자동 처리
+        },
+        body: formData
+      });
+      if (!res.ok) throw new Error('저장 실패');
+      alert('저장 완료!');
+    } catch (e) {
+      console.log({
+        location_id: Number(placeId),
+        location_name: place,
+        activity_type: activity,
+        date,
+        distance_km: Number(distance),
+        time_record: getDurationString(timeStart, timeEnd),
+        crew_members: selectedCrew.map(Number),
+        description: recordText,
+        group_photo: files[0]
+      });
+      alert(e.message);
+    } finally {
+      setSubmitting(false);
     }
-
-    const res = await fetch(`${apiBaseUrl}/users/flag/`, {
-      method: 'POST',
-      headers: {
-        "Authorization": `Bearer ${token}`
-      },
-      body: formData
-    });
-    if (!res.ok) throw new Error('저장 실패');
-    alert('저장 완료!');
-  } catch (e) {
-    console.log({
-      location_id: Number(placeId),
-      location_name: place,
-      activity_type: activity,
-      date,
-      distance_km: Number(distance),
-      time_record: getDurationString(timeStart, timeEnd),
-      crew_members: selectedCrew,
-      description: recordText,
-      group_photo: files[0]
-    });
-    alert(e.message);
-  } finally {
-    setSubmitting(false);
-  }
-};
+  };
 
   return (
     <div className="rw-container">
