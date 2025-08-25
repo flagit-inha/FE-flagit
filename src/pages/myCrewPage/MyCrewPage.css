@@ -223,3 +223,36 @@
     width: 16px;
     height: 16px;
   }
+
+  .no-notices {
+    text-align: center;
+    color: gray;
+    font-size: 16px;
+    margin-top: 20px;
+  }
+
+  .background-change-btn {
+
+    bottom: 10px;
+    right: 10px;
+    max-width: 120px;
+    background: rgba(0, 0, 0, 0.6);
+    color: white;
+    font-size: 12px;
+    padding: 6px 10px;
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    cursor: pointer;
+  }
+  
+  .background-change-btn:hover {
+    background: rgba(0, 0, 0, 0.8);
+  }
+  
+  .camera-icon {
+    width: 14px;
+    height: 14px;
+  }
+  

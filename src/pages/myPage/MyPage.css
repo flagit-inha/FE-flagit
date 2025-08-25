@@ -32,11 +32,21 @@
   }
   
   .profile-image {
+    display: flex;
+    justify-content: center;
+    align-items: center;
     width: 100px;
     height: 100px;
     border-radius: 50%;
     background: #ddd;
+    overflow: hidden; /* 이미지가 영역을 벗어나지 않도록 설정 */
     margin-bottom: 12px;
+  }
+
+  .profile-preview {
+    width: 100%; /* 부모 요소의 너비에 맞게 */
+    height: 100%; /* 부모 요소의 높이에 맞게 */
+    object-fit: cover; /* 이미지 비율을 유지하며 영역에 맞게 채우기 */
   }
   
   
@@ -153,6 +163,7 @@
   
   .invite-label {
     font-weight: bold;
+    font-size: small;
   }
   
   .invite-code {
