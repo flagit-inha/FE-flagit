@@ -47,6 +47,7 @@ function FullMapPage() {
   const [loading, setLoading] = useState(true);
 
   // 깃발 선택 모드
+  const [flags, setFlags ] = useState([]);
   const [selectingFlag, setSelectingFlag] = useState(false);
   const [selectedFlag, setSelectedFlag] = useState(null);
 
@@ -69,17 +70,24 @@ function FullMapPage() {
     return ()=>{ alive = false; };
   },[user_id, myUserId, navigate]);
 
+  // 기록의 flag_lat, flag_lng를 사용해서 지도에 깃발 표시
   const projectedFlags = useMemo(()=> {
     return records
-      .filter(r=> typeof r.latitude==='number' && typeof r.longitude==='number')
+      .filter(r=> typeof r.flag_lat==='number' && typeof r.flag_lng==='number')
       .map(r=>{
-        const p = project(r.latitude, r.longitude);
+        const p = project(r.flag_lat, r.flag_lng);
         if(!p) return null;
-        const placeName = (r.place && r.place.trim()) ? r.place.trim() : '장소 미지정';
+        // 장소명 추출 로직 수정
+        const placeName =
+          r.activity_location?.location_name ||
+          r.activity_location?.name ||
+          r.location_name ||
+          r.location?.name ||
+          '장소 미지정';
         return {
           id: r.id,
           place: placeName,
-          activity: r.activity || 'running',
+          activity: r.activity_type || 'running',
           date: r.date || '',
           ...p
         };
@@ -112,7 +120,7 @@ function FullMapPage() {
   const confirmFlag = () => {
     if (!selectedFlag) return;
     const { lat, lng } = unproject(selectedFlag.left, selectedFlag.top);
-    navigate(`/record-write?lat=${lat}&lng=${lng}`);
+    navigate(`/record-write?flag_lat=${lat}&flag_lng=${lng}`);
     setSelectingFlag(false);
     setSelectedFlag(null);
   };
@@ -122,6 +130,21 @@ function FullMapPage() {
     setSelectingFlag(false);
     setSelectedFlag(null);
   };
+
+  useEffect(() => {
+    const fetchFlags = async () => {
+      const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+      const token = localStorage.getItem("token");
+      const res = await fetch(`${apiBaseUrl}/users/flag/`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setFlags(data);
+      }
+    };
+    fetchFlags();
+  }, []);
 
   const nickname = localStorage.getItem("nickname") || "사용자";
   const line1 = `${nickname}님의`;

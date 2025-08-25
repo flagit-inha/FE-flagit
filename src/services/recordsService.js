@@ -67,18 +67,16 @@ export async function createRecord(formData) {
 }
 
 export async function getRecord(id) {
-  const raw = localStorage.getItem(PREFIX + id);
-  if (!raw) return null;
-  const rec = deserialize(raw);
-  if (!rec) return null;
-
-  // flagOrder 누락 시 전체 재구성
-  if (!rec.flagOrder) {
-    await listRecords(); // 재구성 트리거
-    const reread = localStorage.getItem(PREFIX + id);
-    return reread ? deserialize(reread) : rec;
-  }
-  return rec;
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${apiBaseUrl}/users/flag/${id}/`, {
+    method: 'GET',
+    headers: {
+      "Authorization": `Bearer ${token}`
+    }
+  });
+  if (!res.ok) throw new Error('기록 불러오기 실패');
+  return await res.json();
 }
 
 export async function listRecords() {
@@ -100,22 +98,14 @@ export async function updateRecord(id, patch) {
 }
 
 export async function deleteRecord(id) {
-  localStorage.removeItem(PREFIX + id);
-  // 삭제 후 flagOrder 재정렬
-  const remain = [];
-  eachStored(k => {
-    const raw = localStorage.getItem(k);
-    const rec = deserialize(raw);
-    if (rec) remain.push(rec);
+  const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
+  const token = localStorage.getItem("token");
+  const res = await fetch(`${apiBaseUrl}/users/flag/${id}/`, {
+    method: 'DELETE',
+    headers: { "Authorization": `Bearer ${token}` }
   });
-  // createdAt 오름차순으로 1..N
-  remain.sort((a,b)=>a.createdAt - b.createdAt)
-        .forEach((r, idx) => {
-          if (r.flagOrder !== idx + 1) {
-            r.flagOrder = idx + 1;
-            localStorage.setItem(PREFIX + r.id, serialize(r));
-          }
-        });
+  if (!res.ok) throw new Error('기록 삭제 실패');
+  return true;
 }
 
 /* 전체 삭제 (개발용) */

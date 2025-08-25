@@ -115,10 +115,12 @@
 .rw-location-select option,
 .rw-activity-select option,
 .rw-crew-select option {
+  padding: 10px 0;
+  border-radius: 8px;
+  background: #fff;
   color: #222;
   font-size: 15px;
   font-weight: 500;
-  background: #fff;
 }
 
 .rw-activity-block { position:relative; width:100%; }
@@ -389,6 +391,10 @@
   box-sizing:border-box;
 }
 .rw-media-grid { display:flex; flex-wrap:wrap; gap:12px; }
+.rw-media-guide {
+  font-size: 12px;
+  color: #888;
+}
 .rw-thumb {
   width:80px; height:80px; border-radius:14px;
   overflow:hidden; background:#ececec; position:relative;

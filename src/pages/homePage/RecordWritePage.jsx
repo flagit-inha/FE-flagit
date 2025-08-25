@@ -156,11 +156,11 @@ function RecordWritePage() {
   const MAX_FILE_SIZE = 2 * 1024 * 1024; // 2MB
   const pickImages = e => {
     const arr = Array.from(e.target.files || []);
-    const filtered = arr.filter(file => file.size <= MAX_FILE_SIZE);
+    const filtered = arr.filter(file => file.size <= MAX_FILE_SIZE && file.type === 'image/jpeg');
     if (filtered.length < arr.length) {
       alert('이미지 파일은 2MB 이하만 업로드할 수 있습니다.');
     }
-    setFiles(prev => [...prev, ...filtered].slice(0, 6));
+    setFiles(prev => [...prev, ...filtered].slice(0, 1));
   };
   const removeFile = i => setFiles(list => list.filter((_,idx)=>idx!==i));
 
@@ -172,9 +172,13 @@ function RecordWritePage() {
       const apiBaseUrl = import.meta.env.VITE_API_BASE_URL;
       const token = localStorage.getItem("token");
 
-      // crew_members만 JSON 배열로 보내고, 나머지는 FormData로 유지
+    
+      const searchParams = new URLSearchParams(window.location.search);
+      const flag_lat = searchParams.get('flag_lat');
+      const flag_lng = searchParams.get('flag_lng');
+
       const formData = new FormData();
-      formData.append('location_id', Number(placeId));
+      formData.append('activity_location', Number(placeId));
       formData.append('location_name', place);
       formData.append('activity_type', activity);
       formData.append('date', date);
@@ -182,7 +186,10 @@ function RecordWritePage() {
       formData.append('time_record', getDurationString(timeStart, timeEnd));
       formData.append('description', recordText);
 
-      // crew_members를 JSON 배열 문자열로 전송
+      // 위도/경도 값 추가
+      if (flag_lat) formData.append('flag_lat', flag_lat);
+      if (flag_lng) formData.append('flag_lng', flag_lng);
+
       selectedCrew.map(Number).forEach(id => formData.append('crew_members', id));
 
       if (files.length > 0) {
@@ -193,15 +200,17 @@ function RecordWritePage() {
         method: 'POST',
         headers: {
           "Authorization": `Bearer ${token}`
-          // Content-Type은 FormData 사용 시 자동 처리
         },
         body: formData
       });
       if (!res.ok) throw new Error('저장 실패');
+      const saved = await res.json();
+      console.log('저장된 기록:', saved); 
+      navigate(`/location/${saved.id}`);
       alert('저장 완료!');
     } catch (e) {
       console.log({
-        location_id: Number(placeId),
+        activity_location: Number(placeId),
         location_name: place,
         activity_type: activity,
         date,
@@ -209,7 +218,9 @@ function RecordWritePage() {
         time_record: getDurationString(timeStart, timeEnd),
         crew_members: selectedCrew.map(Number),
         description: recordText,
-        group_photo: files[0]
+        group_photo: files[0],
+        flag_lat,
+        flag_lng
       });
       alert(e.message);
     } finally {
@@ -443,34 +454,35 @@ function RecordWritePage() {
               >기록</button>
             </div>
             {mediaMode === 'photo' && (
-              <div className="rw-media-box">
-                <div className="rw-media-grid">
-                  {files.map((f,i)=>(
-                    <div className="rw-thumb" key={i}>
-                      <img src={URL.createObjectURL(f)} alt="" />
-                      <button
-                        type="button"
-                        className="rw-thumb-del"
-                        aria-label="삭제"
-                        onClick={()=>removeFile(i)}
-                      >×</button>
-                    </div>
-                  ))}
-                  {files.length < 6 && (
-                    <label className="rw-add-thumb">
-                      <input
-                        type="file"
-                        accept="image/*"
-                        multiple
-                        hidden
-                        onChange={pickImages}
-                      />
-                      +
-                    </label>
-                  )}
-                </div>
+            <div className="rw-media-box">
+              <div className="rw-media-grid">
+                {files.map((f,i)=>(
+                  <div className="rw-thumb" key={i}>
+                    <img src={URL.createObjectURL(f)} alt="" />
+                    <button
+                      type="button"
+                      className="rw-thumb-del"
+                      aria-label="삭제"
+                      onClick={()=>removeFile(i)}
+                    >×</button>
+                  </div>
+                ))}
+                {files.length < 1 && (
+                  <label className="rw-add-thumb">
+                    <input
+                      type="file"
+                      accept=".jpg,image/jpeg"
+                      multiple={false}
+                      hidden
+                      onChange={pickImages}
+                    />
+                    +
+                  </label>
+                )}
               </div>
-            )}
+              <div className="rw-media-guide">* 사진은 1장만, jpg 파일만 등록 가능합니다.</div>
+            </div>
+          )}
             {mediaMode === 'note' && (
               <div className="rw-note-box">
                 <textarea
