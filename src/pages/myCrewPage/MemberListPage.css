@@ -1,0 +1,176 @@
+.mycrew-icon {
+    width: 100%;
+    height: 25vh;
+    /* position: relative; ✅ 제거 */
+}
+
+.crewprodv{
+    display: flex;
+    justify-content: center;
+  }
+
+.crewProfile {
+    transform: translateY(-40%);
+    width: 100px;
+    height: 100px;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+.profile-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+
+
+.crewName {
+    /* position: absolute; ✅ 제거 */
+    margin-top: -30px; /* 자연스럽게 간격 조절 */
+    font-size: clamp(1rem, 1vw, 1.2rem);
+    font-weight: bold;
+    color: rgba(0, 0, 0, 0.8);
+}
+
+.memberCountText {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: clamp(0.8rem, 0.8vw, 1rem);
+    color: rgba(0, 0, 0, 0.6);
+}
+/*  */
+.notic-member2 {
+    display: flex;
+    align-items: center;
+    width: 100%;
+    height: 50px;
+    padding: 0 40px;
+    box-sizing: border-box;
+    margin-top: 40px;
+}
+
+.noticeButton2 {
+    flex: 1;
+    color: #000000;
+    background-color: #ffffff;
+    border: 1px solid;
+    border-color: #b5b5b5;
+    border-radius: 15px;
+    height: 34px;
+    min-width: 50px;
+    max-width: 50px;
+    margin-right: 10px;
+    padding: 0 10px;
+}
+.noticeButton2:hover {
+    background-color: #f0f0f0;
+}
+
+.memberButton2 {
+    flex: 1;
+    color: #ffffff;
+    background-color: #23AFB4;
+    border: 1px solid;
+    border-color: #b5b5b5;
+    border-radius: 15px;
+    height: 34px;
+    min-width: 50px;
+    max-width: 50px;
+    padding: 0 10px;
+}
+.memberButton2:hover {
+    background-color: #1e9f9f;
+}
+
+.dropdownContainer {
+    position: relative; /* 드롭다운 기준점 */
+    display: flex; /* Flexbox 활성화 */
+    justify-content: flex-end; /* 오른쪽 정렬 */
+    align-items: center; /* 세로 가운데 정렬 */
+    margin-left: auto;
+}
+
+  .dropdownButton {
+    padding: 8px 12px;
+    right: 0;
+    background: #eeeeee;
+    color: rgb(111, 111, 111);
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    min-width: 100px;
+    max-width: 100px;
+  }
+  
+  .dropdownMenu {
+    position: absolute; /* 다른 레이아웃 안 밀림 */
+    top: 100%; /* 버튼 바로 아래 */
+    left: 0;
+    min-width: 120px;
+    background-color: white;
+    border: 1px solid #ddd;
+    border-radius: 6px;
+    margin-top: 6px;
+    padding: 8px 0;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    display: none; /* 기본 숨김 */
+    flex-direction: column;
+    z-index: 100; /* 다른 요소 위로 */
+  }
+  
+  .dropdownMenu button {
+    background: none;
+    border: none;
+    padding: 8px 12px;
+    text-align: left;
+    cursor: pointer;
+    width: 100%;
+  }
+  
+  .dropdownMenu button:hover {
+    background-color: #f3f3f3;
+  }
+  
+  .dropdownMenu.active {
+    display: flex; /* 열릴 때 flex */
+  }
+  
+
+  /*  */
+
+.list {
+    flex: 1;
+    background-color: #ededed;
+    border-radius: 5px;
+    height: 23px;
+    width: 63px;
+    border: none;
+}
+
+.memberlist{
+    max-height:  380px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #3CBEA5 #ffffff;
+}
+
+.memberbox{
+    background-color: #ffffff;
+    border-radius: 15px;
+    padding-top: 20px;
+    padding-bottom: 20px;
+    border: 2px solid #3CBEA5;
+    margin: 20px 40px;
+    padding: 10px 40px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;  
+}
+
+.profilePic{
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+}

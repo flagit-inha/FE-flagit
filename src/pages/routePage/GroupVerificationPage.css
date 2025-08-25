@@ -1,0 +1,81 @@
+/* 화면 중앙 */
+.gver-screen {
+    min-height: 100svh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #fff;
+    padding: 2rem;
+  }
+  
+  /* 카드 영역 */
+  .gver-card {
+    width: min(92vw, 26rem);
+    min-height: 70svh;
+    background: #fff;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    text-align: center;
+    padding: 0rem 1.25rem 1.25rem;
+  }
+  
+  /* 뒤로가기 */
+  .gver-back {
+    position: absolute;
+    top: -5rem;
+    left: 1rem;
+    background: transparent;
+    border: 0;
+    font-size: 2rem;
+    font-weight: 600;
+    color:#3b82f6;
+    line-height: 1;
+    cursor: pointer;
+  }
+  
+  /* 타이틀 & 설명 */
+  .gver-title {
+    margin: -0.5rem 0 0.5rem;
+    font-size: 2rem;
+    font-weight: 800;
+    color: #234dc0; /* 블루 톤 */
+    line-height: 1.2;
+  }
+  
+  .gver-desc {
+    margin: 1.5rem 0 1.5rem;
+    font-size: 1.1rem;
+    font-weight: 500;
+    color: #000000; /* gray-700 */
+    line-height: 1.6;
+  }
+  
+  /* 일러스트 */
+  .gver-illu {
+    display: block;
+    width: 18rem;
+    height: auto;
+    margin: 4.5rem auto 0;
+    user-select: none;
+    pointer-events: none;
+  }
+  
+  /* 하단 고정 느낌 CTA */
+  .gver-cta {
+    margin-top: auto;            /* 아래로 밀기 */
+    width: 100%;
+    padding: 0.9rem 0;
+    border: none;
+    border-radius: 0.7rem;
+    background: #3cbea5;         /* 민트 */
+    color: #fff;
+    font-weight: 500;
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  
+  .gver-cta:active {
+    transform: translateY(1px);
+  }
+  
