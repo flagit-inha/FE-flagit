@@ -5,24 +5,32 @@ import "./GeneratingQRPage.css";
 export default function GeneratingQRPage() {
   const nav = useNavigate();
   const { state } = useLocation();
-
-  // 표시 문구 (필요시 호출할 때 state로 대체 가능)
+  const certification_id = state?.certification_id;
   const text = state?.text || "단체 인증 완료! QR 발급 중...";
 
-  // 필요하면 자동 이동 (원하면 주석 해제해서 사용)
-  // useEffect(() => {
-  //   const t = setTimeout(() => nav("/qr", { state }), 1500);
-  //   return () => clearTimeout(t);
-  // }, [nav, state]);
+  useEffect(() => {
+    if (!certification_id) {
+      alert("잘못된 접근입니다.");
+      nav(-1);
+      return;
+    }
+
+    // ... (기존 상태 확인 로직)
+  }, [certification_id, nav]);
 
   return (
     <div className="qrgen-screen">
       <div className="qrgen-content">
-        <img
-          className="qrgen-icon"
-          src="/img/check.svg"
-          alt="확인 아이콘"
-        />
+        {/* ✅ 뒤로가기 버튼 */}
+        <button
+          className="qrgen-back"
+          aria-label="뒤로가기"
+          onClick={() => nav(-1)}
+        >
+          ‹
+        </button>
+
+        <img className="qrgen-icon" src="/img/check.svg" alt="확인 아이콘" />
         <p className="qrgen-text">{text}</p>
       </div>
     </div>
